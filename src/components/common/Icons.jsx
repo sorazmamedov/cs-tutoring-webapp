@@ -1,38 +1,38 @@
 import Form from "react-bootstrap/Form";
 import React from "react";
 
-export const editIcon = () => (
-  <i className="bi bi-pencil-fill" data-icon-type="edit" />
+export const editIcon = ({className, ...props}) => (
+  <i className={`bi bi-pencil-fill ${className}`} data-icon-type="edit" {...props} />
 );
 
-export const deleteIcon = () => (
-  <i className="bi bi-trash3 me-3" data-icon-type="delete" />
-);
-
-export const toggleIcon = ({ sourceid, onChange }) => {
-  return (
-    <Form.Switch
-      inline
-      className="me-0 ms-3"
-      data-icon-type="toggle"
-      id={sourceid}
-      onChange={onChange}
-    />
-  );
+export const deleteIcon = (props) => {
+  return <i className="bi bi-trash3 me-3" data-icon-type="delete" {...props} />;
 };
 
-export const megaphoneIcon = () => (
-  <i className="bi bi-megaphone-fill" data-icon-type="megaphone" />
+export const toggleIcon = (props) => {
+  return <Form.Switch inline data-icon-type="toggle" {...props} />;
+};
+
+export const megaphoneIcon = (props) => (
+  <i className="bi bi-megaphone-fill" data-icon-type="megaphone" {...props} />
 );
 
-export const plusIcon = () => (
-  <i className="bi bi-plus-circle" data-icon-type="plus" />
+export const plusIcon = (props) => (
+  <i className="bi bi-plus-circle" data-icon-type="plus" {...props} />
 );
 
-export const arrowUpIcon = () => (
-  <i class="bi bi-arrow-up-square-fill" data-icon-type="arrowUp" />
+export const arrowUpIcon = (props) => (
+  <i class="bi bi-arrow-up-square-fill" data-icon-type="arrowUp" {...props} />
 );
 
 export const personIcon = (style) => (
   <i className="bi bi-person-circle" data-icon-type="person" style={style} />
+);
+
+export const HouseIcon = (props) => (
+  <i className="bi bi-house-door-fill" data-icon-type="house" {...props} />
+);
+
+export const menuIcon = (props) => (
+  <i class="bi bi-three-dots" data-icon-type="menu" {...props} />
 );

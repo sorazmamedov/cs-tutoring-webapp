@@ -1,16 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import MainContainer from "../common/MainContainer";
 import TableHeader from "../CustomTable/TableHeader";
 import ScheduleRowItem from "./ScheduleRowItem";
-import CustomPagination from "../CustomPagination";
+import CustomPagination from "../common/CustomPagination";
 import { PlusIcon } from "../common/IconsWithTooltip";
-import { useEffect } from "react";
-import { useState } from "react";
 
 const Schedules = () => {
   const admin = true;
-  const schedule = [
+  const data = [
     {
       id: 1,
       day: "Monday",
@@ -18,7 +16,7 @@ const Schedules = () => {
       endHour: "1:00 p.m.",
       tutor: { id: 11, name: "Alin" },
       location: "Alin's Zoom link",
-      isActive: false
+      isActive: false,
     },
     {
       id: 2,
@@ -27,7 +25,7 @@ const Schedules = () => {
       endHour: "5:00 p.m.",
       tutor: { id: 12, name: "Andrew" },
       location: "Andrew's Zoom link",
-      isActive: false
+      isActive: false,
     },
     {
       id: 3,
@@ -36,7 +34,7 @@ const Schedules = () => {
       endHour: "1:00 p.m.",
       tutor: { id: 13, name: "Victor" },
       location: "Victor's Zoom link",
-      isActive: false
+      isActive: false,
     },
     {
       id: 4,
@@ -45,7 +43,7 @@ const Schedules = () => {
       endHour: "3:00 p.m.",
       tutor: { id: 11, name: "Alin" },
       location: "Alin's Zoom link",
-      isActive: false
+      isActive: false,
     },
     {
       id: 5,
@@ -54,7 +52,7 @@ const Schedules = () => {
       endHour: "6:00 p.m.",
       tutor: { id: 12, name: "Andrew" },
       location: "Andrew's Zoom link",
-      isActive: false
+      isActive: false,
     },
     {
       id: 6,
@@ -63,20 +61,37 @@ const Schedules = () => {
       endHour: "3:00 p.m.",
       tutor: { id: 13, name: "Victor" },
       location: "Victor's Zoom link",
+      isActive: false,
     },
   ];
+  const [schedules, setSchedules] = useState(
+    JSON.parse(localStorage.getItem("schedules")) || data
+  );
+
+  useEffect(() => {
+    localStorage.setItem("schedules", JSON.stringify(schedules));
+
+    return () => {
+      console.log("Clean up...");
+      localStorage.removeItem("schedules");
+    };
+  }, [schedules]);
+
   const header = ["Day", "From", "To", "Tutor", "Zoom Link"];
   if (admin) {
-    header.push("Action");
+    header.push("Actions");
   }
 
   const handleEdit = (e) => {
-    console.log("Edit Target: ", e.target.id);
+    console.log("Edit Target: ", e);
   };
 
   const handleToggleChange = (e) => {
-    console.log("Toggle: ", e.target.id);
-
+    const id = parseInt(e.target.getAttribute("scheduleid"));
+    const modified = schedules.map((item) =>
+      item.id === id ? { ...item, isActive: !item.isActive } : item
+    );
+    setSchedules(modified);
   };
 
   return (
@@ -85,7 +100,7 @@ const Schedules = () => {
         <TableHeader headers={header} />
         <tbody className="text-muted">
           <ScheduleRowItem
-            data={schedule}
+            data={schedules}
             onEdit={handleEdit}
             onChange={handleToggleChange}
             admin={admin}

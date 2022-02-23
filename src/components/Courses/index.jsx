@@ -2,7 +2,8 @@ import React from "react";
 import Table from "react-bootstrap/Table";
 import { PlusIcon } from "../common/IconsWithTooltip";
 import MainContainer from "../common/MainContainer";
-import CustomPagination from "../CustomPagination";
+import CustomPagination from "../common/CustomPagination";
+import TableHeader from "../CustomTable/TableHeader";
 import CourseRowItem from "./CourseRowItem";
 
 const Courses = () => {
@@ -73,6 +74,7 @@ const Courses = () => {
       instructorEmail: "TBA@neiu.edu",
     },
   ];
+
   const tableHeader = ["Code", "Course", "Semester", "Instructor", "Email"];
   if (admin) {
     tableHeader.push("Edit");
@@ -81,13 +83,7 @@ const Courses = () => {
   return (
     <MainContainer title="Courses" icon={<PlusIcon />}>
       <Table className="text-center mx-auto" bordered hover responsive>
-        <thead className="text-muted">
-          <tr>
-            {tableHeader.map((cell, i) => (
-              <th key={i}>{cell}</th>
-            ))}
-          </tr>
-        </thead>
+        <TableHeader headers={tableHeader} />
         <tbody className="text-muted">
           <CourseRowItem data={courses} admin={admin} />
         </tbody>

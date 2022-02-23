@@ -1,5 +1,11 @@
 @import url("bootstrap-icons/font/bootstrap-icons.css");
 
+:root {
+  --main-pink: #ff0066c9;
+  --main-blue: #1a2943;
+  --main-bg-color: #f0f0f0;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -17,8 +23,7 @@ body {
 .App {
   min-height: 100vh;
   position: relative;
-  /* background-color: rgb(240, 240, 240); */
-  background-color: #f0f0f0;
+  background-color: var(--main-bg-color);
 }
 
 main {
@@ -29,8 +34,7 @@ main {
 
 header,
 footer {
-  background-color: rgb(26 41 67);
-  /* background-color: #1a2943; */
+  background-color: var(--main-blue);
 }
 
 header {

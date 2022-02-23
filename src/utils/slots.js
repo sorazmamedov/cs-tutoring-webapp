@@ -354,7 +354,7 @@ export function getSlots() {
     { id: 11, name: "Jenny Jenssen", slots: [] },
     { id: 12, name: "Andrew Carnegie", slots: [] },
     { id: 13, name: "Victor Zyu", slots: [] },
-    { id: 14, name: "Martha Stewart", slots: [] },
+    { id: 14, name: "Elizabeth Taylor", slots: [] },
     { id: 15, name: "John Doe", slots: [] },
     { id: 16, name: "Arnold Baked", slots: [] },
   ];

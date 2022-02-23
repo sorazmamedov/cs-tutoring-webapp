@@ -14,7 +14,7 @@ const CourseRowItem = ({ data, admin }) => {
       <td>{course.instructorEmail}</td>
       {admin && (
         <td>
-          <EditIcon sourceId={course.id} onEdit={handleEdit}/>
+          <EditIcon sourceid={course.id} onClick={handleEdit} />
         </td>
       )}
     </tr>

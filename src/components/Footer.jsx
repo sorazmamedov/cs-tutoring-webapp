@@ -8,7 +8,9 @@ const Footer = ({ navs }) => {
     <NavLink
       key={++index}
       to={`${navs[key]}`}
-      className={({ isActive }) => (isActive ? "active nav-link" : "nav-link")}
+      className={({ isActive }) =>
+        isActive ? "nav-link activeNav" : "nav-link"
+      }
     >
       {key}
     </NavLink>

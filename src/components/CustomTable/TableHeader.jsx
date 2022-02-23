@@ -1,9 +1,11 @@
 const TableHeader = ({ headers }) => {
   return (
-    <thead className="text-muted">
+    <thead className="text-muted fw-bolder border-white">
       <tr>
         {headers.map((cell, i) => (
-          <th key={i}>{cell}</th>
+          <td key={i}>
+            {cell}
+          </td>
         ))}
       </tr>
     </thead>

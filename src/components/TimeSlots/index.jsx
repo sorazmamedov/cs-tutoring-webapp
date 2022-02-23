@@ -1,21 +1,19 @@
 import React from "react";
-import Table from "react-bootstrap/Table";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import MainContainer from "../common/MainContainer";
-import TableHeader from "../CustomTable/TableHeader";
-import CustomPagination from "../CustomPagination";
 import { getSlots, getHours } from "../../utils/slots";
 import { useState } from "react";
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
+import SlotsTable from "./SlotsTable";
 
 const TimeSlots = () => {
   const [timeSlots, setTimeSlots] = useState(getSlots);
+  const [key, setKey] = useState(timeSlots[0].id);
   const hours = getHours();
 
   const header = [
-    "Tutor",
     "Between",
-    "January 1, 2022 Monday",
+    "Monday",
     "Tuesday",
     "Wednesday",
     "Thursday",
@@ -25,65 +23,43 @@ const TimeSlots = () => {
 
   const tableHeaderDate = [
     "",
-    "January 1, 2022",
-    "January 2, 2022",
-    "January 3, 2022",
-    "January 4, 2022",
-    "January 5, 2022",
-    "January 6, 2022",
+    "Jan 1, 2022",
+    "Jan 2, 2022",
+    "Jan 3, 2022",
+    "Jan 4, 2022",
+    "Jan 5, 2022",
+    "Jan 6, 2022",
   ];
+
+  const theader = header.map((text, i) => text + "-" + tableHeaderDate[i]);
 
   return (
     <MainContainer title="Time Slots">
-      <Row>
-        <Col sm={2} className="pe-0">
-          <Table
-            className="text-muted text-center"
-            size="sm"
-            bordered
-            hover
-            responsive
-          >
-            {header && <TableHeader headers={[header[0]]} />}
-            <tbody>
-              {timeSlots.length > 0 &&
-                timeSlots.map((tutor) => (
-                  <tr id={tutor.id} key={tutor.id}>
-                    <td>{tutor.name}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </Table>
-        </Col>
-        <Col sm={10} className="ps-0">
-          <Table
-            className="text-muted text-center"
-            size="sm"
-            bordered
-            hover
-            responsive
-          >
-            {tableHeaderDate && <TableHeader headers={tableHeaderDate} />}
-            {header && <TableHeader headers={header.slice(1)} />}
-            <tbody>
-              {hours.map((slotHour) => (
-                <tr key={slotHour}>
-                  <td key={slotHour}>{slotHour}</td>
-                  {timeSlots.length > 0 &&
-                    timeSlots[0].slots
-                      .filter((slot) => {
-                        if (`${slot.startHour}-${slot.endHour}` === slotHour) {
-                          return slot;
-                        }
-                      })
-                      .map((data) => <td key={data.slotId}>{data.slotId}</td>)}
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
-      <CustomPagination />
+      <Tabs
+        id="controlled-tab-example"
+        activeKey={key}
+        onSelect={(k) => setKey(k)}
+        className="mb-2"
+      >
+        <Tab eventKey={timeSlots[0].id} title={timeSlots[0].name}>
+          <SlotsTable hours={hours} theader={theader} timeSlot={timeSlots[0]} />
+        </Tab>
+        <Tab eventKey={timeSlots[1].id} title={timeSlots[1].name}>
+          <SlotsTable hours={hours} theader={theader} timeSlot={timeSlots[1]} />
+        </Tab>
+        <Tab eventKey={timeSlots[2].id} title={timeSlots[2].name}>
+          <SlotsTable hours={hours} theader={theader} timeSlot={timeSlots[2]} />
+        </Tab>
+        <Tab eventKey={timeSlots[3].id} title={timeSlots[3].name}>
+          <SlotsTable hours={hours} theader={theader} timeSlot={timeSlots[3]} />
+        </Tab>
+        <Tab eventKey={timeSlots[4].id} title={timeSlots[4].name}>
+          <SlotsTable hours={hours} theader={theader} timeSlot={timeSlots[4]} />
+        </Tab>
+        <Tab eventKey={timeSlots[5].id} title={timeSlots[5].name}>
+          <SlotsTable hours={hours} theader={theader} timeSlot={timeSlots[5]} />
+        </Tab>
+      </Tabs>
     </MainContainer>
   );
 };

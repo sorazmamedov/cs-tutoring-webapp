@@ -1,6 +1,4 @@
-import React, { useRef } from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import React from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import {
@@ -11,6 +9,7 @@ import {
   plusIcon,
   arrowUpIcon,
   personIcon,
+  menuIcon,
 } from "./Icons";
 
 const tooltip = (text, fn) => (
@@ -18,36 +17,35 @@ const tooltip = (text, fn) => (
     {fn}
   </OverlayTrigger>
 );
-const IconTooltip = ({text, children}) => (
-  <OverlayTrigger placement="top" overlay={<Tooltip>{text}</Tooltip>}>
-    {children}
-  </OverlayTrigger>
-);
 
-export const EditIcon = ({ sourceId, onEdit }) => {
-  return tooltip("Edit", editIcon(sourceId, onEdit));
+export const EditIcon = (props) => {
+  return tooltip("Edit", editIcon(props));
 };
 
-export const DeleteIcon = ({ sourceId, onDelete }) => {
-  return tooltip("Delete", deleteIcon(sourceId, onDelete));
+export const DeleteIcon = (props) => {
+  return tooltip("Delete", deleteIcon(props));
 };
 
-export const SwitchIcon = ({ isActive, ...props }) => {
-  return tooltip("Deactivate", toggleIcon(props));
+export const SwitchIcon = (props) => {
+  return tooltip(props.checked ? "Deactivate" : "Activate", toggleIcon(props));
 };
 
-export const MegaphoneIcon = () => {
-  return tooltip("New Announcement", megaphoneIcon());
+export const MegaphoneIcon = (props) => {
+  return tooltip("New Announcement", megaphoneIcon(props));
 };
 
-export const PlusIcon = () => {
-  return tooltip("New", plusIcon());
+export const PlusIcon = (props) => {
+  return tooltip("New", plusIcon(props));
 };
 
-export const ArrowUpIcon = () => {
-  return tooltip("Go Up", arrowUpIcon());
+export const ArrowUpIcon = (props) => {
+  return tooltip("Go Up", arrowUpIcon(props));
 };
 
 export const PersonIcon = ({ style }) => {
   return tooltip("Picture Placeholder", personIcon(style));
+};
+
+export const MenuIcon = (props) => {
+  return tooltip("Menu", menuIcon(props));
 };
