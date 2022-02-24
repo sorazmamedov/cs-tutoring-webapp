@@ -2,11 +2,18 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useContext } from "react";
-import { ViewContext, ActionsContext } from "../Context/DataContext";
+import { ViewContext, ActionsContext } from "../Context/AnnouncementContext";
 
 const DeleteAnnouncementDialog = () => {
-  const { announcementId, deleteAnnouncement } = useContext(ViewContext);
-  const { setShow } = useContext(ActionsContext);
+  const { reset, announcements, announcementId } = useContext(ViewContext);
+  const { setAnnouncements } = useContext(ActionsContext);
+
+  const deleteAnnouncement = () => {
+    setAnnouncements(
+      announcements.filter((item) => item.id !== announcementId)
+    );
+    reset();
+  };
 
   return (
     <>
@@ -17,14 +24,11 @@ const DeleteAnnouncementDialog = () => {
         <Button
           data-action="delete"
           className="flex-fill roundBorder dangerBtn"
-          onClick={() => deleteAnnouncement(announcementId)}
+          onClick={deleteAnnouncement}
         >
           DELETE
         </Button>
-        <Button
-          className="flex-fill roundBorder primaryBtn"
-          onClick={() => setShow(false)}
-        >
+        <Button className="flex-fill roundBorder primaryBtn" onClick={reset}>
           CANCEL
         </Button>
       </Modal.Footer>

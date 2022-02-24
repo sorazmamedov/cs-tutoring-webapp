@@ -54,12 +54,22 @@ i[data-icon-type="delete"] {
 
 .dangerBtn:hover,
 .dangerBtn:focus {
-  background-color: #e91857;
+  background-color: #b30036;
+  color: #ffffff;
+}
+
+.dangerBtn:disabled {
+  background-color: #af677c;
   color: #ffffff;
 }
 
 .primaryBtn {
   background-color: #2699fb;
+  color: #ffffff;
+}
+
+.primaryBtn:disabled {
+  background-color: #82a8ca;
   color: #ffffff;
 }
 

@@ -4,7 +4,14 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
 
-const Header = ({ navs }) => {
+const Header = () => {
+  const navs = {
+    Semester: "/",
+    Profile: "/profile",
+    Logout: "/logout",
+    Login: "/login",
+  };
+
   const links = Object.keys(navs).map((key, index) => (
     <NavLink
       key={++index}

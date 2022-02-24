@@ -1,15 +1,19 @@
 import React, { useContext } from "react";
 import Modal from "react-bootstrap/Modal";
-import { ViewContext } from "../Context/DataContext";
 
-const CustomModal = () => {
-  const { onClose, show, modalBody: ModalBody } = useContext(ViewContext);
+const TemplateModal = ({ viewContext }) => {
+  const {
+    show,
+    modalBody: ModalBody,
+    reset,
+  } = useContext(viewContext);
 
   return (
     <Modal
       size="lg"
       show={show}
-      onHide={onClose}
+      onHide={reset}
+      onExiting={reset}
       backdrop="static"
       keyboard={false}
       centered
@@ -21,4 +25,4 @@ const CustomModal = () => {
   );
 };
 
-export default CustomModal;
+export default TemplateModal;
