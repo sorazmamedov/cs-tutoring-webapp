@@ -53,13 +53,17 @@ const Announcements = () => {
                 className={announcement.published ? "" : "draft"}
                 onClick={handleShowAnnouncement}
               >
-                <td className="w-100 d-flex justify-content-between border-start-0 border-end-0">
+                <td className="d-flex justify-content-between border-start-0 border-end-0">
                   <p className="m-0">
-                    {announcement.id + ": " + announcement.subject}
+                    {`${announcement.id}: ${
+                      announcement.subject.length > 100
+                        ? announcement.subject.substring(0, 100) + "..."
+                        : announcement.subject
+                    }`}
                   </p>
                   <div>
                     {!announcement.published && (
-                      <span className="d-inline me-4">Draft</span>
+                      <span className="me-4">Draft</span>
                     )}
                     <DeleteIcon id={announcement.id} onClick={handleDelete} />
                   </div>
