@@ -1,78 +1,24 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
 import { HouseIcon } from "../common/Icons";
 import MainContainer from "../common/MainContainer";
 import TitleBar from "../common/TitleBar";
+import {
+  GlobalViewContext,
+  GlobalActionsContext,
+} from "../Context/DataContext";
+import { ViewContext, ActionsContext } from "../Context/SemesterContext";
+import TemplateModal from "../common/TemplateModal";
+import SemesterDialog from "./SemesterDialog";
 
 const Semesters = () => {
-  const yearRef = useRef(null);
-  const [semesters, setSemesters] = useState([
-    {
-      id: 0,
-      semesterName: "Spring",
-      academicYear: "2021",
-      startDate: "8/26/2021",
-      endDate: "12/14/2021",
-      active: true,
-    },
-    {
-      id: 1,
-      semesterName: "Fall",
-      academicYear: "2021",
-      startDate: "8/26/2021",
-      endDate: "12/14/2021",
-      active: false,
-    },
-    {
-      id: 2,
-      semesterName: "Spring",
-      academicYear: "2022",
-      startDate: "1/21/2022",
-      endDate: "5/10/2022",
-      active: true,
-    },
-    {
-      id: 3,
-      semesterName: "Summer",
-      academicYear: "2022",
-      startDate: "5/26/2022",
-      endDate: "8/14/2022",
-      active: false,
-    },
-    {
-      id: 4,
-      semesterName: "Fall",
-      academicYear: "2022",
-      startDate: "8/26/2022",
-      endDate: "12/14/2022",
-      active: false,
-    },
-    {
-      id: 5,
-      semesterName: "Spring",
-      academicYear: "2023",
-      startDate: "1/15/2023",
-      endDate: "5/7/2023",
-      active: false,
-    },
-    {
-      id: 6,
-      semesterName: "Summer",
-      academicYear: "2023",
-      startDate: "5/15/2023",
-      endDate: "8/7/2023",
-      active: false,
-    },
-    {
-      id: 7,
-      semesterName: "Summer",
-      academicYear: "2034",
-      startDate: "5/15/2034",
-      endDate: "8/7/2034",
-      active: false,
-    },
-  ]);
+  const { loadedSemesterId } = useContext(GlobalViewContext);
+  const { setLoadedSemesterId } = useContext(GlobalActionsContext);
+
+  const { semesters } = useContext(ViewContext);
+  const { setTitle, setSemesters, setModalBody, setShow } =
+    useContext(ActionsContext);
 
   const availableYears = [
     ...new Set(semesters.map((item) => item.academicYear)),
@@ -87,22 +33,15 @@ const Semesters = () => {
     )[0] || semesters[0]
   );
 
-  const [loadedSemester, setLoadedSemester] = useState(currentSemester.id);
-
   const [selectedYear, setSelectedYear] = useState(
     currentSemester.academicYear
   );
 
-  const handleLoad = () => {
-    setLoadedSemester(currentSemester.id);
-  };
-
-  const handleStatusChange = () => {
-    setCurrentSemester({ ...currentSemester, active: !currentSemester.active });
-    setSemesters([
-      ...semesters.filter((item) => item.id !== currentSemester.id),
-      { ...currentSemester, active: !currentSemester.active },
-    ]);
+  const handleYearChange = (selected) => {
+    setSelectedYear(selected);
+    setCurrentSemester(
+      semesters.filter((item) => item.academicYear === selected)[0]
+    );
   };
 
   const handleSemesterChange = (selected) => {
@@ -113,25 +52,40 @@ const Semesters = () => {
     );
   };
 
-  const handleYearChange = (selected) => {
-    setSelectedYear(selected);
-    setCurrentSemester(
-      semesters.filter((item) => item.academicYear === selected)[0]
-    );
+  const handleLoad = () => {
+    setLoadedSemesterId(currentSemester.id);
+  };
+
+  const handleStatusChange = () => {
+    setCurrentSemester({ ...currentSemester, active: !currentSemester.active });
+    setSemesters([
+      ...semesters.filter((item) => item.id !== currentSemester.id),
+      { ...currentSemester, active: !currentSemester.active },
+    ]);
   };
 
   const handleAddSemester = () => {
     console.log("Add new semester ....");
+    setTitle("Add New Semester");
+    setModalBody(() => SemesterDialog);
+    setShow(true);
   };
 
   const handleEditSemester = () => {
     console.log("Edit semester ....");
+    setTitle("Edit Semester");
+    setModalBody(() => SemesterDialog);
+    setShow(true);
   };
 
   const handleDeleteSemester = () => {
     const targetId = currentSemester.id;
     setSemesters([...semesters.filter((item) => item.id !== targetId)]);
   };
+
+  useEffect(() => {
+    setLoadedSemesterId(currentSemester.id);
+  }, []);
 
   return (
     <MainContainer className="shadow p-3 mb-4 rounded-3">
@@ -142,7 +96,6 @@ const Semesters = () => {
 
           {/* Select Year */}
           <select
-            ref={yearRef}
             className="ms-3 text-muted align-text-bottom rounded bg-white px-1"
             onChange={(e) => handleYearChange(e.target.value)}
             value={currentSemester.academicYear}
@@ -174,10 +127,10 @@ const Semesters = () => {
           {/* End of Select Semester */}
 
           <Button
-            disabled={loadedSemester === currentSemester.id}
+            disabled={loadedSemesterId === currentSemester.id}
             size="sm"
             className={`ms-4 px-3 py-0 align-text-bottom ${
-              loadedSemester === currentSemester.id
+              loadedSemesterId === currentSemester.id
                 ? "btn-secondary"
                 : "available"
             }`}
@@ -221,6 +174,7 @@ const Semesters = () => {
           </Dropdown.Menu>
         </Dropdown>
       </TitleBar>
+      <TemplateModal viewContext={ViewContext} />
     </MainContainer>
   );
 };

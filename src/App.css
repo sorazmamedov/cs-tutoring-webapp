@@ -1,3 +1,16 @@
+::-webkit-input-placeholder {
+  font-style: italic;
+}
+:-moz-placeholder {
+  font-style: italic;
+}
+::-moz-placeholder {
+  font-style: italic;
+}
+:-ms-input-placeholder {
+  font-style: italic;
+}
+
 .activeNav {
   color: var(--main-pink) !important;
 }
@@ -93,7 +106,8 @@ i[data-icon-type="delete"] {
 }
 
 input.roundBorder,
-textarea.roundBorder {
+textarea.roundBorder,
+select.roundBorder {
   background: #f5f6fa 0% 0% no-repeat padding-box;
   border: 2px solid #cbcbcb;
   opacity: 1;

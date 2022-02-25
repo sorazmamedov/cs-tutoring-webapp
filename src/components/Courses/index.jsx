@@ -75,7 +75,7 @@ const Courses = () => {
     },
   ];
 
-  const tableHeader = ["Code", "Course", "Semester", "Instructor", "Email"];
+  const tableHeader = ["Section", "Course", "Semester", "Instructor", "Email"];
   if (admin) {
     tableHeader.push("Edit");
   }

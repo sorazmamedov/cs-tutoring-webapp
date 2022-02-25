@@ -14,7 +14,11 @@ const ProfileInfo = () => {
         >
           <Form.Group className="col-6 pe-4">
             <Form.Label className="text-muted mb-0">Firstname</Form.Label>
-            <Form.Control type="text" placeholder="" className="roundBorder" />
+            <Form.Control
+              type="text"
+              placeholder=""
+              className="roundBorder"
+            />
           </Form.Group>
           <Form.Group className="col-6 ps-4 ms-sm-0">
             <Form.Label className="text-muted mb-0">Lastname</Form.Label>
