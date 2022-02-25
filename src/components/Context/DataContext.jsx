@@ -1,50 +1,27 @@
 import { createContext, useState } from "react";
 
-const ViewContext = createContext({});
-const ActionsContext = createContext({});
+const GlobalViewContext = createContext({});
+const GlobalActionsContext = createContext({});
 
-export const DataProvider = ({ children }) => {
-  const handleClose = () => setShow(false);
-  const [show, setShow] = useState(false);
-  const [modalBody, setModalBody] = useState("");
-  const [onClose, setOnClose] = useState(() => handleClose);
-
-  //Announcement ModalBody
-  const [subject, setSubject] = useState("");
-  const [content, setContent] = useState("");
-  const [announcementId, setAnnouncementId] = useState(-1);
-  const [addAnnouncement, setAddAnnouncement] = useState("");
-  const [deleteAnnouncement, setDeleteAnnouncement] = useState(() => {});
+const DataProvider = ({ children }) => {
+  const [loadedSemesterId, setLoadedSemesterId] = useState("");
 
   return (
-    <ViewContext.Provider
+    <GlobalViewContext.Provider
       value={{
-        show,
-        modalBody,
-        subject,
-        content,
-        onClose,
-        announcementId,
-        addAnnouncement,
-        deleteAnnouncement,
+        loadedSemesterId,
       }}
     >
-      <ActionsContext.Provider
+      <GlobalActionsContext.Provider
         value={{
-          setShow,
-          setModalBody,
-          setSubject,
-          setContent,
-          setOnClose,
-          setAnnouncementId,
-          setAddAnnouncement,
-          setDeleteAnnouncement,
+          setLoadedSemesterId,
         }}
       >
         {children}
-      </ActionsContext.Provider>
-    </ViewContext.Provider>
+      </GlobalActionsContext.Provider>
+    </GlobalViewContext.Provider>
   );
 };
 
-export { ViewContext, ActionsContext };
+export default DataProvider;
+export { GlobalViewContext, GlobalActionsContext };

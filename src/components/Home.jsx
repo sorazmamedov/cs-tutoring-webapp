@@ -5,12 +5,15 @@ import Announcements from "./Announcements";
 import Courses from "./Courses";
 import Profiles from "./Profiles";
 import TimeSlots from "./TimeSlots";
-import { AnnouncementDataProvider } from "./Context/AnnouncementContext";
+import AnnouncementDataProvider from "./Context/AnnouncementContext";
+import SemesterDataProvider from "./Context/SemesterContext";
 
 const Home = () => {
   return (
     <>
-      <Semesters />
+      <SemesterDataProvider>
+        <Semesters />
+      </SemesterDataProvider>
       <Schedules />
       <AnnouncementDataProvider>
         <Announcements />
