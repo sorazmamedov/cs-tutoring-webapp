@@ -3,8 +3,7 @@ import { createContext, useState } from "react";
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
-export const AnnouncementDataProvider = ({ children }) => {
-  //Announcement
+const AnnouncementDataProvider = ({ children }) => {
   const [announcements, setAnnouncements] = useState([
     {
       id: 1,
@@ -71,35 +70,28 @@ export const AnnouncementDataProvider = ({ children }) => {
     },
   ]);
 
-  //Modal
   const [show, setShow] = useState(false);
   const [modalBody, setModalBody] = useState("");
-
-  //Announcement ModalBody
+  const [title, setTitle] = useState("");
+  const [announcementId, setAnnouncementId] = useState(0);
 
   const handleReset = () => {
-    console.log("Resetting everything....");
+    console.log("Announcement Resetting....");
     setShow(false);
+    setTitle("");
     setModalBody("");
-    setContent("");
-    setSubject("");
     setAnnouncementId(0);
   };
-  const [subject, setSubject] = useState("");
-  const [content, setContent] = useState("");
-  const [announcementId, setAnnouncementId] = useState(0);
-  const [addAnnouncement, setAddAnnouncement] = useState("");
+
   const [reset] = useState(() => handleReset);
 
   return (
     <ViewContext.Provider
       value={{
         show,
+        title,
         modalBody,
-        subject,
-        content,
         announcementId,
-        addAnnouncement,
         announcements,
         reset,
       }}
@@ -107,11 +99,9 @@ export const AnnouncementDataProvider = ({ children }) => {
       <ActionsContext.Provider
         value={{
           setShow,
+          setTitle,
           setModalBody,
-          setSubject,
-          setContent,
           setAnnouncementId,
-          setAddAnnouncement,
           setAnnouncements,
         }}
       >
@@ -121,4 +111,5 @@ export const AnnouncementDataProvider = ({ children }) => {
   );
 };
 
+export default AnnouncementDataProvider;
 export { ViewContext, ActionsContext };

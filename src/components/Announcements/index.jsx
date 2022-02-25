@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import { DeleteIcon, MegaphoneIcon } from "../common/IconsWithTooltip";
 import MainContainer from "../common/MainContainer";
@@ -9,25 +9,28 @@ import DeleteAnnouncementDialog from "./DeleteAnnouncementDialog";
 import { ViewContext, ActionsContext } from "../Context/AnnouncementContext";
 
 const Announcements = () => {
-  const { setShow, setModalBody, setAnnouncementId } =
+  const { setShow, setTitle, setModalBody, setAnnouncementId } =
     useContext(ActionsContext);
   const { announcements } = useContext(ViewContext);
 
   const handleCreateAnnouncement = () => {
+    setTitle("New Announcement");
     setModalBody(() => AnnouncementDialog);
     setShow(true);
   };
 
   const handleShowAnnouncement = (e) => {
     const targetId = parseInt(e.currentTarget.id);
-    setModalBody(() => AnnouncementDialog);
+    setTitle("Announcement");
     setAnnouncementId(targetId);
+    setModalBody(() => AnnouncementDialog);
     setShow(true);
   };
 
   const handleDelete = (e) => {
     e.stopPropagation();
     const targetId = parseInt(e.target.id);
+    setTitle("Are you sure you want to delete?");
     setAnnouncementId(targetId);
     setModalBody(() => DeleteAnnouncementDialog);
     setShow(true);
