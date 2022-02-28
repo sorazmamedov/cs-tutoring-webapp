@@ -37,7 +37,7 @@ const Announcements = () => {
   };
 
   useEffect(() => {
-    console.log("Announcements change...");
+    //console.log("Announcements change...");
   }, [announcements]);
 
   return (

@@ -12,11 +12,9 @@ const SlotsTable = ({ theader, hours, timeSlot }) => {
           <tr key={slotHour}>
             <td key={slotHour}>{slotHour}</td>
             {timeSlot.slots
-              .filter((slot) => {
-                if (`${slot.startHour}-${slot.endHour}` === slotHour) {
-                  return slot;
-                }
-              })
+              .filter(
+                (slot) => `${slot.startHour}-${slot.endHour}` === slotHour
+              )
               .map((data) => (
                 <td
                   key={data.slotId}

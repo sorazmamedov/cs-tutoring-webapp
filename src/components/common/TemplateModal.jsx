@@ -9,7 +9,6 @@ const TemplateModal = ({ viewContext }) => {
       size="lg"
       show={show}
       onHide={reset}
-      // onExiting={reset}
       backdrop="static"
       keyboard={false}
       centered

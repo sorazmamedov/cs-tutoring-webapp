@@ -7,82 +7,83 @@ const SemesterDataProvider = ({ children }) => {
   //Semesters
   const [semesters, setSemesters] = useState([
     {
-      id: 0,
+      id: "QGngtrqEGS2L",
       semesterName: "Spring",
-      academicYear: "2021",
-      startDate: "8/26/2021",
-      endDate: "12/14/2021",
+      academicYear: 2021,
+      startDate: 1629954000000,
+      endDate: 1639461600000,
       active: true,
     },
     {
-      id: 1,
+      id: "Pp9NItWifwKW",
       semesterName: "Fall",
-      academicYear: "2021",
-      startDate: "8/26/2021",
-      endDate: "12/14/2021",
+      academicYear: 2021,
+      startDate: 1629954000000,
+      endDate: 1639461600000,
       active: false,
     },
     {
-      id: 2,
+      id: "riO9WNrTkOOu",
+      semesterName: "Summer",
+      academicYear: 2022,
+      startDate: 1653541200000,
+      endDate: 1660453200000,
+      active: false,
+    },
+    {
+      id: "8OZm4MkQWQdU",
+      semesterName: "Fall",
+      academicYear: 2022,
+      startDate: 1653541200000,
+      endDate: 1664453200000,
+      active: false,
+    },
+    {
+      id: "jzGiHw3J3WMI",
       semesterName: "Spring",
-      academicYear: "2022",
-      startDate: "1/21/2022",
-      endDate: "5/10/2022",
+      academicYear: 2022,
+      startDate: 1642744800000,
+      endDate: 1652158800000,
       active: true,
     },
     {
-      id: 3,
-      semesterName: "Summer",
-      academicYear: "2022",
-      startDate: "5/26/2022",
-      endDate: "8/14/2022",
-      active: false,
-    },
-    {
-      id: 4,
-      semesterName: "Fall",
-      academicYear: "2022",
-      startDate: "8/26/2022",
-      endDate: "12/14/2022",
-      active: false,
-    },
-    {
-      id: 5,
+      id: "8OZm4MkQWQdp",
       semesterName: "Spring",
-      academicYear: "2023",
-      startDate: "1/15/2023",
-      endDate: "5/7/2023",
+      academicYear: 2023,
+      startDate: 1673762400000,
+      endDate: 1676762400000,
       active: false,
     },
     {
-      id: 6,
+      id: "8OZm4MkQWQdz",
       semesterName: "Summer",
-      academicYear: "2023",
-      startDate: "5/15/2023",
-      endDate: "8/7/2023",
+      academicYear: 2023,
+      startDate: 1673762400000,
+      endDate: 1679762400000,
       active: false,
     },
     {
-      id: 7,
+      id: "8OZm4MkQWQdw",
       semesterName: "Summer",
-      academicYear: "2034",
-      startDate: "5/15/2034",
-      endDate: "8/7/2034",
+      academicYear: 2024,
+      startDate: 1715749200000,
+      endDate: 1719949200000,
       active: false,
     },
   ]);
 
   //Modal
   const [show, setShow] = useState(false);
-  const [modalBody, setModalBody] = useState("");
   const [title, setTitle] = useState("");
+  const [modalBody, setModalBody] = useState("");
+  const [editSemesterId, setEditSemesterId] = useState("");
 
-  //Semester ModalBody
   const handleReset = () => {
     console.log("Semester Resetting....");
     setShow(false);
     setModalBody("");
     setTitle("");
+    setEditSemesterId("");
   };
 
   const [reset] = useState(() => handleReset);
@@ -91,18 +92,20 @@ const SemesterDataProvider = ({ children }) => {
     <ViewContext.Provider
       value={{
         show,
+        title,
         modalBody,
+        editSemesterId,
         semesters,
         reset,
-        title,
       }}
     >
       <ActionsContext.Provider
         value={{
           setShow,
-          setModalBody,
-          setSemesters,
           setTitle,
+          setModalBody,
+          setEditSemesterId,
+          setSemesters,
         }}
       >
         {children}
