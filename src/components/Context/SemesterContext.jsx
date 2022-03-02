@@ -1,92 +1,56 @@
+import { useEffect } from "react";
 import { createContext, useState } from "react";
+import axios from "../../apis/cs-tutoring";
+import useAxios from "../../hooks/useAxios";
 
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const SemesterDataProvider = ({ children }) => {
+  const [data, error, loading, axiosFetch] = useAxios();
+
   //Semesters
-  const [semesters, setSemesters] = useState([
-    {
-      id: "QGngtrqEGS2L",
-      semesterName: "Spring",
-      academicYear: 2021,
-      startDate: 1629954000000,
-      endDate: 1639461600000,
-      active: true,
-    },
-    {
-      id: "Pp9NItWifwKW",
-      semesterName: "Fall",
-      academicYear: 2021,
-      startDate: 1629954000000,
-      endDate: 1639461600000,
-      active: false,
-    },
-    {
-      id: "riO9WNrTkOOu",
-      semesterName: "Summer",
-      academicYear: 2022,
-      startDate: 1653541200000,
-      endDate: 1660453200000,
-      active: false,
-    },
-    {
-      id: "8OZm4MkQWQdU",
-      semesterName: "Fall",
-      academicYear: 2022,
-      startDate: 1653541200000,
-      endDate: 1664453200000,
-      active: false,
-    },
-    {
-      id: "jzGiHw3J3WMI",
-      semesterName: "Spring",
-      academicYear: 2022,
-      startDate: 1642744800000,
-      endDate: 1652158800000,
-      active: true,
-    },
-    {
-      id: "8OZm4MkQWQdp",
-      semesterName: "Spring",
-      academicYear: 2023,
-      startDate: 1673762400000,
-      endDate: 1676762400000,
-      active: false,
-    },
-    {
-      id: "8OZm4MkQWQdz",
-      semesterName: "Summer",
-      academicYear: 2023,
-      startDate: 1673762400000,
-      endDate: 1679762400000,
-      active: false,
-    },
-    {
-      id: "8OZm4MkQWQdw",
-      semesterName: "Summer",
-      academicYear: 2024,
-      startDate: 1715749200000,
-      endDate: 1719949200000,
-      active: false,
-    },
-  ]);
+  const [semesters, setSemesters] = useState([]);
 
   //Modal
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
   const [modalBody, setModalBody] = useState("");
-  const [editSemesterId, setEditSemesterId] = useState("");
+  const [currentSemester, setCurrentSemester] = useState(null);
+  const [edit, setEdit] = useState(false);
 
   const handleReset = () => {
-    console.log("Semester Resetting....");
     setShow(false);
     setModalBody("");
     setTitle("");
-    setEditSemesterId("");
+    setEdit(false);
   };
 
   const [reset] = useState(() => handleReset);
+
+  const fetchSemesters = () => {
+    axiosFetch({
+      axiosInstance: axios,
+      method: "GET",
+      url: "/semesters",
+      requestConfig: {},
+    });
+  };
+
+  useEffect(() => {
+    console.log("Setting up semesters");
+    fetchSemesters();
+  }, []);
+
+  useEffect(() => {
+    // setTimeout(() => {
+    //   if (data.length !== 0) {
+    //   }
+    // }, 5000);
+
+    console.log("==============Semesters Context=============");
+    setSemesters([...data]);
+  }, [data]);
 
   return (
     <ViewContext.Provider
@@ -94,9 +58,12 @@ const SemesterDataProvider = ({ children }) => {
         show,
         title,
         modalBody,
-        editSemesterId,
         semesters,
+        currentSemester,
+        edit,
         reset,
+        error,
+        loading,
       }}
     >
       <ActionsContext.Provider
@@ -104,7 +71,8 @@ const SemesterDataProvider = ({ children }) => {
           setShow,
           setTitle,
           setModalBody,
-          setEditSemesterId,
+          setCurrentSemester,
+          setEdit,
           setSemesters,
         }}
       >

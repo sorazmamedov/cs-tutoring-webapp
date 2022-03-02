@@ -10,15 +10,12 @@ import { localToUtc, utcToLocal } from "../../utils/date";
 import Id from "../../utils/Id";
 
 const SemesterDialog = () => {
-  const { semesters, reset, editSemesterId } = useContext(ViewContext);
-  const { setSemesters } = useContext(ActionsContext);
+  const { semesters, reset, currentSemester, edit } = useContext(ViewContext);
+  const { setSemesters, setCurrentSemester } = useContext(ActionsContext);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
   const [datepickerYear, setDatepickerYear] = useState(
-    new Date().getFullYear()
-  );
-  const [editSemester, setEditSemester] = useState(
-    semesters.find((item) => item.id === editSemesterId)
+    edit ? "" : new Date().getFullYear()
   );
 
   const handleYearFilter = (e) => {
@@ -31,28 +28,31 @@ const SemesterDialog = () => {
     e.stopPropagation();
 
     const newItem = {
-      id: editSemesterId ? editSemesterId : Id.makeId(),
+      id: edit ? currentSemester.id : Id.makeId(),
       semesterName: form.semesterName.value.trim(),
       academicYear: parseInt(form.academicYear.value.trim()),
       startDate: +new Date(utcToLocal(form.startDate.value.trim())),
       endDate: +new Date(utcToLocal(form.endDate.value.trim())),
-      active: editSemesterId ? editSemester.active : false,
+      active: edit ? currentSemester.active : false,
     };
 
     let error = semesterValidator(newItem);
     if (!error) {
-      if (editSemesterId) {
-        let index = semesters.findIndex((item) => item.id === editSemesterId);
+      if (edit) {
+        let index = semesters.findIndex(
+          (item) => item.id === currentSemester.id
+        );
         setSemesters([
           ...semesters.slice(0, index),
-          newItem,
+          { ...newItem },
           ...semesters.slice(++index),
         ]);
       } else {
-        setSemesters([...semesters, newItem]);
+        setSemesters([...semesters, { ...newItem }]);
       }
       setValidated(true);
       reset();
+      setCurrentSemester({ ...newItem });
     } else {
       const errorData = {};
       for (let item of error.inner) {
@@ -79,7 +79,7 @@ const SemesterDialog = () => {
             aria-label="Select Semester"
             className="pe-3 roundBorder"
             name="semesterName"
-            defaultValue={editSemester?.semesterName}
+            defaultValue={edit && currentSemester.semesterName}
           >
             <option value="Fall">Fall</option>
             <option value="Spring">Spring</option>
@@ -90,11 +90,11 @@ const SemesterDialog = () => {
           <Form.Label className="text-muted mb-0">Academic Year</Form.Label>
           <Form.Control
             type="number"
-            min="2022"
+            min={edit ? "" : "2022"}
             placeholder="yyyy"
             className="roundBorder"
             name="academicYear"
-            defaultValue={editSemester?.academicYear}
+            defaultValue={edit && currentSemester.academicYear}
             onChange={handleYearFilter}
             isInvalid={errors.academicYear}
             required
@@ -113,7 +113,7 @@ const SemesterDialog = () => {
             name="startDate"
             min={`${datepickerYear}-01-01`}
             max={`${datepickerYear}-12-31`}
-            defaultValue={editSemester && localToUtc(editSemester.startDate)}
+            defaultValue={edit && localToUtc(currentSemester.startDate)}
             isInvalid={errors.startDate}
             required
           />
@@ -129,7 +129,7 @@ const SemesterDialog = () => {
             name="endDate"
             min={`${datepickerYear}-01-01`}
             max={`${datepickerYear}-12-31`}
-            defaultValue={editSemester && localToUtc(editSemester.endDate)}
+            defaultValue={edit && localToUtc(currentSemester.endDate)}
             isInvalid={errors.endDate}
             required
           />

@@ -34,8 +34,8 @@ export const MegaphoneIcon = (props) => {
   return tooltip("New Announcement", megaphoneIcon(props));
 };
 
-export const PlusIcon = (props) => {
-  return tooltip("New", plusIcon(props));
+export const PlusIcon = ({text, ...props}) => {
+  return tooltip(text ? text : "New", plusIcon(props));
 };
 
 export const ArrowUpIcon = (props) => {
