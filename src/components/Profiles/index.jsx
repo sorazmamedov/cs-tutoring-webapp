@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Table from "react-bootstrap/Table";
-import MainContainer from "../common/MainContainer";
-import TableHeader from "../CustomTable/TableHeader";
-import ProfileRowItem from "./ProfileRowItem";
-import CustomPagination from "../common/CustomPagination";
-import { PlusIcon } from "../common/IconsWithTooltip";
+import MainContainer from "../common/mainContainer";
+import TableHeader from "../CustomTable/tableHeader";
+import ProfileRowItem from "./profileRowItem";
+import CustomPagination from "../common/customPagination";
+import { PlusIcon } from "../common/iconsWithTooltip";
 import { useEffect } from "react";
 
 const Profiles = () => {
@@ -16,7 +16,8 @@ const Profiles = () => {
       firstName: "John",
       lastName: "Monroe",
       email: "jmonroe@neiu.edu",
-      about: "Some lorem ipsum and some more Some lorem ipsum and Some lorem ipsum",
+      about:
+        "Some lorem ipsum and some more Some lorem ipsum and Some lorem ipsum",
     },
     {
       id: "2ZXHi4q7J_9m",
@@ -76,7 +77,7 @@ const Profiles = () => {
     localStorage.setItem("profiles", JSON.stringify(profiles));
 
     return () => {
-      console.log("Clean up...");
+      console.log("Profiles Clean up...");
       localStorage.removeItem("profiles");
     };
   }, [profiles]);

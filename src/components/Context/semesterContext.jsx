@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { createContext, useState } from "react";
-import axios from "../../apis/cs-tutoring";
+import axios from "../../apis/cs-tutoring/cs-tutoring";
 import useAxios from "../../hooks/useAxios";
 
 const ViewContext = createContext({});
@@ -16,7 +16,7 @@ const SemesterDataProvider = ({ children }) => {
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
   const [modalBody, setModalBody] = useState("");
-  const [currentSemester, setCurrentSemester] = useState(null);
+  const [currentSemester, setCurrentSemester] = useState({});
   const [edit, setEdit] = useState(false);
 
   const handleReset = () => {
@@ -38,17 +38,11 @@ const SemesterDataProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log("Setting up semesters");
     fetchSemesters();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   if (data.length !== 0) {
-    //   }
-    // }, 5000);
-
-    console.log("==============Semesters Context=============");
     setSemesters([...data]);
   }, [data]);
 

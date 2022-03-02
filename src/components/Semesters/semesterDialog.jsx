@@ -1,13 +1,13 @@
 import React, { useState, useContext } from "react";
-// import { format } from "date-fns";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { ViewContext, ActionsContext } from "../Context/SemesterContext";
-import { semesterValidator } from "../../utils/validator/";
+import { ViewContext, ActionsContext } from "../Context/semesterContext";
+import { semesterValidator } from "../../utils/validator";
 import { localToUtc, utcToLocal } from "../../utils/date";
 import Id from "../../utils/Id";
+import postSemester from "../../apis/cs-tutoring/semesters/postSemester";
 
 const SemesterDialog = () => {
   const { semesters, reset, currentSemester, edit } = useContext(ViewContext);
@@ -22,7 +22,7 @@ const SemesterDialog = () => {
     setDatepickerYear(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     const form = e.currentTarget;
     e.preventDefault();
     e.stopPropagation();
@@ -38,21 +38,25 @@ const SemesterDialog = () => {
 
     let error = semesterValidator(newItem);
     if (!error) {
-      if (edit) {
-        let index = semesters.findIndex(
-          (item) => item.id === currentSemester.id
-        );
-        setSemesters([
-          ...semesters.slice(0, index),
-          { ...newItem },
-          ...semesters.slice(++index),
-        ]);
-      } else {
-        setSemesters([...semesters, { ...newItem }]);
+      const response = await postSemester(newItem);
+
+      if (response.status === 201) {
+        if (edit) {
+          let index = semesters.findIndex(
+            (item) => item.id === currentSemester.id
+          );
+          setSemesters([
+            ...semesters.slice(0, index),
+            { ...newItem },
+            ...semesters.slice(++index),
+          ]);
+        } else {
+          setSemesters([...semesters, { ...newItem }]);
+        }
+        setValidated(true);
+        reset();
+        setCurrentSemester({ ...newItem });
       }
-      setValidated(true);
-      reset();
-      setCurrentSemester({ ...newItem });
     } else {
       const errorData = {};
       for (let item of error.inner) {

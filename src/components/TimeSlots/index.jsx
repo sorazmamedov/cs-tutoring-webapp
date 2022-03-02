@@ -1,10 +1,10 @@
 import React from "react";
-import MainContainer from "../common/MainContainer";
+import MainContainer from "../common/mainContainer";
 import { getSlots, getHours } from "../../utils/slots";
 import { useState } from "react";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
-import SlotsTable from "./SlotsTable";
+import SlotsTable from "./slotsTable";
 
 const TimeSlots = () => {
   const [timeSlots, setTimeSlots] = useState(getSlots);

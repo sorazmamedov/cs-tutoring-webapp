@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
-import MainContainer from "../common/MainContainer";
-import TableHeader from "../CustomTable/TableHeader";
-import ScheduleRowItem from "./ScheduleRowItem";
-import CustomPagination from "../common/CustomPagination";
-import { PlusIcon } from "../common/IconsWithTooltip";
+import MainContainer from "../common/mainContainer";
+import TableHeader from "../CustomTable/tableHeader";
+import ScheduleRowItem from "./scheduleRowItem";
+import CustomPagination from "../common/customPagination";
+import { PlusIcon } from "../common/iconsWithTooltip";
 
 const Schedules = () => {
   const admin = true;
@@ -72,7 +72,7 @@ const Schedules = () => {
     localStorage.setItem("schedules", JSON.stringify(schedules));
 
     return () => {
-      console.log("Clean up...");
+      console.log("Schedules Clean up...");
       localStorage.removeItem("schedules");
     };
   }, [schedules]);

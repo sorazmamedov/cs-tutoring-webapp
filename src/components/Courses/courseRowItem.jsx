@@ -1,4 +1,4 @@
-import { EditIcon } from "../common/IconsWithTooltip";
+import { EditIcon } from "../common/iconsWithTooltip";
 
 const CourseRowItem = ({ data, admin }) => {
   const handleEdit = (e) => {

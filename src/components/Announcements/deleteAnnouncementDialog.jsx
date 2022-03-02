@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { ViewContext, ActionsContext } from "../Context/AnnouncementContext";
+import { ViewContext, ActionsContext } from "../Context/announcementContext";
 
 const DeleteAnnouncementDialog = () => {
   const { reset, announcements, announcementId } = useContext(ViewContext);

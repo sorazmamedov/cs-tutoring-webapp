@@ -5,8 +5,8 @@ import Announcements from "./Announcements";
 import Courses from "./Courses";
 import Profiles from "./Profiles";
 import TimeSlots from "./TimeSlots";
-import AnnouncementDataProvider from "./Context/AnnouncementContext";
-import SemesterDataProvider from "./Context/SemesterContext";
+import AnnouncementDataProvider from "./Context/announcementContext";
+import SemesterDataProvider from "./Context/semesterContext";
 
 const Home = () => {
   return (

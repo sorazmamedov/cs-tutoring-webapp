@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 import useAxios from "../../hooks/useAxios";
-import axios from "../../apis/cs-tutoring";
+import axios from "../../apis/cs-tutoring/cs-tutoring";
 import { useEffect } from "react";
 
 const GlobalViewContext = createContext({});
@@ -25,7 +25,6 @@ const DataProvider = ({ children }) => {
 
   useEffect(() => {
     if (Object.keys(data).length !== 0) {
-      console.log("==============LoadedSemester Context=============");
       setLoadedSemester({ ...data });
     }
   }, [data]);

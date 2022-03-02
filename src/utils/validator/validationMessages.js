@@ -12,7 +12,7 @@ const len = Object.freeze({
   minLongTextLength: 10,
   maxLongTextLength: 1000,
   minYear: 2022,
-  minDate: 1646001839857, //(January 1, 2022)
+  minDate: 1641016800000, //(January 1, 2022)
   minDay: 1, //0-Sunday, 1-Monday etc.
   maxDay: 6, //6-Saturday etc. 0-6
   minStartHour: 6, //6am 24 hour format

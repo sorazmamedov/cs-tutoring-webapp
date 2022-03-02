@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Header from "./components/Header";
-import MainContainer from "./components/common/MainContainer";
-import Main from "./components/Main";
-import Home from "./components/Home";
+import Header from "./components/header";
+import MainContainer from "./components/common/mainContainer";
+import Main from "./components/main";
+import Home from "./components/home";
 import Profile from "./components/Profile";
-import Footer from "./components/Footer";
-import DataProvider from "./components/Context/DataContext";
+import Footer from "./components/footer";
+import DataProvider from "./components/Context/dataContext";
 
 function App() {
   return (

@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import { ViewContext, ActionsContext } from "../Context/AnnouncementContext";
+import { ViewContext, ActionsContext } from "../Context/announcementContext";
 
 const AnnouncementDialog = () => {
   const [validated, setValidated] = useState(false);

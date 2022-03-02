@@ -76,7 +76,6 @@ const AnnouncementDataProvider = ({ children }) => {
   const [announcementId, setAnnouncementId] = useState(0);
 
   const handleReset = () => {
-    console.log("Announcement Resetting....");
     setShow(false);
     setTitle("");
     setModalBody("");

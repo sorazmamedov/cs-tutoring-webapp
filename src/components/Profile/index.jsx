@@ -1,9 +1,9 @@
 import React from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import ProfileImage from "./ProfileImage";
-import ProfileInfo from "./ProfileInfo";
-import MainContainer from "../common/MainContainer";
+import ProfileImage from "./image";
+import ProfileInfo from "./info";
+import MainContainer from "../common/mainContainer";
 
 const Profile = () => {
   return (

@@ -1,4 +1,4 @@
-import { EditIcon, SwitchIcon } from "../common/IconsWithTooltip";
+import { EditIcon, SwitchIcon } from "../common/iconsWithTooltip";
 
 const ScheduleRowItem = ({ data, admin, onEdit, onChange }) => {
   return data.map((schedule) => (

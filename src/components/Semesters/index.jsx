@@ -1,18 +1,21 @@
-import React, { useState, useContext, useEffect } from "react";
-import Dropdown from "react-bootstrap/Dropdown";
-import Button from "react-bootstrap/Button";
+import React, { useContext, useEffect } from "react";
 import Placeholder from "react-bootstrap/Placeholder";
-import { HouseIcon } from "../common/Icons";
-import { PlusIcon } from "../common/IconsWithTooltip";
-import MainContainer from "../common/MainContainer";
-import TitleBar from "../common/TitleBar";
 import {
   GlobalViewContext,
   GlobalActionsContext,
-} from "../Context/DataContext";
-import { ViewContext, ActionsContext } from "../Context/SemesterContext";
-import TemplateModal from "../common/TemplateModal";
-import SemesterDialog from "./SemesterDialog";
+} from "../Context/dataContext";
+import { ViewContext, ActionsContext } from "../Context/semesterContext";
+import MainContainer from "../common/mainContainer";
+import TitleBar from "../common/titleBar";
+import YearSelector from "./yearSelector";
+import SemesterSelector from "./semesterSelector";
+import StatusLabelWithBtn from "./statusLabelWithBtn";
+import LoadBtn from "./loadBtn";
+import ActionsDropDown from "./actionsDropDown";
+import SemesterDialog from "./semesterDialog";
+import TemplateModal from "../common/templateModal";
+import { HouseIcon } from "../common/icons";
+import { PlusIcon } from "../common/iconsWithTooltip";
 
 const Semesters = () => {
   const { loadedSemester } = useContext(GlobalViewContext);
@@ -27,11 +30,6 @@ const Semesters = () => {
     setCurrentSemester,
     setEdit,
   } = useContext(ActionsContext);
-
-  // const loading = false;
-  // const error = false;
-
-  const [availableYears, setAvailableYears] = useState([]);
 
   const handleYearChange = (selected) => {
     const year = parseInt(selected);
@@ -83,24 +81,23 @@ const Semesters = () => {
   const handleDeleteSemester = () => {
     const targetId = currentSemester.id;
     setSemesters([...semesters.filter((item) => item.id !== targetId)]);
-    setAvailableYears([...new Set(semesters.map((item) => item.academicYear))]);
   };
 
   useEffect(() => {
-    if (Object.keys(loadedSemester).length !== 0) {
-      console.log("==============Got loadedSemester=============");
+    if (
+      Object.keys(loadedSemester).length !== 0 &&
+      Object.keys(currentSemester).length === 0
+    ) {
       setCurrentSemester({ ...loadedSemester });
+    } else if (
+      Object.keys(loadedSemester).length === 0 &&
+      Object.keys(currentSemester).length === 0 &&
+      semesters.length !== 0
+    ) {
+      setCurrentSemester({ ...semesters[0] });
+      setLoadedSemester({ ...semesters[0] });
     }
-  }, [loadedSemester]);
-
-  useEffect(() => {
-    if (semesters.length !== 0) {
-      console.log("==============Setting availableYears=============");
-      setAvailableYears([
-        ...new Set(semesters.map((item) => item.academicYear)),
-      ]);
-    }
-  }, [semesters]);
+  }, [loadedSemester, semesters]);
 
   return (
     <MainContainer className="shadow p-3 mb-4 rounded-3">
@@ -122,105 +119,46 @@ const Semesters = () => {
           <PlusIcon text="Add New Semester" onClick={handleAddSemester} />
         </div>
       )}
-      {!loading &&
-        !error &&
-        loadedSemester &&
-        currentSemester &&
-        semesters &&
-        semesters.length > 0 &&
-        availableYears && (
-          <TitleBar className="w-100 d-flex justify-content-between align-items-center text-muted">
-            <div className="w-100">
-              <HouseIcon />
-              <span className="ms-3 fw-bolder align-text-bottom">Semester</span>
+      {!loading && !error && semesters && semesters.length !== 0 && (
+        <TitleBar className="w-100 d-flex justify-content-between align-items-center text-muted">
+          <div className="w-100">
+            <HouseIcon />
+            <span className="ms-3 fw-bolder align-text-bottom">Semester</span>
 
-              {/* Select Year */}
-              <select
-                className="ms-3 text-muted align-text-bottom rounded bg-white px-1"
-                onChange={(e) => handleYearChange(e.target.value)}
-                value={currentSemester?.academicYear}
-              >
-                {availableYears.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-              {/* End of Select Year */}
+            <YearSelector
+              className="ms-3 text-muted align-text-bottom rounded bg-white px-1"
+              onChange={(e) => handleYearChange(e.target.value)}
+              value={currentSemester?.academicYear}
+              years={[...new Set(semesters.map((item) => item.academicYear))]}
+            />
 
-              {/* Select Semester */}
-              <select
-                className="ms-3 text-muted align-text-bottom rounded bg-white px-1"
-                onChange={(e) => handleSemesterChange(e)}
-                value={currentSemester?.id}
-              >
-                {semesters
-                  .filter(
-                    (item) =>
-                      item.academicYear === currentSemester?.academicYear
-                  )
-                  .map((semester) => (
-                    <option key={semester.id} value={semester.id}>
-                      {`${semester.semesterName}`}
-                    </option>
-                  ))}
-              </select>
-              {/* End of Select Semester */}
+            <SemesterSelector
+              className="ms-3 text-muted align-text-bottom rounded bg-white px-1"
+              onChange={(e) => handleSemesterChange(e)}
+              value={currentSemester?.id}
+              semesters={semesters.filter(
+                (item) => item.academicYear === currentSemester?.academicYear
+              )}
+            />
 
-              <Button
-                disabled={loadedSemester?.id === currentSemester?.id}
-                size="sm"
-                className={`ms-4 px-3 py-0 align-text-bottom ${
-                  loadedSemester?.id === currentSemester?.id
-                    ? "btn-secondary"
-                    : "available"
-                }`}
-                onClick={handleLoad}
-              >
-                LOAD
-              </Button>
+            <LoadBtn
+              loadedSemester={loadedSemester}
+              currentSemester={currentSemester}
+              onClick={handleLoad}
+            />
 
-              <span className="ms-4 me-2 fw-bolder align-text-bottom">
-                Status:
-              </span>
-              <Button
-                size="sm"
-                className="py-0 align-text-bottom"
-                variant={currentSemester?.active ? "success" : "warning"}
-                onClick={handleStatusChange}
-              >
-                {currentSemester?.active ? (
-                  <span className="px-2">Active</span>
-                ) : (
-                  "Inactive"
-                )}
-              </Button>
-            </div>
-            <Dropdown size="sm">
-              <Dropdown.Toggle
-                variant="secondary"
-                className="px-1 py-0 rounded-3"
-              >
-                More
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item href="#" onClick={handleAddSemester}>
-                  Add New Semester
-                </Dropdown.Item>
-                <Dropdown.Item href="#" onClick={handleEditSemester}>
-                  Edit Current Semester
-                </Dropdown.Item>
-                <Dropdown.Item
-                  href="#"
-                  onClick={handleDeleteSemester}
-                  className="text-danger"
-                >
-                  Delete Current Semester
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </TitleBar>
-        )}
+            <StatusLabelWithBtn
+              currentSemester={currentSemester}
+              onClick={handleStatusChange}
+            />
+          </div>
+          <ActionsDropDown
+            handleAddSemester={handleAddSemester}
+            handleEditSemester={handleEditSemester}
+            handleDeleteSemester={handleDeleteSemester}
+          />
+        </TitleBar>
+      )}
       <TemplateModal viewContext={ViewContext} />
     </MainContainer>
   );

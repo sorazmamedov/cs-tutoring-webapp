@@ -1,4 +1,4 @@
-import { EditIcon, SwitchIcon } from "../common/IconsWithTooltip";
+import { EditIcon, SwitchIcon } from "../common/iconsWithTooltip";
 
 const ProfileRowItem = ({ data, admin, onEdit, onChange }) => {
   return data.map((tutor) => (
@@ -7,7 +7,11 @@ const ProfileRowItem = ({ data, admin, onEdit, onChange }) => {
       <td>{tutor.firstName}</td>
       <td>{tutor.lastName}</td>
       <td>{tutor.email}</td>
-      <td>{tutor.about.length > 30 ? tutor.about.substring(0, 30) + "..." : tutor.about}</td>
+      <td>
+        {tutor.about.length > 30
+          ? tutor.about.substring(0, 30) + "..."
+          : tutor.about}
+      </td>
       {admin && (
         <td className="pe-0 no-stretch">
           <EditIcon onClick={onEdit} tutorid={tutor.id} />

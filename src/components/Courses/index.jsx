@@ -1,10 +1,10 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
-import { PlusIcon } from "../common/IconsWithTooltip";
-import MainContainer from "../common/MainContainer";
-import CustomPagination from "../common/CustomPagination";
-import TableHeader from "../CustomTable/TableHeader";
-import CourseRowItem from "./CourseRowItem";
+import { PlusIcon } from "../common/iconsWithTooltip";
+import MainContainer from "../common/mainContainer";
+import CustomPagination from "../common/customPagination";
+import TableHeader from "../CustomTable/tableHeader";
+import CourseRowItem from "./courseRowItem";
 
 const Courses = () => {
   const admin = true;

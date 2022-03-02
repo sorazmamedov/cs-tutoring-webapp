@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import Table from "react-bootstrap/Table";
-import { DeleteIcon, MegaphoneIcon } from "../common/IconsWithTooltip";
-import MainContainer from "../common/MainContainer";
-import TemplateModal from "../common/TemplateModal";
-import CustomPagination from "../common/CustomPagination";
-import AnnouncementDialog from "./AnnouncementDialog";
-import DeleteAnnouncementDialog from "./DeleteAnnouncementDialog";
-import { ViewContext, ActionsContext } from "../Context/AnnouncementContext";
+import { DeleteIcon, MegaphoneIcon } from "../common/iconsWithTooltip";
+import MainContainer from "../common/mainContainer";
+import TemplateModal from "../common/templateModal";
+import CustomPagination from "../common/customPagination";
+import AnnouncementDialog from "./announcementDialog";
+import DeleteAnnouncementDialog from "./deleteAnnouncementDialog";
+import { ViewContext, ActionsContext } from "../Context/announcementContext";
 
 const Announcements = () => {
   const { setShow, setTitle, setModalBody, setAnnouncementId } =
@@ -35,10 +35,6 @@ const Announcements = () => {
     setModalBody(() => DeleteAnnouncementDialog);
     setShow(true);
   };
-
-  useEffect(() => {
-    //console.log("Announcements change...");
-  }, [announcements]);
 
   return (
     <MainContainer

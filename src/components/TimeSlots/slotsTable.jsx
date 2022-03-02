@@ -1,7 +1,7 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
-import SlotsTableHeader from "./SlotsTableHeader";
+import SlotsTableHeader from "./slotsTableHeader";
 
 const SlotsTable = ({ theader, hours, timeSlot }) => {
   return (

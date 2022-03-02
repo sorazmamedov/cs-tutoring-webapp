@@ -10,7 +10,7 @@ import {
   arrowUpIcon,
   personIcon,
   menuIcon,
-} from "./Icons";
+} from "./icons";
 
 const tooltip = (text, fn) => (
   <OverlayTrigger placement="top" overlay={<Tooltip>{text}</Tooltip>}>
