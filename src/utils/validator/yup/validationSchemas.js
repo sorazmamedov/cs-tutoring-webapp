@@ -1,4 +1,4 @@
-import { object, string, number, date, boolean, ref } from "yup";
+import { string, number, boolean, ref } from "yup";
 import { len, messages } from "../validationMessages";
 
 export default Object.freeze({
@@ -64,14 +64,7 @@ export default Object.freeze({
 
   boolean: boolean().required().typeError(messages.isRequired),
 
-  //Course
-
   //Semester
-  semesterId: string()
-    .trim()
-    .matches(new RegExp(/^(Fall|Spring|Summer)[2-9]\d{3}$/))
-    .required()
-    .typeError(messages.isRequired),
   semesterName: string()
     .trim()
     .matches(new RegExp(/^(Fall|Spring|Summer)$/), messages.semesterNameError)
@@ -87,28 +80,10 @@ export default Object.freeze({
     .min(len.minDate, messages.dateError)
     .required()
     .typeError(messages.isRequired),
-  // Joi.string()
-  //   .trim()
-  //   .matches(
-  //     new RegExp(/^[2-9][0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/)
-  //   )
-  //   .required(),
-  endDate: number().when("startDate", {
-    is: (startDate) => startDate >= len.minDate,
-    then: number()
-      .min(ref("startDate"), messages.dateError)
-      .required()
-      .typeError(messages.isRequired),
-    otherwise: number()
-      .min(len.minDate, messages.dateError)
-      .required()
-      .typeError(messages.isRequired),
-  }),
-
-  //Report
-  // status: Joi.string()
-  //   .matches(new RegExp(/^(pending|sent|error)$/))
-  //   .required(),
+  endDate: number()
+    .moreThan(ref("startDate"), messages.dateError)
+    .required()
+    .typeError(messages.isRequired),
 
   //Schedule
   weekday: number()

@@ -8,7 +8,6 @@ const useAxios = () => {
 
   const axiosFetch = async (configObj) => {
     const { axiosInstance, method, url, requestConfig = {} } = configObj;
-
     try {
       setLoading(true);
       const ctrl = new AbortController();
@@ -19,7 +18,6 @@ const useAxios = () => {
       });
       setResponse(res.data);
     } catch (err) {
-      console.log(err.message);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -28,6 +26,7 @@ const useAxios = () => {
 
   useEffect(() => {
     return () => {
+      console.log("Aborting controller");
       controller && controller.abort();
     };
   }, [controller]);

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Placeholder from "react-bootstrap/Placeholder";
 import {
   GlobalViewContext,
@@ -16,8 +16,13 @@ import SemesterDialog from "./semesterDialog";
 import TemplateModal from "../common/templateModal";
 import { HouseIcon } from "../common/icons";
 import { PlusIcon } from "../common/iconsWithTooltip";
+import { semesterValidator } from "../../utils/validator";
+import { putSemester } from "../../apis/cs-tutoring/semesters";
+import useFetcher from "../../hooks/useMakeRequest";
 
 const Semesters = () => {
+  const [axiosFetch, controller] = useFetcher();
+  const [changingStatus, setChangingStatus] = useState(false);
   const { loadedSemester } = useContext(GlobalViewContext);
   const { setLoadedSemester } = useContext(GlobalActionsContext);
   const { semesters, currentSemester, loading, error } =
@@ -46,22 +51,42 @@ const Semesters = () => {
     setLoadedSemester({ ...currentSemester });
   };
 
-  const handleStatusChange = () => {
+  const handleStatusChange = async () => {
+    setChangingStatus(true);
     const modified = {
       ...currentSemester,
       active: !currentSemester.active,
     };
 
-    let index = semesters.findIndex((item) => item.id === modified.id);
+    let error = semesterValidator(modified);
 
-    setSemesters([
-      ...semesters.slice(0, index),
-      modified,
-      ...semesters.slice(++index),
-    ]);
-    setCurrentSemester(modified);
-    if (loadedSemester.id === modified.id) {
-      setLoadedSemester(modified);
+    if (!error) {
+      const response = await axiosFetch(putSemester(modified));
+
+      if (response.status === 200) {
+        let index = semesters.findIndex((item) => item.id === modified.id);
+        setSemesters([
+          ...semesters.slice(0, index),
+          modified,
+          ...semesters.slice(++index),
+        ]);
+        setCurrentSemester({ ...modified });
+        if (loadedSemester.id === modified.id) {
+          setLoadedSemester({ ...modified });
+        }
+        setChangingStatus(false);
+      } else {
+        if (response.name === "AbortError") {
+          console.log("[fetch aborted...]");
+        } else {
+          if (response.message === "Network Error")
+            alert("Please check your internet connection!");
+          setChangingStatus(false);
+        }
+      }
+    } else {
+      console.log("Error: ", error.inner);
+      setChangingStatus(false);
     }
   };
 
@@ -98,6 +123,13 @@ const Semesters = () => {
       setLoadedSemester({ ...semesters[0] });
     }
   }, [loadedSemester, semesters]);
+
+  useEffect(() => {
+    return () => {
+      console.log("Aborting fetch from semesters...");
+      controller && controller.abort();
+    };
+  }, []);
 
   return (
     <MainContainer className="shadow p-3 mb-4 rounded-3">
@@ -150,6 +182,7 @@ const Semesters = () => {
             <StatusLabelWithBtn
               currentSemester={currentSemester}
               onClick={handleStatusChange}
+              changing={changingStatus}
             />
           </div>
           <ActionsDropDown
