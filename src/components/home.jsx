@@ -7,6 +7,7 @@ import Profiles from "./Profiles";
 import TimeSlots from "./TimeSlots";
 import AnnouncementDataProvider from "./Context/announcementContext";
 import SemesterDataProvider from "./Context/semesterContext";
+import CourseDataProvider from "./Context/courseContext";
 
 const Home = () => {
   return (
@@ -18,7 +19,9 @@ const Home = () => {
       <AnnouncementDataProvider>
         <Announcements />
       </AnnouncementDataProvider>
-      <Courses />
+      <CourseDataProvider>
+        <Courses />
+      </CourseDataProvider>
       <Profiles />
       <TimeSlots />
     </>

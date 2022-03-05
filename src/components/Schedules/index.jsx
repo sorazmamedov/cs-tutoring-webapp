@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Table from "react-bootstrap/Table";
 import MainContainer from "../common/mainContainer";
 import TableHeader from "../CustomTable/tableHeader";
 import ScheduleRowItem from "./scheduleRowItem";
 import CustomPagination from "../common/customPagination";
 import { PlusIcon } from "../common/iconsWithTooltip";
-
+import { GlobalViewContext } from "../Context/dataContext";
 const Schedules = () => {
+  const { loadedSemester } = useContext(GlobalViewContext);
   const admin = true;
   const data = [
     {
@@ -95,7 +96,14 @@ const Schedules = () => {
   };
 
   return (
-    <MainContainer title="Tutor Schedule" icon={<PlusIcon />}>
+    <MainContainer
+      title={
+        !loadedSemester?.semesterName
+          ? "Tutor Schedule"
+          : `Tutor Schedule <--> ${loadedSemester.semesterName} ${loadedSemester.academicYear}`
+      }
+      icon={<PlusIcon />}
+    >
       <Table className="text-center" bordered hover responsive>
         <TableHeader headers={header} />
         <tbody className="text-muted">

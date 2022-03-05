@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import Table from "react-bootstrap/Table";
 import { DeleteIcon, MegaphoneIcon } from "../common/iconsWithTooltip";
 import MainContainer from "../common/mainContainer";
@@ -7,8 +7,10 @@ import CustomPagination from "../common/customPagination";
 import AnnouncementDialog from "./announcementDialog";
 import DeleteAnnouncementDialog from "./deleteAnnouncementDialog";
 import { ViewContext, ActionsContext } from "../Context/announcementContext";
+import { GlobalViewContext } from "../Context/dataContext";
 
 const Announcements = () => {
+  const { loadedSemester } = useContext(GlobalViewContext);
   const { setShow, setTitle, setModalBody, setAnnouncementId } =
     useContext(ActionsContext);
   const { announcements } = useContext(ViewContext);
@@ -38,7 +40,11 @@ const Announcements = () => {
 
   return (
     <MainContainer
-      title="Announcements"
+      title={
+        !loadedSemester?.semesterName
+          ? "Announcements"
+          : `Announcements <--> ${loadedSemester.semesterName} ${loadedSemester.academicYear}`
+      }
       icon={<MegaphoneIcon onClick={handleCreateAnnouncement} />}
     >
       <Table bordered hover responsive>

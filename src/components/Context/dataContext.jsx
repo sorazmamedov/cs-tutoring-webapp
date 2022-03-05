@@ -9,6 +9,7 @@ const GlobalActionsContext = createContext({});
 const DataProvider = ({ children }) => {
   const [data, error, loading, axiosFetch] = useAxios();
   const [loadedSemester, setLoadedSemester] = useState({});
+  const [admin, setAdmin] = useState(true);
 
   const fetchData = () => {
     axiosFetch({
@@ -33,11 +34,13 @@ const DataProvider = ({ children }) => {
     <GlobalViewContext.Provider
       value={{
         loadedSemester,
+        admin,
       }}
     >
       <GlobalActionsContext.Provider
         value={{
           setLoadedSemester,
+          setAdmin,
         }}
       >
         {children}

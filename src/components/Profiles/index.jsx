@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Table from "react-bootstrap/Table";
 import MainContainer from "../common/mainContainer";
 import TableHeader from "../CustomTable/tableHeader";
@@ -6,9 +6,10 @@ import ProfileRowItem from "./profileRowItem";
 import CustomPagination from "../common/customPagination";
 import { PlusIcon } from "../common/iconsWithTooltip";
 import { useEffect } from "react";
+import { GlobalViewContext } from "../Context/dataContext";
 
 const Profiles = () => {
-  const admin = true;
+  const { loadedSemester, admin } = useContext(GlobalViewContext);
   const data = [
     {
       id: "wx-nWZPAX1TC",
@@ -100,7 +101,14 @@ const Profiles = () => {
   };
 
   return (
-    <MainContainer title="Tutor Profile" icon={<PlusIcon />}>
+    <MainContainer
+      title={
+        !loadedSemester?.semesterName
+          ? "Tutor Profile"
+          : `Tutor Profile <--> ${loadedSemester.semesterName} ${loadedSemester.academicYear}`
+      }
+      icon={<PlusIcon />}
+    >
       <Table hover responsive>
         <TableHeader headers={header} />
         <tbody className="text-muted">

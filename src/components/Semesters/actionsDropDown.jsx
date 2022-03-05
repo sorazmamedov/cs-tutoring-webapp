@@ -1,11 +1,7 @@
 import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 
-const ActionsDropDown = ({
-  handleAddSemester,
-  handleEditSemester,
-  handleDeleteSemester,
-}) => {
+const ActionsDropDown = ({ handleAddSemester, handleEditSemester }) => {
   return (
     <Dropdown size="sm">
       <Dropdown.Toggle variant="secondary" className="px-1 py-0 rounded-3">
@@ -16,14 +12,7 @@ const ActionsDropDown = ({
           Add New Semester
         </Dropdown.Item>
         <Dropdown.Item href="#" onClick={handleEditSemester}>
-          Edit Current Semester
-        </Dropdown.Item>
-        <Dropdown.Item
-          href="#"
-          onClick={handleDeleteSemester}
-          className="text-danger"
-        >
-          Delete Current Semester
+          Edit Semester Dates
         </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>

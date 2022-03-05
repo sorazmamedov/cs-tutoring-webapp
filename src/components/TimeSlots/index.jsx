@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import MainContainer from "../common/mainContainer";
 import { getSlots, getHours } from "../../utils/slots";
 import { useState } from "react";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import SlotsTable from "./slotsTable";
+import { GlobalViewContext } from "../Context/dataContext";
 
 const TimeSlots = () => {
+  const { loadedSemester, admin } = useContext(GlobalViewContext);
   const [timeSlots, setTimeSlots] = useState(getSlots);
   const [key, setKey] = useState(timeSlots[0].id);
   const hours = getHours();
@@ -34,7 +36,13 @@ const TimeSlots = () => {
   const theader = header.map((text, i) => text + "-" + tableHeaderDate[i]);
 
   return (
-    <MainContainer title="Time Slots">
+    <MainContainer
+      title={
+        !loadedSemester?.semesterName
+          ? "Time Slots"
+          : `Time Slots <--> ${loadedSemester.semesterName} ${loadedSemester.academicYear}`
+      }
+    >
       <Tabs
         id="controlled-tab-example"
         activeKey={key}

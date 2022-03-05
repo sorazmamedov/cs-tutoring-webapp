@@ -1,87 +1,41 @@
-import React from "react";
+import React, { useContext } from "react";
 import Table from "react-bootstrap/Table";
 import { PlusIcon } from "../common/iconsWithTooltip";
 import MainContainer from "../common/mainContainer";
-import CustomPagination from "../common/customPagination";
 import TableHeader from "../CustomTable/tableHeader";
 import CourseRowItem from "./courseRowItem";
+import CustomPagination from "../common/customPagination";
+import TemplateModal from "../common/templateModal";
+import CourseDialog from "./courseDialog";
+import { ActionsContext, ViewContext } from "../Context/courseContext";
+import { GlobalViewContext } from "../Context/dataContext";
 
 const Courses = () => {
+  const { loadedSemester } = useContext(GlobalViewContext);
+  const { show, courses } = useContext(ViewContext);
+  const { setShow, setTitle, setModalBody, setCourses } =
+    useContext(ActionsContext);
   const admin = true;
-  const courses = [
-    {
-      id: "OmI7h-JiesTo",
-      courseCode: "CS-324-1",
-      courseName: "Algorithms",
-      semesterId: "Pp9NItWifwKW",
-      instructorName: "Peter Kimmel",
-      instructorEmail: "pkimmel@neiu.edu",
-    },
-    {
-      id: "OhKh3ClzPv-y",
-      courseCode: "CS-400-2",
-      courseName: "Discrete Structures",
-      semesterId: "Pp9NItWifwKW",
-      instructorName: "Rachel Trana",
-      instructorEmail: "rtrana@neiu.edu",
-    },
-    {
-      id: "QCYy5AGrKZrl",
-      courseCode: "CS-442",
-      courseName: "Network",
-      semesterId: "Pp9NItWifwKW",
-      instructorName: "TBA",
-      instructorEmail: "TBA@neiu.edu",
-    },
-    {
-      id: "U5NsuHEmMxds",
-      courseCode: "CS-442",
-      courseName: "Operating Systems",
-      semesterId: "Pp9NItWifwKW",
-      instructorName: "TBA",
-      instructorEmail: "TBA@neiu.edu",
-    },
-    {
-      id: "ZQAd_NT9e8Pk",
-      courseCode: "CS-442",
-      courseName: "Game Theory",
-      semesterId: "Pp9NItWifwKW",
-      instructorName: "TBA",
-      instructorEmail: "TBA@neiu.edu",
-    },
-    {
-      id: "US0g_IJcyYWj",
-      courseCode: "CS-442",
-      courseName: "Java Mastery",
-      semesterId: "Pp9NItWifwKW",
-      instructorName: "TBA",
-      instructorEmail: "TBA@neiu.edu",
-    },
-    {
-      id: "KY9V4BrBTiSV",
-      courseCode: "CS-442",
-      courseName: "Front-End Development",
-      semesterId: "Pp9NItWifwKW",
-      instructorName: "TBA",
-      instructorEmail: "TBA@neiu.edu",
-    },
-    {
-      id: "VrveAvVNT_7h",
-      courseCode: "CS-442",
-      courseName: "Data Mining",
-      semesterId: "Pp9NItWifwKW",
-      instructorName: "TBA",
-      instructorEmail: "TBA@neiu.edu",
-    },
-  ];
 
   const tableHeader = ["Section", "Course", "Semester", "Instructor", "Email"];
   if (admin) {
     tableHeader.push("Edit");
   }
 
+  const handleAddCourse = () => {
+    setTitle("Add New Courses");
+    setModalBody(() => CourseDialog);
+    setShow(true);
+  };
   return (
-    <MainContainer title="Courses" icon={<PlusIcon />}>
+    <MainContainer
+      title={
+        !loadedSemester?.semesterName
+          ? "Courses"
+          : `Courses <--> ${loadedSemester.semesterName} ${loadedSemester.academicYear}`
+      }
+      icon={<PlusIcon onClick={handleAddCourse} />}
+    >
       <Table className="text-center mx-auto" bordered hover responsive>
         <TableHeader headers={tableHeader} />
         <tbody className="text-muted">
@@ -89,6 +43,7 @@ const Courses = () => {
         </tbody>
       </Table>
       <CustomPagination />
+      <TemplateModal viewContext={ViewContext} />
     </MainContainer>
   );
 };

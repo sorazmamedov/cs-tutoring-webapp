@@ -103,11 +103,6 @@ const Semesters = () => {
     setShow(true);
   };
 
-  const handleDeleteSemester = () => {
-    const targetId = currentSemester.id;
-    setSemesters([...semesters.filter((item) => item.id !== targetId)]);
-  };
-
   useEffect(() => {
     if (
       Object.keys(loadedSemester).length !== 0 &&
@@ -188,7 +183,6 @@ const Semesters = () => {
           <ActionsDropDown
             handleAddSemester={handleAddSemester}
             handleEditSemester={handleEditSemester}
-            handleDeleteSemester={handleDeleteSemester}
           />
         </TitleBar>
       )}
