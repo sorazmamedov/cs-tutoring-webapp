@@ -134,7 +134,7 @@ const Semesters = () => {
       console.log("Aborting fetch from semesters...");
       controller && controller.abort();
     };
-  }, []);
+  });
 
   return (
     <MainContainer>
