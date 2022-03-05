@@ -19,6 +19,7 @@ import { PlusIcon } from "../common/iconsWithTooltip";
 import { semesterValidator } from "../../utils/validator";
 import { putSemester } from "../../apis/cs-tutoring/semesters";
 import useFetcher from "../../hooks/useMakeRequest";
+import InfoDialog from "../common/infoDialog";
 
 const Semesters = () => {
   const [axiosFetch, controller] = useFetcher();
@@ -34,6 +35,7 @@ const Semesters = () => {
     setShow,
     setCurrentSemester,
     setEdit,
+    setMessage,
   } = useContext(ActionsContext);
 
   const handleYearChange = (selected) => {
@@ -79,11 +81,16 @@ const Semesters = () => {
         if (response.name === "AbortError") {
           console.log("[fetch aborted...]");
         } else {
+          let message = "";
           if (response.message === "Network Error") {
-            alert("Please check your internet connection!");
+            message = "Please check your internet connection!";
+          } else if (response.data.error) {
+            message = response.data.error;
           }
-          alert(response.data.error);
+          setMessage(message);
           setChangingStatus(false);
+          setModalBody(() => InfoDialog);
+          setShow(true);
         }
       }
     } else {

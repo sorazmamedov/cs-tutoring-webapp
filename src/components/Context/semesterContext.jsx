@@ -18,12 +18,14 @@ const SemesterDataProvider = ({ children }) => {
   const [modalBody, setModalBody] = useState("");
   const [currentSemester, setCurrentSemester] = useState({});
   const [edit, setEdit] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleReset = () => {
     setShow(false);
     setModalBody("");
     setTitle("");
     setEdit(false);
+    setMessage("");
   };
 
   const [reset] = useState(() => handleReset);
@@ -59,6 +61,7 @@ const SemesterDataProvider = ({ children }) => {
         reset,
         error,
         loading,
+        message,
       }}
     >
       <ActionsContext.Provider
@@ -69,6 +72,7 @@ const SemesterDataProvider = ({ children }) => {
           setCurrentSemester,
           setEdit,
           setSemesters,
+          setMessage,
         }}
       >
         {children}
