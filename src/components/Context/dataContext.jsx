@@ -11,24 +11,24 @@ const DataProvider = ({ children }) => {
   const [loadedSemester, setLoadedSemester] = useState({});
   const [admin, setAdmin] = useState(true);
 
-  const fetchData = () => {
-    axiosFetch({
-      axiosInstance: axios,
-      method: "GET",
-      url: "/semesters/active",
-      requestConfig: {},
-    });
-  };
+  // const fetchData = () => {
+  //   axiosFetch({
+  //     axiosInstance: axios,
+  //     method: "GET",
+  //     url: "/semesters/active",
+  //     requestConfig: {},
+  //   });
+  // };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  useEffect(() => {
-    if (Object.keys(data).length !== 0) {
-      setLoadedSemester({ ...data });
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (Object.keys(data).length !== 0) {
+  //     setLoadedSemester({ ...data });
+  //   }
+  // }, [data]);
 
   return (
     <GlobalViewContext.Provider

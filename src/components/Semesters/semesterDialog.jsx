@@ -19,13 +19,6 @@ const SemesterDialog = () => {
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [datepickerYear, setDatepickerYear] = useState(
-    edit ? currentSemester.academicYear : new Date().getFullYear()
-  );
-
-  const handleYearFilter = (e) => {
-    setDatepickerYear(e.target.value);
-  };
 
   const handleSubmit = async (e) => {
     const form = e.currentTarget;
@@ -35,7 +28,9 @@ const SemesterDialog = () => {
     const newItem = {
       id: edit ? currentSemester.id : Id.makeId(),
       semesterName: form.semesterName.value.trim(),
-      academicYear: parseInt(form.academicYear.value.trim()),
+      academicYear: new Date(
+        utcToLocal(form.startDate.value.trim())
+      ).getFullYear(),
       startDate: +new Date(utcToLocal(form.startDate.value.trim())),
       endDate: +new Date(utcToLocal(form.endDate.value.trim())),
       active: edit ? currentSemester.active : false,
@@ -136,27 +131,11 @@ const SemesterDialog = () => {
               name="semesterName"
               defaultValue={edit && currentSemester.semesterName}
             >
-              <option value="Fall">Fall</option>
               <option value="Spring">Spring</option>
               <option value="Summer">Summer</option>
+              <option value="Fall">Fall</option>
+              <option value="Winter">Winter</option>
             </Form.Select>
-          </Col>
-          <Col sm="6" className="mb-3 mb-sm-auto ps-sm-4">
-            <Form.Label className="text-muted mb-0">Academic Year</Form.Label>
-            <Form.Control
-              type="number"
-              min={new Date().getFullYear()}
-              placeholder="yyyy"
-              className="roundBorder"
-              name="academicYear"
-              defaultValue={edit && currentSemester.academicYear}
-              onChange={handleYearFilter}
-              isInvalid={errors.academicYear}
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              {"Academic year " + errors.academicYear}
-            </Form.Control.Feedback>
           </Col>
         </Row>
         <Row className="mb-5" sm="2">
@@ -166,8 +145,6 @@ const SemesterDialog = () => {
               type="date"
               className="roundBorder"
               name="startDate"
-              min={`${datepickerYear}-01-01`}
-              max={`${datepickerYear}-12-31`}
               defaultValue={edit && localToUtc(currentSemester.startDate)}
               isInvalid={errors.startDate}
               required
@@ -182,8 +159,6 @@ const SemesterDialog = () => {
               type="date"
               className="roundBorder"
               name="endDate"
-              min={`${datepickerYear}-01-01`}
-              max={`${datepickerYear}-12-31`}
               defaultValue={edit && localToUtc(currentSemester.endDate)}
               isInvalid={errors.endDate}
               required

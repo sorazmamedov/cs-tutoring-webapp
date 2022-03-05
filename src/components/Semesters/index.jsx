@@ -79,8 +79,10 @@ const Semesters = () => {
         if (response.name === "AbortError") {
           console.log("[fetch aborted...]");
         } else {
-          if (response.message === "Network Error")
+          if (response.message === "Network Error") {
             alert("Please check your internet connection!");
+          }
+          alert(response.data.error);
           setChangingStatus(false);
         }
       }
@@ -104,20 +106,21 @@ const Semesters = () => {
   };
 
   useEffect(() => {
-    if (
-      Object.keys(loadedSemester).length !== 0 &&
-      Object.keys(currentSemester).length === 0
-    ) {
-      setCurrentSemester({ ...loadedSemester });
-    } else if (
-      Object.keys(loadedSemester).length === 0 &&
-      Object.keys(currentSemester).length === 0 &&
-      semesters.length !== 0
-    ) {
-      setCurrentSemester({ ...semesters[0] });
-      setLoadedSemester({ ...semesters[0] });
+    if (semesters.length !== 0) {
+      const semester = semesters.find((item) => item.active === true);
+      if (Object.keys(loadedSemester).length === 0) {
+        if (semester) {
+          setCurrentSemester({ ...semester });
+          setLoadedSemester({ ...semester });
+        } else {
+          setCurrentSemester({ ...semesters[0] });
+          setLoadedSemester({ ...semesters[0] });
+        }
+      } else if (Object.keys(currentSemester).length === 0) {
+        setCurrentSemester({ ...loadedSemester });
+      }
     }
-  }, [loadedSemester, semesters]);
+  }, [semesters]);
 
   useEffect(() => {
     return () => {
@@ -127,7 +130,7 @@ const Semesters = () => {
   }, []);
 
   return (
-    <MainContainer className="shadow p-3 mb-4 rounded-3">
+    <MainContainer>
       {loading && (
         <Placeholder as="p" animation="glow" className="m-auto">
           <Placeholder xs={12} />

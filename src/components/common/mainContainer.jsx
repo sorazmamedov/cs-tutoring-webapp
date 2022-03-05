@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import TitleBar from "./titleBar";
 
 const MainContainer = ({className, title, children, icon }) => {
-  const defaults = "shadow p-3 mb-4 rounded-3";
+  const defaults = "shadow p-3 mb-4";
 
   return (
     <Container className={className || defaults}>

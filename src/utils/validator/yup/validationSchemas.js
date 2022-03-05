@@ -67,7 +67,10 @@ export default Object.freeze({
   //Semester
   semesterName: string()
     .trim()
-    .matches(new RegExp(/^(Fall|Spring|Summer)$/), messages.semesterNameError)
+    .matches(
+      new RegExp(/^(Spring|Summer|Fall|Winter)$/),
+      messages.semesterNameError
+    )
     .required()
     .typeError(messages.isRequired),
   year: number()

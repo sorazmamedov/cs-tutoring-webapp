@@ -39,6 +39,7 @@ const SemesterDataProvider = ({ children }) => {
 
   useEffect(() => {
     fetchSemesters();
+    console.log("[Fetching semesters]");
     // eslint-disable-next-line
   }, []);
 
