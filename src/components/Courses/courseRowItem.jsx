@@ -7,7 +7,7 @@ const CourseRowItem = ({ data, admin }) => {
 
   return data.map((course) => (
     <tr id={course.id} key={course.id}>
-      <td>{course.courseCode}</td>
+      <td>{course.section}</td>
       <td>{course.courseName}</td>
       <td>{course.semesterId}</td>
       <td>{course.instructorName}</td>

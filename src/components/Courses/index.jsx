@@ -11,16 +11,13 @@ import { ActionsContext, ViewContext } from "../Context/courseContext";
 import { GlobalViewContext } from "../Context/dataContext";
 
 const Courses = () => {
-  const { loadedSemester } = useContext(GlobalViewContext);
-  const { show, courses } = useContext(ViewContext);
+  const { loadedSemester, admin } = useContext(GlobalViewContext);
+  const { courses } = useContext(ViewContext);
   const { setShow, setTitle, setModalBody, setCourses } =
     useContext(ActionsContext);
-  const admin = true;
 
   const tableHeader = ["Section", "Course", "Semester", "Instructor", "Email"];
-  if (admin) {
-    tableHeader.push("Edit");
-  }
+  const adminTHeader = [...tableHeader, "Edit"];
 
   const handleAddCourse = () => {
     setTitle("Add New Courses");
@@ -37,7 +34,7 @@ const Courses = () => {
       icon={<PlusIcon onClick={handleAddCourse} />}
     >
       <Table className="text-center mx-auto" bordered hover responsive>
-        <TableHeader headers={tableHeader} />
+        <TableHeader headers={admin ? adminTHeader : tableHeader} />
         <tbody className="text-muted">
           <CourseRowItem data={courses} admin={admin} />
         </tbody>
