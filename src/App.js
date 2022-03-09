@@ -20,10 +20,10 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/profile" element={<Profile />} />
               <Route
-                path="/logout"
+                path="/settings"
                 element={
                   <MainContainer>
-                    <h3>Logout Page</h3>
+                    <h3>Admin related settings</h3>
                   </MainContainer>
                 }
               />

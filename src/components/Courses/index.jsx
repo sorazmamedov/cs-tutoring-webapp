@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import { PlusIcon } from "../common/iconsWithTooltip";
 import MainContainer from "../common/mainContainer";
@@ -7,16 +7,22 @@ import CourseRowItem from "./courseRowItem";
 import CustomPagination from "../common/customPagination";
 import TemplateModal from "../common/templateModal";
 import CourseDialog from "./courseDialog";
+import TitleBar from "../common/titleBar";
 import { ActionsContext, ViewContext } from "../Context/courseContext";
 import { GlobalViewContext } from "../Context/dataContext";
+import {
+  NoDataPlaceholder,
+  ErrorPlaceholder,
+  LoadingPlaceholder,
+} from "../common/Placeholders/";
 
 const Courses = () => {
-  const { loadedSemester, admin } = useContext(GlobalViewContext);
-  const { courses } = useContext(ViewContext);
+  const { admin } = useContext(GlobalViewContext);
+  const { courses, loading, error } = useContext(ViewContext);
   const { setShow, setTitle, setModalBody, setCourses } =
     useContext(ActionsContext);
 
-  const tableHeader = ["Section", "Course", "Semester", "Instructor", "Email"];
+  const tableHeader = ["Section", "Course", "Instructor", "Email"];
   const adminTHeader = [...tableHeader, "Edit"];
 
   const handleAddCourse = () => {
@@ -24,22 +30,35 @@ const Courses = () => {
     setModalBody(() => CourseDialog);
     setShow(true);
   };
+
+  useEffect(() => {}, [courses]);
+
   return (
-    <MainContainer
-      title={
-        !loadedSemester?.semesterName
-          ? "Courses"
-          : `Courses <--> ${loadedSemester.semesterName} ${loadedSemester.academicYear}`
-      }
-      icon={<PlusIcon onClick={handleAddCourse} />}
-    >
-      <Table className="text-center mx-auto" bordered hover responsive>
-        <TableHeader headers={admin ? adminTHeader : tableHeader} />
-        <tbody className="text-muted">
-          <CourseRowItem data={courses} admin={admin} />
-        </tbody>
-      </Table>
-      <CustomPagination />
+    <MainContainer>
+      {!loading && !error && (
+        <TitleBar
+          title={"Courses"}
+          icon={<PlusIcon onClick={handleAddCourse} />}
+        />
+      )}
+
+      {loading && <LoadingPlaceholder />}
+      {!loading && error && <ErrorPlaceholder />}
+      {!loading && !error && courses && courses.length === 0 && (
+        <NoDataPlaceholder />
+      )}
+
+      {!loading && !error && courses && courses.length !== 0 && (
+        <>
+          <Table className="text-center" bordered hover responsive>
+            <TableHeader headers={admin ? adminTHeader : tableHeader} />
+            <tbody className="text-muted">
+              <CourseRowItem courses={courses} admin={admin} />
+            </tbody>
+          </Table>
+          <CustomPagination />
+        </>
+      )}
       <TemplateModal viewContext={ViewContext} />
     </MainContainer>
   );

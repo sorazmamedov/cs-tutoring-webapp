@@ -7,7 +7,7 @@ const Footer = () => {
   const navs = {
     Semester: "/",
     Profile: "/profile",
-    Logout: "/logout",
+    Settings: "/settings",
     Login: "/login",
   };
 

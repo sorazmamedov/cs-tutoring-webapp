@@ -44,7 +44,9 @@ div > p + i[data-icon-type]:hover {
   color: black;
 }
 
-[data-icon-type="plus"] {
+[data-icon-type="plus"],
+[data-icon-type="check"],
+[data-icon-type="cancel"] {
   font-size: 1.2rem;
 }
 

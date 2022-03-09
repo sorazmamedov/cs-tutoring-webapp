@@ -4,14 +4,12 @@ import { len, messages } from "../validationMessages";
 export default Object.freeze({
   nanoid: string()
     .trim()
-    .length(len.idLength, messages.idError)
+    .length(len.idLength)
     .required()
-    .typeError(messages.isRequired),
+    .typeError("${path}" + messages.idError),
 
-  neiuId: number()
-    .integer()
-    .min(len.neiuIdStart)
-    .max(len.neiuIdEnd)
+  neiuId: string()
+    .matches(/^\d{9}$/)
     .required()
     .typeError(messages.isRequired),
 
@@ -62,15 +60,12 @@ export default Object.freeze({
 
   requiredText: string().trim().required().typeError(messages.isRequired),
 
-  boolean: boolean().required().typeError(messages.isRequired),
+  boolean: boolean().required().typeError('${path}' + messages.isRequired),
 
   //Semester
   semesterName: string()
     .trim()
-    .matches(
-      new RegExp(/^(Spring|Summer|Fall|Winter)$/),
-      messages.semesterNameError
-    )
+    .matches(/^(Spring|Summer|Fall|Winter)$/, messages.semesterNameError)
     .required()
     .typeError(messages.isRequired),
   year: number()
@@ -89,35 +84,27 @@ export default Object.freeze({
     .typeError(messages.isRequired),
 
   //Schedule
-  weekday: number()
-    .integer()
-    .positive()
-    .min(len.minDay)
-    .max(len.maxDay)
+  weekday: string()
+    .trim()
+    .matches(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)$/)
     .required()
     .typeError(messages.isRequired),
 
-  startHour: number()
-    .integer()
-    .positive()
-    .min(len.minStartHour)
-    .max(len.maxEndHour - 1)
+  startHour: string()
+    .trim()
+    .matches(
+      /^([1-9]|1[0-2]):[0-5][0-9]\s(a.m.|p.m.)$/,
+      "Format mismatch! Example: 1:45 a.m."
+    )
     .required()
     .typeError(messages.isRequired),
 
-  endHour: number()
-    .integer()
-    .positive()
-    .moreThan(ref("startHour"))
-    .max(len.maxEndHour)
-    .required()
-    .typeError(messages.isRequired),
-
-  sessionDuration: number()
-    .integer()
-    .positive()
-    .min(len.minSessionDuration)
-    .max(len.maxSessionDuration)
+  endHour: string()
+    .trim()
+    .matches(
+      /^([1-9]|1[0-2]):[0-5][0-9]\s(a.m.|p.m.)$/,
+      "Format mismatch! Example: 1:45 a.m."
+    )
     .required()
     .typeError(messages.isRequired),
 });

@@ -10,6 +10,8 @@ import {
   arrowUpIcon,
   personIcon,
   menuIcon,
+  checkIcon,
+  cancelIcon,
 } from "./icons";
 
 const tooltip = (text, fn) => (
@@ -34,7 +36,7 @@ export const MegaphoneIcon = (props) => {
   return tooltip("New Announcement", megaphoneIcon(props));
 };
 
-export const PlusIcon = ({text, ...props}) => {
+export const PlusIcon = ({ text, ...props }) => {
   return tooltip(text ? text : "New", plusIcon(props));
 };
 
@@ -48,4 +50,12 @@ export const PersonIcon = ({ style }) => {
 
 export const MenuIcon = (props) => {
   return tooltip("Menu", menuIcon(props));
+};
+
+export const CheckIcon = (props) => {
+  return tooltip("Save", checkIcon(props));
+};
+
+export const CancelIcon = (props) => {
+  return tooltip("Cancel", cancelIcon(props));
 };

@@ -1,8 +1,12 @@
 import Form from "react-bootstrap/Form";
 import React from "react";
 
-export const editIcon = ({className, ...props}) => (
-  <i className={`bi bi-pencil-fill ${className}`} data-icon-type="edit" {...props} />
+export const editIcon = ({ className, ...props }) => (
+  <i
+    className={`bi bi-pencil-fill ${className}`}
+    data-icon-type="edit"
+    {...props}
+  />
 );
 
 export const deleteIcon = (props) => {
@@ -34,5 +38,13 @@ export const HouseIcon = (props) => (
 );
 
 export const menuIcon = (props) => (
-  <i class="bi bi-three-dots" data-icon-type="menu" {...props} />
+  <i className="bi bi-three-dots" data-icon-type="menu" {...props} />
+);
+
+export const checkIcon = (props) => (
+  <i className="bi bi-check-circle" data-icon-type="check" {...props} />
+);
+
+export const cancelIcon = (props) => (
+  <i className="bi bi-x-lg" data-icon-type="cancel" {...props} />
 );

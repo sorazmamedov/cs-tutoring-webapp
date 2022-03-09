@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { createContext, useState } from "react";
-import axios from "../../apis/cs-tutoring/cs-tutoring";
+import axios from "../../apis/cs-tutoring";
 import useAxios from "../../hooks/useAxios";
 
 const ViewContext = createContext({});

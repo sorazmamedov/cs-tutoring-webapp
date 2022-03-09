@@ -1,6 +1,5 @@
 import { EditIcon, SwitchIcon } from "../common/iconsWithTooltip";
-
-const ProfileRowItem = ({ data, admin, onEdit, onChange }) => {
+const TutorRowItem = ({ data, admin, onEdit, onChange }) => {
   return data.map((tutor) => (
     <tr id={tutor.id} key={tutor.id}>
       <td>{tutor.neiuId}</td>
@@ -27,4 +26,4 @@ const ProfileRowItem = ({ data, admin, onEdit, onChange }) => {
   ));
 };
 
-export default ProfileRowItem;
+export default TutorRowItem;

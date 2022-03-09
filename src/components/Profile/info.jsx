@@ -39,7 +39,7 @@ const ProfileInfo = () => {
               NEIU ID (9 digits)
             </Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               placeholder="example: 000123456"
               className="roundBorder"
             />

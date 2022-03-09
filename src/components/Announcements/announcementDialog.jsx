@@ -18,12 +18,8 @@ const AnnouncementDialog = () => {
     : null;
 
   const handleSubmit = (e) => {
-    // const form = e.currentTarget;
-
-    // if (form.checkValidity() === false) {
     e.preventDefault();
     e.stopPropagation();
-    // }
 
     setValidated(true);
     const isPublished =

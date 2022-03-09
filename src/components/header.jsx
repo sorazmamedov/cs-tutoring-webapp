@@ -8,7 +8,7 @@ const Header = () => {
   const navs = {
     Semester: "/",
     Profile: "/profile",
-    Logout: "/logout",
+    Settings: "/settings",
     Login: "/login",
   };
 

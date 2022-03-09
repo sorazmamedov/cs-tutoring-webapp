@@ -1,9 +1,14 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import useAxios from "../../hooks/useAxios";
+import axios from "../../apis/cs-tutoring";
+import { GlobalViewContext } from "./dataContext";
 
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const AnnouncementDataProvider = ({ children }) => {
+  const { loadedSemester } = useContext(GlobalViewContext);
+  const [data, error, loading, axiosFetch] = useAxios();
   const [announcements, setAnnouncements] = useState([
     {
       id: 1,
@@ -84,6 +89,27 @@ const AnnouncementDataProvider = ({ children }) => {
 
   const [reset] = useState(() => handleReset);
 
+  const fetchData = () => {
+    axiosFetch({
+      axiosInstance: axios,
+      method: "GET",
+      url: "/announcements",
+      requestConfig: {},
+    });
+  };
+
+  useEffect(() => {
+    // fetchData();
+    console.log("[Fetching announcements]");
+    // eslint-disable-next-line
+  }, [loadedSemester]);
+
+  useEffect(() => {
+    if (Object.keys(data).length !== 0) {
+      setAnnouncements([...data]);
+    }
+  }, [data]);
+
   return (
     <ViewContext.Provider
       value={{
@@ -92,6 +118,8 @@ const AnnouncementDataProvider = ({ children }) => {
         modalBody,
         announcementId,
         announcements,
+        error,
+        loading,
         reset,
       }}
     >

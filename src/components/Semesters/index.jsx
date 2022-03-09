@@ -137,7 +137,7 @@ const Semesters = () => {
   });
 
   return (
-    <MainContainer>
+    <MainContainer className="shadow p-3 mb-4">
       {loading && (
         <Placeholder as="p" animation="glow" className="m-auto">
           <Placeholder xs={12} />

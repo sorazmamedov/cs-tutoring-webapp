@@ -6,111 +6,99 @@ import ScheduleRowItem from "./scheduleRowItem";
 import CustomPagination from "../common/customPagination";
 import { PlusIcon } from "../common/iconsWithTooltip";
 import { GlobalViewContext } from "../Context/dataContext";
+import TitleBar from "../common/titleBar";
+import Id from "../../utils/Id";
+
 const Schedules = () => {
   const { loadedSemester } = useContext(GlobalViewContext);
   const admin = true;
   const data = [
     {
-      id: 1,
+      id: "kTMSq6018qGj",
       day: "Monday",
       startHour: "9:00 a.m.",
       endHour: "1:00 p.m.",
-      tutor: { id: 11, name: "Alin" },
-      location: "Alin's Zoom link",
+      tutor: {
+        id: "wx-nWZPAX1TC",
+        name: "Alin",
+      },
+      location: "https://www.youtube.com/watch?v=3imO7PFU5cI",
       isActive: false,
     },
     {
-      id: 2,
+      id: "abMSq6018qGj",
       day: "Monday",
       startHour: "1:00 p.m.",
       endHour: "5:00 p.m.",
-      tutor: { id: 12, name: "Andrew" },
-      location: "Andrew's Zoom link",
+      tutor: { id: "2ZXHi4q7J_9m", name: "Andrew" },
+      location: "https://www.youtube.com/watch?v=_v98All94pc",
       isActive: false,
     },
     {
-      id: 3,
+      id: "kTMSq6018q78",
       day: "Tuesday",
       startHour: "10:00 a.m.",
       endHour: "1:00 p.m.",
-      tutor: { id: 13, name: "Victor" },
+      tutor: { id: "Zt5_isRtMR10", name: "Victor" },
       location: "Victor's Zoom link",
       isActive: false,
     },
     {
-      id: 4,
+      id: "kTMSq6018123",
       day: "Tuesday",
       startHour: "11:00 a.m.",
       endHour: "3:00 p.m.",
-      tutor: { id: 11, name: "Alin" },
+      tutor: { id: "nWZPAX1TC", name: "Alin" },
       location: "Alin's Zoom link",
       isActive: false,
     },
     {
-      id: 5,
+      id: "kTMSq6011234",
       day: "Friday",
       startHour: "1:00 p.m.",
       endHour: "6:00 p.m.",
-      tutor: { id: 12, name: "Andrew" },
+      tutor: { id: "2ZXHi4q7J_9m", name: "Andrew" },
       location: "Andrew's Zoom link",
       isActive: false,
     },
     {
-      id: 6,
+      id: "1234q6018qGj",
       day: "Saturday",
       startHour: "10:00 a.m.",
       endHour: "3:00 p.m.",
-      tutor: { id: 13, name: "Victor" },
+      tutor: { id: "Zt5_isRtMR10", name: "Victor" },
       location: "Victor's Zoom link",
       isActive: false,
     },
   ];
-  const [schedules, setSchedules] = useState(
-    JSON.parse(localStorage.getItem("schedules")) || data
-  );
 
-  useEffect(() => {
-    localStorage.setItem("schedules", JSON.stringify(schedules));
+  const [newItemId, setNewItemId] = useState(null);
 
-    return () => {
-      console.log("Schedules Clean up...");
-      localStorage.removeItem("schedules");
-    };
-  }, [schedules]);
+  const [schedules, setSchedules] = useState(data);
 
   const header = ["Day", "From", "To", "Tutor", "Zoom Link"];
-  if (admin) {
-    header.push("Actions");
-  }
+  const adminHeader = [...header, "Actions"];
 
-  const handleEdit = (e) => {
-    console.log("Edit Target: ", e);
-  };
-
-  const handleToggleChange = (e) => {
-    const id = parseInt(e.target.getAttribute("scheduleid"));
-    const modified = schedules.map((item) =>
-      item.id === id ? { ...item, isActive: !item.isActive } : item
-    );
-    setSchedules(modified);
+  const handleAddSchedule = () => {
+    if (!newItemId) {
+      setNewItemId(() => Id.makeId());
+    }
   };
 
   return (
-    <MainContainer
-      title={
-        !loadedSemester?.semesterName
-          ? "Tutor Schedule"
-          : `Tutor Schedule <--> ${loadedSemester.semesterName} ${loadedSemester.academicYear}`
-      }
-      icon={<PlusIcon />}
-    >
+    <MainContainer>
+      <TitleBar
+        title="Tutor Schedule"
+        icon={<PlusIcon onClick={handleAddSchedule} />}
+      />
       <Table className="text-center" bordered hover responsive>
-        <TableHeader headers={header} />
+        <TableHeader headers={admin ? adminHeader : header} />
         <tbody className="text-muted">
           <ScheduleRowItem
-            data={schedules}
-            onEdit={handleEdit}
-            onChange={handleToggleChange}
+            newItemId={newItemId}
+            setNewItemId={setNewItemId}
+            schedules={schedules}
+            setSchedules={setSchedules}
             admin={admin}
           />
         </tbody>

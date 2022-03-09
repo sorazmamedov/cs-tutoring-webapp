@@ -7,8 +7,8 @@ import MainContainer from "../common/mainContainer";
 
 const Profile = () => {
   return (
-    <MainContainer title="Profile">
-      <Row>
+    <MainContainer>
+      <Row className="mt-4">
         <Col sm={4} className="d-flex justify-content-center">
           <ProfileImage />
         </Col>

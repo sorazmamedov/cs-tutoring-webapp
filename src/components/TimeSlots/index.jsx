@@ -6,6 +6,7 @@ import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import SlotsTable from "./slotsTable";
 import { GlobalViewContext } from "../Context/dataContext";
+import TitleBar from "../common/titleBar";
 
 const TimeSlots = () => {
   const { loadedSemester, admin } = useContext(GlobalViewContext);
@@ -36,13 +37,8 @@ const TimeSlots = () => {
   const theader = header.map((text, i) => text + "-" + tableHeaderDate[i]);
 
   return (
-    <MainContainer
-      title={
-        !loadedSemester?.semesterName
-          ? "Time Slots"
-          : `Time Slots <--> ${loadedSemester.semesterName} ${loadedSemester.academicYear}`
-      }
-    >
+    <MainContainer>
+      <TitleBar title="Tutoring Slots" />
       <Tabs
         id="controlled-tab-example"
         activeKey={key}

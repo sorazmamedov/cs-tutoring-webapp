@@ -2,7 +2,7 @@ const len = Object.freeze({
   //length of a field
   dateLength: 10,
   idLength: 12,
-  neiuIdLength: 6,
+  neiuIdLength: 9,
   neiuIdStart: 100000,
   neiuIdEnd: 999999,
   minNameLength: 2,
@@ -23,11 +23,11 @@ const len = Object.freeze({
 
 const messages = Object.freeze({
   //errors
-  isRequired: "is a required field!",
+  isRequired: " is a required field!",
   noEmpty: "cannot be empty",
-  idError: `"id" must be a string of length ${len.idLength}!`,
+  idError: ` does not meet requirements!`,
   minYearError: `must be equal or greater than ${len.minYear}`,
-  neiuIdError: `"neiuId" must be a 6 digit number between ${len.neiuIdStart} and ${len.neiuIdEnd}!`,
+  neiuIdError: `NEIU ID must be a ${len.neiuIdLength} digit number! example: 000123456`,
   nameError: `must be a string of length: min=${len.minNameLength}, max=${len.maxNameLength}`,
   firstnameError: `Firstname must be a string of length: min=${len.minNameLength}, max=${len.maxNameLength}`, //?
   lastnameError: "Lastname must be a string of length: min=2, max=30", //?

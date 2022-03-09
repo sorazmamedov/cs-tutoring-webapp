@@ -7,13 +7,14 @@ import Col from "react-bootstrap/Col";
 import { ViewContext, ActionsContext } from "../Context/semesterContext";
 import { semesterValidator } from "../../utils/validator";
 import { localToUtc, utcToLocal } from "../../utils/date";
+import { isEqual } from "../../utils/isEqual";
 import Id from "../../utils/Id";
 import { postSemester, putSemester } from "../../apis/cs-tutoring/semesters";
 import useFetcher from "../../hooks/useMakeRequest";
 import { useEffect } from "react";
 
 const SemesterDialog = () => {
-  const [axiosFetch, controller] = useFetcher();
+  const [axiosFetch] = useFetcher();
   const { semesters, reset, currentSemester, edit } = useContext(ViewContext);
   const { setSemesters, setCurrentSemester } = useContext(ActionsContext);
   const [validated, setValidated] = useState(false);
@@ -96,7 +97,7 @@ const SemesterDialog = () => {
   useEffect(() => {
     return () => {
       console.log("Aborting fetch from semesters...");
-      controller && controller.abort();
+      // controller && controller.abort();
     };
   });
 
@@ -200,17 +201,3 @@ const SemesterDialog = () => {
 };
 
 export default SemesterDialog;
-
-const isEqual = (obj1, obj2) => {
-  if (Object.keys(obj1).length !== Object.keys(obj2).length) {
-    return false;
-  }
-
-  for (let key in obj1) {
-    if (obj1[key] !== obj2[key]) {
-      return false;
-    }
-  }
-
-  return true;
-};

@@ -1,4 +1,4 @@
-import axios from "../cs-tutoring";
+import axios from "../";
 
 const axiosInstance = { axiosInstance: axios };
 export const postSemester = (newSemester) => {
