@@ -8,6 +8,7 @@ const useAxios = () => {
 
   const axiosFetch = async (configObj) => {
     const { axiosInstance, method, url, requestConfig = {} } = configObj;
+
     try {
       setLoading(true);
       const ctrl = new AbortController();

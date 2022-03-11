@@ -60,7 +60,9 @@ export default Object.freeze({
 
   requiredText: string().trim().required().typeError(messages.isRequired),
 
-  boolean: boolean().required().typeError('${path}' + messages.isRequired),
+  boolean: boolean()
+    .required()
+    .typeError("${path}" + messages.isRequired),
 
   //Semester
   semesterName: string()
@@ -86,7 +88,10 @@ export default Object.freeze({
   //Schedule
   weekday: string()
     .trim()
-    .matches(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)$/)
+    .matches(
+      /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)$/,
+      "Day must be one of the following: (Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)"
+    )
     .required()
     .typeError(messages.isRequired),
 
