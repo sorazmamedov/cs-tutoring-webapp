@@ -1,25 +1,24 @@
 import axios from "../";
 
 const axiosInstance = { axiosInstance: axios };
-export const postSemester = (newSemester) => {
+export const postSchedule = (newSchedule) => {
   const configObj = {
-    ...axiosInstance,
     method: "post",
-    url: "/semesters",
-    requestConfig: { data: newSemester },
+    url: "/schedules",
+    data: newSchedule,
   };
-  return configObj;
+  return makeRequest(configObj);
 };
 
-export const putSemester = (modifiedSemester) => {
-  const { id, ...modified } = modifiedSemester;
+export const putSchedule = (modifiedSchedule) => {
+  const { id, ...modified } = modifiedSchedule;
   const configObj = {
     ...axiosInstance,
     method: "put",
-    url: `/semesters/${id}`,
-    requestConfig: { data: modified },
+    url: `/schedules/${id}`,
+    data: modified,
   };
-  return configObj;
+  return makeRequest(configObj);
 };
 
 const makeRequest = async (configObj) => {
@@ -36,7 +35,6 @@ const makeRequest = async (configObj) => {
     }
     return error;
   } finally {
-    console.log("aborting...");
     ctrl.abort();
   }
 };

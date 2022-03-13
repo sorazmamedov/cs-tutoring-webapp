@@ -6,10 +6,10 @@ import { GlobalViewContext } from "./dataContext";
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
-const TutorDataProvider = ({ children }) => {
+const ScheduleDataProvider = ({ children }) => {
   const { loadedSemester } = useContext(GlobalViewContext);
   const [data, error, loading, axiosFetch] = useAxios();
-  const [tutors, setTutors] = useState([]);
+  const [schedules, setSchedules] = useState([]);
 
   const [show, setShow] = useState(false);
   const [modalBody, setModalBody] = useState("");
@@ -23,11 +23,11 @@ const TutorDataProvider = ({ children }) => {
 
   const [reset] = useState(() => handleReset);
 
-  const fetchTutors = () => {
+  const fetchSchedules = () => {
     axiosFetch({
       axiosInstance: axios,
       method: "GET",
-      url: "/tutors",
+      url: "/schedules",
       requestConfig: {
         params: { semesterId: loadedSemester.id },
       },
@@ -35,15 +35,15 @@ const TutorDataProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (loadedSemester.id) {
-      fetchTutors();
-      console.log("[Fetching tutors]");
+    if (loadedSemester?.id) {
+      fetchSchedules();
+      console.log("[Fetching schedules]");
     }
     // eslint-disable-next-line
   }, [loadedSemester]);
 
   useEffect(() => {
-    setTutors([...data]);
+    setSchedules([...data]);
   }, [data]);
 
   return (
@@ -52,7 +52,7 @@ const TutorDataProvider = ({ children }) => {
         show,
         title,
         modalBody,
-        tutors,
+        schedules,
         error,
         loading,
         reset,
@@ -63,7 +63,7 @@ const TutorDataProvider = ({ children }) => {
           setShow,
           setTitle,
           setModalBody,
-          setTutors,
+          setSchedules,
         }}
       >
         {children}
@@ -72,5 +72,5 @@ const TutorDataProvider = ({ children }) => {
   );
 };
 
-export default TutorDataProvider;
+export default ScheduleDataProvider;
 export { ViewContext, ActionsContext };

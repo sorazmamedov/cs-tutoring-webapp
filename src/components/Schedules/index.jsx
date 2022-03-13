@@ -8,101 +8,46 @@ import { PlusIcon } from "../common/iconsWithTooltip";
 import { GlobalViewContext } from "../Context/dataContext";
 import TitleBar from "../common/titleBar";
 import Id from "../../utils/Id";
-import axios from "../../apis/cs-tutoring";
-import useAxios from "../../hooks/useAxios";
 import {
   NoDataPlaceholder,
   ErrorPlaceholder,
   LoadingPlaceholder,
 } from "../common/Placeholders/";
+import TemplateModal from "../common/templateModal";
+import { ViewContext as TutorContext } from "../Context/tutorsContext";
+import { ActionsContext, ViewContext } from "../Context/scheduleContext";
 
 const Schedules = () => {
-  const [data, error, loading, axiosFetch] = useAxios();
-  // const error = false;
-  // const loading = false;
+  const {
+    tutors,
+    error: tutorsError,
+    loading: tutorsLoading,
+  } = useContext(TutorContext);
   const { loadedSemester, admin } = useContext(GlobalViewContext);
-  // const data = [
-  //   {
-  //     id: "kTMSq6018qGj",
-  //     day: "Monday",
-  //     startHour: "9:00 a.m.",
-  //     endHour: "1:00 p.m.",
-  //     tutor: {
-  //       id: "wx-nWZPAX1TC",
-  //       name: "Alin",
-  //     },
-  //     location: "https://www.youtube.com/watch?v=3imO7PFU5cI",
-  //     isActive: false,
-  //   },
-  //   {
-  //     id: "abMSq6018qGj",
-  //     day: "Monday",
-  //     startHour: "1:00 p.m.",
-  //     endHour: "5:00 p.m.",
-  //     tutor: { id: "2ZXHi4q7J_9m", name: "Andrew" },
-  //     location: "https://www.youtube.com/watch?v=_v98All94pc",
-  //     isActive: false,
-  //   },
-  //   {
-  //     id: "kTMSq6018q78",
-  //     day: "Tuesday",
-  //     startHour: "10:00 a.m.",
-  //     endHour: "1:00 p.m.",
-  //     tutor: { id: "Zt5_isRtMR10", name: "Victor" },
-  //     location: "Victor's Zoom link",
-  //     isActive: false,
-  //   },
-  //   {
-  //     id: "kTMSq6018123",
-  //     day: "Tuesday",
-  //     startHour: "11:00 a.m.",
-  //     endHour: "3:00 p.m.",
-  //     tutor: { id: "nWZPAX1TCdfg", name: "Alin" },
-  //     location: "Alin's Zoom link",
-  //     isActive: false,
-  //   },
-  //   {
-  //     id: "kTMSq6011234",
-  //     day: "Friday",
-  //     startHour: "1:00 p.m.",
-  //     endHour: "6:00 p.m.",
-  //     tutor: { id: "2ZXHi4q7J_9m", name: "Andrew" },
-  //     location: "Andrew's Zoom link",
-  //     isActive: false,
-  //   },
-  //   {
-  //     id: "1234q6018qGj",
-  //     day: "Saturday",
-  //     startHour: "10:00 a.m.",
-  //     endHour: "3:00 p.m.",
-  //     tutor: { id: "Zt5_isRtMR10", name: "Victor" },
-  //     location: "Victor's Zoom link",
-  //     isActive: false,
-  //   },
-  // ];
-
+  const { error, loading, schedules } = useContext(ViewContext);
+  const { setSchedules, setModalBody, setTitle, setShow } =
+    useContext(ActionsContext);
   const [newItemId, setNewItemId] = useState(null);
-
-  const [schedules, setSchedules] = useState([]);
 
   const header = ["Day", "From", "To", "Tutor", "Zoom Link"];
   const adminHeader = [...header, "Actions"];
 
   const handleAddSchedule = () => {
-    if (!newItemId) {
-      setNewItemId(() => Id.makeId());
+    if (tutors.length) {
+      if (!newItemId) {
+        setNewItemId(() => Id.makeId());
+      }
+      return;
     }
-  };
 
-  const fetchSchedules = () => {
-    axiosFetch({
-      axiosInstance: axios,
-      method: "GET",
-      url: "/schedules",
-      requestConfig: {
-        params: { semesterId: loadedSemester.id },
-      },
-    });
+    setTitle("Requirement Error");
+    setModalBody(
+      () => () =>
+        getErrorModalBody({
+          error: `You need to add tutors first to ${loadedSemester.semesterName} ${loadedSemester.academicYear}`,
+        })
+    );
+    setShow(true);
   };
 
   useEffect(() => {
@@ -113,61 +58,65 @@ const Schedules = () => {
         day: "",
         startHour: "",
         endHour: "",
-        tutor: { id: null, name: "" },
+        tutorId: null,
         location: "",
         isActive: false,
       };
       setSchedules([{ ...template, id: newItemId }, ...schedules]);
     }
-  }, [newItemId])
-
-  useEffect(() => {
-    if (loadedSemester?.id) {
-      fetchSchedules();
-      console.log("[Fetching schedules]");
-    }
-    // eslint-disable-next-line
-  }, [loadedSemester]);
-
-  useEffect(() => {
-    if (data) {
-      setSchedules([...data]);
-    }
-  }, [data]);
+  }, [newItemId]);
 
   return (
     <MainContainer>
-      {!loading && !error && (
+      {!loading && !error && !tutorsLoading && !tutorsError && (
         <TitleBar
           title="Tutor Schedule"
           icon={<PlusIcon onClick={handleAddSchedule} />}
         />
       )}
 
-      {loading && <LoadingPlaceholder />}
-      {!loading && error && <ErrorPlaceholder />}
-      {!loading && !error && schedules && schedules.length === 0 && (
-        <NoDataPlaceholder />
+      {loading && tutorsLoading && <LoadingPlaceholder />}
+      {!loading && !tutorsLoading && (error || tutorsError) && (
+        <ErrorPlaceholder />
       )}
-      {!loading && !error && schedules && schedules.length !== 0 && (
-        <>
-          <Table className="text-center" bordered hover responsive>
-            <TableHeader headers={admin ? adminHeader : header} />
-            <tbody className="text-muted">
-              <ScheduleRows
-                newItemId={newItemId}
-                setNewItemId={setNewItemId}
-                schedules={schedules}
-                setSchedules={setSchedules}
-                admin={admin}
-              />
-            </tbody>
-          </Table>
-          <CustomPagination />
-        </>
-      )}
+      {!loading &&
+        !error &&
+        !tutorsLoading &&
+        !tutorsError &&
+        schedules &&
+        schedules.length === 0 && <NoDataPlaceholder />}
+      {!loading &&
+        !error &&
+        !tutorsLoading &&
+        !tutorsError &&
+        schedules &&
+        schedules.length !== 0 && (
+          <>
+            <Table className="text-center" bordered hover responsive>
+              <TableHeader headers={admin ? adminHeader : header} />
+              <tbody className="text-muted">
+                <ScheduleRows
+                  newItemId={newItemId}
+                  setNewItemId={setNewItemId}
+                />
+              </tbody>
+            </Table>
+            <CustomPagination />
+          </>
+        )}
+      <TemplateModal viewContext={ViewContext} />
     </MainContainer>
   );
 };
 
 export default Schedules;
+
+function getErrorModalBody(errorData) {
+  return (
+    <div className="col-10 col-lg-8 mx-auto mb-5 text-center">
+      {Object.entries(errorData).map(([key, value]) => {
+        return <p key={key}>{value}</p>;
+      })}
+    </div>
+  );
+}

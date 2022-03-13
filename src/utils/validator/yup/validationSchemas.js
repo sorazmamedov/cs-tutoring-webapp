@@ -90,7 +90,7 @@ export default Object.freeze({
     .trim()
     .matches(
       /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)$/,
-      "Day must be one of the following: (Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)"
+      "Day must be on the week days and must begin with capital letter!"
     )
     .required()
     .typeError(messages.isRequired),
@@ -99,7 +99,7 @@ export default Object.freeze({
     .trim()
     .matches(
       /^([1-9]|1[0-2]):[0-5][0-9]\s(a.m.|p.m.)$/,
-      "Format mismatch! Example: 1:45 a.m."
+      "From: Format mismatch! Example: 1:45 a.m."
     )
     .required()
     .typeError(messages.isRequired),
@@ -108,7 +108,7 @@ export default Object.freeze({
     .trim()
     .matches(
       /^([1-9]|1[0-2]):[0-5][0-9]\s(a.m.|p.m.)$/,
-      "Format mismatch! Example: 1:45 a.m."
+      "To: Format mismatch! Example: 1:45 a.m."
     )
     .required()
     .typeError(messages.isRequired),

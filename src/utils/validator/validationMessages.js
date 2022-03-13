@@ -25,7 +25,7 @@ const messages = Object.freeze({
   //errors
   isRequired: " is a required field!",
   noEmpty: "cannot be empty",
-  idError: ` does not meet requirements!`,
+  idError: " does not meet requirements!",
   minYearError: `must be equal or greater than ${len.minYear}`,
   neiuIdError: `NEIU ID must be a ${len.neiuIdLength} digit number! example: 000123456`,
   nameError: `must be a string of length: min=${len.minNameLength}, max=${len.maxNameLength}`,

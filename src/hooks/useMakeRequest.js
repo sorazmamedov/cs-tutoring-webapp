@@ -25,6 +25,7 @@ const useFetcher = () => {
 
   useEffect(() => {
     return () => {
+      console.log("[Cancel useMakeRequest]");
       controller && controller.abort();
     };
   }, [controller]);

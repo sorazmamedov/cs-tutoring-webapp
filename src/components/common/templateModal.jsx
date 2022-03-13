@@ -25,8 +25,12 @@ const TemplateModal = ({ viewContext }) => {
 
 export default TemplateModal;
 
-export const TemplateModalNoCtx = ({ title, show, modalBody: ModalBody, reset }) => {
-
+export const TemplateModalNoCtx = ({
+  title,
+  show,
+  modalBody: ModalBody,
+  reset,
+}) => {
   return (
     <Modal
       size="lg"

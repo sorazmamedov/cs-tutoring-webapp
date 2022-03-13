@@ -9,7 +9,7 @@ import SemesterDataProvider from "./Context/semesterContext";
 import AnnouncementDataProvider from "./Context/announcementContext";
 import CourseDataProvider from "./Context/courseContext";
 import TutorDataProvider from "./Context/tutorsContext";
-
+import ScheduleDataProvider from "./Context/scheduleContext";
 
 const Home = () => {
   return (
@@ -17,7 +17,11 @@ const Home = () => {
       <SemesterDataProvider>
         <Semesters />
       </SemesterDataProvider>
-      <Schedules />
+      <TutorDataProvider>
+        <ScheduleDataProvider>
+          <Schedules />
+        </ScheduleDataProvider>
+      </TutorDataProvider>
       <AnnouncementDataProvider>
         <Announcements />
       </AnnouncementDataProvider>

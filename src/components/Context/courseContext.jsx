@@ -22,7 +22,7 @@ const CourseDataProvider = ({ children }) => {
 
   const [reset] = useState(() => handleReset);
 
-  const fetchData = () => {
+  const fetchCourses = () => {
     axiosFetch({
       axiosInstance: axios,
       method: "GET",
@@ -32,8 +32,10 @@ const CourseDataProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchData();
-    console.log("[Fetching courses]");
+    if (loadedSemester.id) {
+      fetchCourses();
+      console.log("[Fetching courses]");
+    }
     // eslint-disable-next-line
   }, [loadedSemester]);
 

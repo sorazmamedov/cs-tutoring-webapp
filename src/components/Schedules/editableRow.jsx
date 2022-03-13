@@ -1,13 +1,11 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CancelIcon, CheckIcon } from "../common/iconsWithTooltip";
+import { ViewContext } from "../Context/tutorsContext";
 
-const EditableRow = (props) => {
-  const { admin, schedule, schedules, newItemId, handleSave, handleCancel } =
-    props;
-  const tutors = [
-    ...new Set(schedules.slice(1).map(({ tutor }) => tutor.name)),
-  ];
+const EditableRow = ({ admin, schedule, handleSave, handleCancel }) => {
+  const { tutors } = useContext(ViewContext);
   const [edited, setEdited] = useState({ ...schedule });
+  const tutor = tutors.find((item) => item.id === edited.tutorId);
   const days = [
     "Select",
     "Monday",
@@ -22,7 +20,7 @@ const EditableRow = (props) => {
   return (
     <tr>
       <td className="px-0">
-        {newItemId !== edited.id ? (
+        {/* {newItemId !== edited.id ? (
           <input
             className="text-center roundBorder"
             type="text"
@@ -33,18 +31,19 @@ const EditableRow = (props) => {
             onChange={(e) => setEdited({ ...edited, day: e.target.value })}
             required
           />
-        ) : (
-          <select
-            className="roundBorder"
-            onChange={(e) => setEdited({ ...edited, day: e.target.value })}
-          >
-            {days.map((day) => (
-              <option key={day} value={day}>
-                {day}
-              </option>
-            ))}
-          </select>
-        )}
+        ) : ( */}
+        <select
+          className="roundBorder"
+          value={edited.day}
+          onChange={(e) => setEdited({ ...edited, day: e.target.value })}
+        >
+          {days.map((day) => (
+            <option key={day} value={day}>
+              {day}
+            </option>
+          ))}
+        </select>
+        {/* )} */}
       </td>
       <td className="px-0">
         <input
@@ -76,7 +75,7 @@ const EditableRow = (props) => {
         />
       </td>
       <td className="px-0">
-        {newItemId !== edited.id ? (
+        {/* {newItemId !== edited.id ? (
           <input
             className="text-center roundBorder"
             type="text"
@@ -94,24 +93,28 @@ const EditableRow = (props) => {
             }
             required
           />
-        ) : (
-          <select
-            className="roundBorder"
-            onChange={(e) =>
-              setEdited({
-                ...edited,
-                tutor: { ...edited.tutor, name: e.target.value },
-              })
-            }
-          >
-            <option value="Select">Select</option>
-            {tutors.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-        )}
+        ) : ( */}
+        <select
+          className="roundBorder"
+          defaultValue={`${tutor?.firstName} ${tutor?.lastName}`}
+          onChange={(e) =>
+            e.target.selectedIndex &&
+            setEdited({
+              ...edited,
+              tutorId:
+                tutors[e.target.selectedIndex ? e.target.selectedIndex - 1 : 0]
+                  .id,
+            })
+          }
+        >
+          <option value="Select">Select</option>
+          {tutors.map(({ id, firstName, lastName }) => (
+            <option key={id} value={`${firstName} ${lastName}`}>
+              {`${firstName} ${lastName}`}
+            </option>
+          ))}
+        </select>
+        {/* )} */}
       </td>
       <td className="px-0">
         <input

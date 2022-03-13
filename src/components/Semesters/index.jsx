@@ -114,27 +114,20 @@ const Semesters = () => {
 
   useEffect(() => {
     if (semesters.length !== 0) {
-      const semester = semesters.find((item) => item.active === true);
-      if (Object.keys(loadedSemester).length === 0) {
-        if (semester) {
-          setCurrentSemester({ ...semester });
-          setLoadedSemester({ ...semester });
-        } else {
+      const active = semesters.find((item) => item.active === true);
+      if (!active) {
+        if (Object.keys(loadedSemester).length === 0) {
+          console.log("ACTIVE:", active);
           setCurrentSemester({ ...semesters[0] });
           setLoadedSemester({ ...semesters[0] });
+        } else if (Object.keys(loadedSemester).length !== 0) {
+          setCurrentSemester({ ...semesters[0] });
         }
-      } else if (Object.keys(currentSemester).length === 0) {
-        setCurrentSemester({ ...loadedSemester });
+      } else {
+        setCurrentSemester({ ...active });
       }
     }
   }, [semesters]);
-
-  useEffect(() => {
-    return () => {
-      console.log("Aborting fetch from semesters...");
-      controller && controller.abort();
-    };
-  });
 
   return (
     <MainContainer className="shadow p-3 mb-4">

@@ -26,21 +26,14 @@ const SemesterDialog = () => {
     e.preventDefault();
     e.stopPropagation();
 
-    const newItem = {
-      id: edit ? currentSemester.id : Id.makeId(),
-      semesterName: form.semesterName.value.trim(),
-      academicYear: new Date(
-        utcToLocal(form.startDate.value.trim())
-      ).getFullYear(),
-      startDate: +new Date(utcToLocal(form.startDate.value.trim())),
-      endDate: +new Date(utcToLocal(form.endDate.value.trim())),
-      active: edit ? currentSemester.active : false,
-    };
+    const newItem = getServerFotmatted(edit, currentSemester, form);
+    if (isEqual(currentSemester, newItem)) {
+      reset();
+    }
 
     let error = semesterValidator(newItem);
-    const equal = isEqual(currentSemester, newItem);
 
-    if (!error && !equal) {
+    if (!error) {
       setLoading(true);
       setValidated(true);
       setErrors({});
@@ -89,8 +82,6 @@ const SemesterDialog = () => {
       }
       setErrors(errorData);
       setValidated(false);
-    } else {
-      reset();
     }
   };
 
@@ -189,7 +180,7 @@ const SemesterDialog = () => {
                   role="save"
                   aria-hidden="true"
                 />
-                <span className="visually-hidden">Loading...</span>
+                <span className="visually-hidden">Saving...</span>
                 Saving...
               </Button>
             )}
@@ -201,3 +192,16 @@ const SemesterDialog = () => {
 };
 
 export default SemesterDialog;
+
+function getServerFotmatted(edit, currentSemester, form) {
+  return {
+    id: edit ? currentSemester.id : Id.makeId(),
+    semesterName: form.semesterName.value.trim(),
+    academicYear: new Date(
+      utcToLocal(form.startDate.value.trim())
+    ).getFullYear(),
+    startDate: +new Date(utcToLocal(form.startDate.value.trim())),
+    endDate: +new Date(utcToLocal(form.endDate.value.trim())),
+    active: edit ? currentSemester.active : false,
+  };
+}
