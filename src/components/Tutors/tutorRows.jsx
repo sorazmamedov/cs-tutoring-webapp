@@ -65,7 +65,7 @@ const TutorRows = ({}) => {
               />
             </>
           ) : (
-            <SpinnerBtn />
+            <SpinnerBtn btnVariant="" variant="primary" />
           )}
         </td>
       )}

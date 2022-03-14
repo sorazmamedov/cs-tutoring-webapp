@@ -22,7 +22,7 @@ const Courses = () => {
   const { setShow, setTitle, setModalBody } = useContext(ActionsContext);
 
   const tableHeader = ["Section", "Course", "Instructor", "Email"];
-  const adminTHeader = [...tableHeader, "Edit"];
+  const adminTHeader = [...tableHeader, "Actions"];
 
   const handleAddCourse = () => {
     setTitle("Add New Courses");
@@ -50,7 +50,7 @@ const Courses = () => {
           <Table className="text-center" bordered hover responsive>
             <TableHeader headers={admin ? adminTHeader : tableHeader} />
             <tbody className="text-muted">
-              <CourseRows courses={courses} admin={admin} />
+              <CourseRows admin={admin} />
             </tbody>
           </Table>
           <CustomPagination />

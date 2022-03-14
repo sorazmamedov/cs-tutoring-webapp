@@ -115,10 +115,9 @@ const Semesters = () => {
       const active = semesters.find((item) => item.active === true);
       if (!active) {
         if (Object.keys(loadedSemester).length === 0) {
-          console.log("ACTIVE:", active);
           setCurrentSemester({ ...semesters[0] });
           setLoadedSemester({ ...semesters[0] });
-        } else if (Object.keys(loadedSemester).length !== 0) {
+        } else if (Object.keys(currentSemester).length === 0) {
           setCurrentSemester({ ...semesters[0] });
         }
       } else {

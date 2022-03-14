@@ -86,6 +86,7 @@ const Announcements = () => {
                         <DeleteIcon
                           id={announcement.id}
                           onClick={handleDelete}
+                          className="me-3"
                         />
                       </div>
                     </td>

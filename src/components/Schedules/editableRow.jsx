@@ -119,7 +119,7 @@ const EditableRow = ({
               />
             </>
           ) : (
-            <SpinnerBtn />
+            <SpinnerBtn btnVariant="" variant="primary" />
           )}
         </td>
       )}

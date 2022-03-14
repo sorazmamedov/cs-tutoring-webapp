@@ -22,6 +22,7 @@ const DataProvider = ({ children }) => {
 
   useEffect(() => {
     fetchActiveSemester();
+    console.log("[Fetching Active");
   }, []);
 
   useEffect(() => {

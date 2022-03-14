@@ -28,7 +28,7 @@ const ReadOnlyRow = ({
         )}
       </td>
       {admin && (
-        <td className="pe-0 no-stretch">
+        <td className="ps-1 pe-0 no-stretch">
           {saving !== schedule.id ? (
             <>
               <EditIcon onClick={handleEdit} scheduleid={schedule.id} />
@@ -40,7 +40,7 @@ const ReadOnlyRow = ({
               />
             </>
           ) : (
-            <SpinnerBtn accessibilityText="Saving" />
+            <SpinnerBtn btnVariant="" variant="primary" />
           )}
         </td>
       )}

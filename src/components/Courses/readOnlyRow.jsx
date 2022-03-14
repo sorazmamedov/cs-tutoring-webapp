@@ -1,6 +1,7 @@
-import { EditIcon } from "../common/iconsWithTooltip";
+import { DeleteIcon, EditIcon } from "../common/iconsWithTooltip";
+import SpinnerBtn from "../common/spinnerBtn";
 
-const ReadOnlyRow = ({ course, admin, handleEdit }) => {
+const ReadOnlyRow = ({ course, admin, saving, handleEdit, handleDelete }) => {
   return (
     <tr>
       <td>{course.section}</td>
@@ -8,9 +9,20 @@ const ReadOnlyRow = ({ course, admin, handleEdit }) => {
       <td>{course.instructorName}</td>
       <td>{course.instructorEmail}</td>
       {admin && (
-        <td>
-          <EditIcon courseid={course.id} onClick={handleEdit} />
-        </td>
+        <td className="pe-0 no-stretch">
+        {saving !== course.id ? (
+          <>
+            <EditIcon courseid={course.id} onClick={handleEdit} />
+            <DeleteIcon
+              courseid={course.id}
+              className="ms-3"
+              onClick={handleDelete}
+            />
+          </>
+        ) : (
+          <SpinnerBtn accessibilityText="Saving" />
+        )}
+      </td>
       )}
     </tr>
   );

@@ -79,6 +79,7 @@ const AnnouncementDataProvider = ({ children }) => {
   const [modalBody, setModalBody] = useState("");
   const [title, setTitle] = useState("");
   const [announcementId, setAnnouncementId] = useState(0);
+  const [current, setCurrent] = useState("");
 
   const handleReset = () => {
     setShow(false);
@@ -89,18 +90,22 @@ const AnnouncementDataProvider = ({ children }) => {
 
   const [reset] = useState(() => handleReset);
 
-  const fetchData = () => {
+  const fetchAnnouncements = () => {
     axiosFetch({
       axiosInstance: axios,
       method: "GET",
       url: "/announcements",
-      requestConfig: {},
+      requestConfig: { params: { semesterId: loadedSemester.id } },
     });
   };
 
   useEffect(() => {
-    // fetchData();
-    console.log("[Fetching announcements]");
+    if (loadedSemester.id && current !== loadedSemester.id) {
+      setCurrent(loadedSemester.id);
+      // fetchAnnouncements();
+      console.log("[Fetching announcements]");
+    }
+
     // eslint-disable-next-line
   }, [loadedSemester]);
 

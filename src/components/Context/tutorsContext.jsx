@@ -14,6 +14,7 @@ const TutorDataProvider = ({ children }) => {
   const [show, setShow] = useState(false);
   const [modalBody, setModalBody] = useState("");
   const [title, setTitle] = useState("");
+  const [current, setCurrent] = useState("");
 
   const handleReset = () => {
     setShow(false);
@@ -35,7 +36,8 @@ const TutorDataProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (loadedSemester.id) {
+    if (loadedSemester.id && current !== loadedSemester.id) {
+      setCurrent(loadedSemester.id);
       fetchTutors();
       console.log("[Fetching tutors]");
     }

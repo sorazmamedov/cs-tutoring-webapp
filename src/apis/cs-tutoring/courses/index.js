@@ -1,4 +1,4 @@
-import {makeRequest} from "../";
+import { makeRequest } from "../";
 
 export const postCourse = (semesterId, data) => {
   const configObj = {
@@ -15,6 +15,15 @@ export const putCourse = (data) => {
     method: "put",
     url: `/courses/${id}`,
     requestConfig: { data: modified },
+  };
+  return makeRequest(configObj);
+};
+
+export const deleteCourse = (id) => {
+  const configObj = {
+    method: "delete",
+    url: `/courses/${id}`,
+    requestConfig: {},
   };
   return makeRequest(configObj);
 };

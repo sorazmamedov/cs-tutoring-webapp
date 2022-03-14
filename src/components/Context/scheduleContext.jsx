@@ -14,6 +14,7 @@ const ScheduleDataProvider = ({ children }) => {
   const [show, setShow] = useState(false);
   const [modalBody, setModalBody] = useState("");
   const [title, setTitle] = useState("");
+  const [current, setCurrent] = useState("");
 
   const handleReset = () => {
     setShow(false);
@@ -35,7 +36,8 @@ const ScheduleDataProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (loadedSemester?.id) {
+    if (loadedSemester.id && current !== loadedSemester.id) {
+      setCurrent(loadedSemester.id);
       fetchSchedules();
       console.log("[Fetching schedules]");
     }

@@ -9,8 +9,8 @@ export const editIcon = ({ className, ...props }) => (
   />
 );
 
-export const deleteIcon = (props) => {
-  return <i className="bi bi-trash3 me-3" data-icon-type="delete" {...props} />;
+export const deleteIcon = ({className, ...props}) => {
+  return <i className={`bi bi-trash3 ${className}`} data-icon-type="delete" {...props} />;
 };
 
 export const toggleIcon = (props) => {

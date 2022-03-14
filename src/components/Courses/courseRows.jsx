@@ -4,42 +4,67 @@ import { courseValidator } from "../../utils/validator";
 import { ActionsContext, ViewContext } from "../Context/courseContext";
 import EditableRow from "./editableRow";
 import ReadOnlyRow from "./readOnlyRow";
+import { showErrors } from "../common/errorHelper";
+import { putCourse } from "../../apis/cs-tutoring/courses";
+import DeleteCourseDialog from "./deleteCourseDialog";
 
-const CourseRows = ({ courses, admin }) => {
-  const {} = useContext(ViewContext);
-  const { setShow, setTitle, setModalBody } = useContext(ActionsContext);
+const CourseRows = ({ admin }) => {
+  const { courses } = useContext(ViewContext);
+  const { setShow, setTitle, setModalBody, setCourses } =
+    useContext(ActionsContext);
   const [editId, setEditId] = useState(null);
+  const [saving, setSaving] = useState(null);
 
   const handleEdit = (e) => {
-    e.stopPropagation();
+    if (saving) {
+      return;
+    }
     const courseId = e.target.getAttribute("courseid");
     setEditId(courseId);
   };
 
-  const handleSave = (edited) => {
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    const id = e.target.getAttribute("courseid");
+    setTitle("Are you sure you want to delete?");
+    setModalBody(() => () => DeleteCourseDialog(id));
+    setShow(true);
+  };
+
+  const handleSave = async (edited) => {
+    setSaving(edited.id);
+
+    //Dismiss if nothing has changed
     const actual = courses.find(({ id }) => id === edited.id);
     if (actual && isEqual(actual, edited)) {
+      setSaving(null);
       setEditId(null);
       return;
     }
 
+    //Validation
     const result = courseValidator(edited);
-
     if (result) {
-      const errorData = {};
-      for (let item of result.inner) {
-        const name = item.path;
-        const message = item.message;
-        errorData[name] = message;
-      }
-
-      setTitle("Validation Error");
-      setModalBody(() => () => getErrorModalBody(errorData));
-      setShow(true);
+      setSaving(null);
+      showErrors(result, setTitle, setShow, setModalBody);
       return;
     }
 
-    console.log("Bitti");
+    //Persistence
+    const response = await putCourse(edited);
+    if (response.status === 200) {
+      let index = courses.findIndex((item) => item.id === edited.id);
+      setCourses([
+        ...courses.slice(0, index),
+        edited,
+        ...courses.slice(++index),
+      ]);
+    } else {
+      showErrors(response, setTitle, setShow, setModalBody);
+    }
+
+    setEditId(null);
+    setSaving(null);
   };
 
   return courses.map((course) =>
@@ -47,28 +72,22 @@ const CourseRows = ({ courses, admin }) => {
       <EditableRow
         key={course.id}
         course={course}
+        saving={saving}
         handleSave={handleSave}
         setEditId={setEditId}
+        setSaving={setSaving}
       />
     ) : (
       <ReadOnlyRow
         key={course.id}
         course={course}
         admin={admin}
+        saving={saving}
         handleEdit={handleEdit}
+        handleDelete={handleDelete}
       />
     )
   );
 };
 
 export default CourseRows;
-
-function getErrorModalBody(errorData) {
-  return (
-    <div className="col-10 col-lg-8 mx-auto mb-5 text-center">
-      {Object.entries(errorData).map(([key, value]) => {
-        return <p key={key}>{value}</p>;
-      })}
-    </div>
-  );
-}

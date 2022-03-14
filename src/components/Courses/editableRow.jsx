@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { CancelIcon, CheckIcon } from "../common/iconsWithTooltip";
+import SpinnerBtn from "../common/spinnerBtn";
 
-const EditableRow = ({ course, handleSave, setEditId }) => {
+const EditableRow = ({ course, saving, handleSave, setEditId, setSaving }) => {
   const [edited, setEdited] = useState({ ...course });
 
   return (
@@ -58,7 +59,7 @@ const EditableRow = ({ course, handleSave, setEditId }) => {
           style={{
             width: `${edited.instructorEmail.length + 1}ch`,
             minWidth: "10ch",
-            maxWidth: "15ch",
+            maxWidth: "30ch",
           }}
           onChange={(e) =>
             setEdited({ ...edited, instructorEmail: e.target.value })
@@ -67,17 +68,26 @@ const EditableRow = ({ course, handleSave, setEditId }) => {
         />
       </td>
       <td className="px-0 d-flex justify-content-evenly">
-        <CheckIcon
-          type="submit"
-          onClick={() => handleSave(edited)}
-          aria-label="Save"
-          style={{ color: "green" }}
-        />
-        <CancelIcon
-          onClick={() => setEditId(null)}
-          aria-label="Cancel"
-          style={{ color: "red" }}
-        />
+        {edited.id !== saving ? (
+          <>
+            <CheckIcon
+              type="submit"
+              onClick={() => handleSave(edited)}
+              aria-label="Save"
+              style={{ color: "green" }}
+            />
+            <CancelIcon
+              onClick={() => {
+                setEditId(null);
+                setSaving(null);
+              }}
+              aria-label="Cancel"
+              style={{ color: "red" }}
+            />
+          </>
+        ) : (
+          <SpinnerBtn btnVariant="" variant="primary" />
+        )}
       </td>
     </tr>
   );

@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { ViewContext, ActionsContext } from "../Context/semesterContext";
@@ -11,6 +10,7 @@ import { isEqual } from "../../utils/isEqual";
 import Id from "../../utils/Id";
 import { postSemester, putSemester } from "../../apis/cs-tutoring/semesters";
 import { useEffect } from "react";
+import SpinnerBtn from "../common/spinnerBtn";
 
 const SemesterDialog = () => {
   const { semesters, reset, currentSemester, edit } = useContext(ViewContext);
@@ -170,17 +170,7 @@ const SemesterDialog = () => {
                 SAVE CHANGES
               </Button>
             ) : (
-              <Button className="col-12 roundBorder" disabled>
-                <Spinner
-                  as="span"
-                  animation="grow"
-                  size="sm"
-                  role="save"
-                  aria-hidden="true"
-                />
-                <span className="visually-hidden">Saving...</span>
-                Saving...
-              </Button>
+              <SpinnerBtn className="col-12 roundBorder" text="Saving" />
             )}
           </Col>
         </Row>
