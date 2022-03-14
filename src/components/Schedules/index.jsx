@@ -16,6 +16,7 @@ import {
 import TemplateModal from "../common/templateModal";
 import { ViewContext as TutorContext } from "../Context/tutorsContext";
 import { ActionsContext, ViewContext } from "../Context/scheduleContext";
+import { showErrors } from "../common/errorHelper";
 
 const Schedules = () => {
   const {
@@ -40,14 +41,11 @@ const Schedules = () => {
       return;
     }
 
-    setTitle("Requirement Error");
-    setModalBody(
-      () => () =>
-        getErrorModalBody({
-          error: `You need to add tutors first to ${loadedSemester.semesterName} ${loadedSemester.academicYear}`,
-        })
-    );
-    setShow(true);
+    const err = {
+      title: "Requirement Error",
+      message: `You need to add tutors first to ${loadedSemester.semesterName} ${loadedSemester.academicYear}`,
+    };
+    showErrors(err, setTitle, setShow, setModalBody);
   };
 
   useEffect(() => {
@@ -110,13 +108,3 @@ const Schedules = () => {
 };
 
 export default Schedules;
-
-function getErrorModalBody(errorData) {
-  return (
-    <div className="col-10 col-lg-8 mx-auto mb-5 text-center">
-      {Object.entries(errorData).map(([key, value]) => {
-        return <p key={key}>{value}</p>;
-      })}
-    </div>
-  );
-}

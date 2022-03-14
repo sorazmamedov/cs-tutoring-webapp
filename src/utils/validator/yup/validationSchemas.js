@@ -34,7 +34,10 @@ export default Object.freeze({
       maxDomainSegments: 2,
       tlds: { allow: ["edu"] },
     })
-    .matches(/[A-Za-z0-9-]+@neiu.edu$/)
+    .matches(
+      /[A-Za-z0-9-]+@neiu.edu$/,
+      "Email does not match: example@neiu.edu"
+    )
     .required()
     .typeError(messages.isRequired),
 

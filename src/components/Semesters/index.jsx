@@ -18,11 +18,9 @@ import { HouseIcon } from "../common/icons";
 import { PlusIcon } from "../common/iconsWithTooltip";
 import { semesterValidator } from "../../utils/validator";
 import { putSemester } from "../../apis/cs-tutoring/semesters";
-import useFetcher from "../../hooks/useMakeRequest";
 import InfoDialog from "../common/infoDialog";
 
 const Semesters = () => {
-  const [axiosFetch, controller] = useFetcher();
   const [changingStatus, setChangingStatus] = useState(false);
   const { loadedSemester } = useContext(GlobalViewContext);
   const { setLoadedSemester } = useContext(GlobalActionsContext);
@@ -63,7 +61,7 @@ const Semesters = () => {
     let error = semesterValidator(modified);
 
     if (!error) {
-      const response = await axiosFetch(putSemester(modified));
+      const response = await putSemester(modified);
 
       if (response.status === 200) {
         let index = semesters.findIndex((item) => item.id === modified.id);

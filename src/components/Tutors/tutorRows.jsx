@@ -1,8 +1,46 @@
-import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
+import { useState, useContext } from "react";
+import { GlobalViewContext } from "../Context/dataContext";
+import { ActionsContext, ViewContext } from "../Context/tutorsContext";
 import { EditIcon, SwitchIcon } from "../common/iconsWithTooltip";
+import SpinnerBtn from "../common/spinnerBtn";
+import { putTutor } from "../../apis/cs-tutoring/tutors";
+import { showErrors } from "../common/errorHelper";
 
-const TutorRowItem = ({ tutors, admin, saving, onEdit, onChange }) => {
+const TutorRows = ({}) => {
+  const { admin } = useContext(GlobalViewContext);
+  const { tutors } = useContext(ViewContext);
+  const { setTutors, setShow, setTitle, setModalBody } =
+    useContext(ActionsContext);
+  const [saving, setSaving] = useState(null);
+
+  const handleEdit = (e) => {
+    console.log("Edit Target: ", e);
+  };
+
+  const handleToggle = async (e) => {
+    if (saving) {
+      return;
+    }
+    const id = e.target.getAttribute("tutorid");
+    setSaving(id);
+    const item = tutors.find((item) => item.id === id);
+    const modified = { ...item, isActive: !item.isActive };
+    const result = await putTutor(modified);
+
+    if (result.status === 200) {
+      let index = tutors.findIndex((item) => item.id === id);
+      setSaving(null);
+      setTutors([
+        ...tutors.slice(0, index),
+        result.data,
+        ...tutors.slice(++index),
+      ]);
+    } else {
+      setSaving(null);
+      showErrors(result, setTitle, setShow, setModalBody);
+    }
+  };
+
   return tutors.map((tutor) => (
     <tr id={tutor.id} key={tutor.id}>
       <td>{tutor.neiuId}</td>
@@ -18,25 +56,16 @@ const TutorRowItem = ({ tutors, admin, saving, onEdit, onChange }) => {
         <td className="pe-0 no-stretch">
           {saving !== tutor.id ? (
             <>
-              <EditIcon onClick={onEdit} tutorid={tutor.id} />
+              <EditIcon onClick={handleEdit} tutorid={tutor.id} />
               <SwitchIcon
                 tutorid={tutor.id}
                 className="me-0 ms-2"
-                onChange={onChange}
+                onChange={handleToggle}
                 checked={tutor.isActive}
               />
             </>
           ) : (
-            <Button className="col-12 p-0 roundBorder" disabled>
-              <Spinner
-                as="span"
-                animation="grow"
-                size="sm"
-                role="save"
-                aria-hidden="true"
-              />
-              <span className="visually-hidden">Saving...</span>
-            </Button>
+            <SpinnerBtn />
           )}
         </td>
       )}
@@ -44,4 +73,4 @@ const TutorRowItem = ({ tutors, admin, saving, onEdit, onChange }) => {
   ));
 };
 
-export default TutorRowItem;
+export default TutorRows;

@@ -1,23 +1,20 @@
-import axios from "../";
+import { makeRequest } from "../";
 
-const axiosInstance = { axiosInstance: axios };
-export const postTutor = (data) => {
+export const postTutor = () => {
   const configObj = {
-    ...axiosInstance,
     method: "post",
     url: "/tutors",
     requestConfig: { data: {} },
   };
-  return configObj;
+  return makeRequest(configObj);
 };
 
 export const putTutor = (data) => {
   const { id, ...modified } = data;
   const configObj = {
-    ...axiosInstance,
     method: "put",
     url: `/tutors/${id}`,
     requestConfig: { data: modified },
   };
-  return configObj;
+  return makeRequest(configObj);
 };

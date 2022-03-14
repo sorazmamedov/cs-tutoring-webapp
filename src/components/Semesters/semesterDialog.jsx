@@ -10,11 +10,9 @@ import { localToUtc, utcToLocal } from "../../utils/date";
 import { isEqual } from "../../utils/isEqual";
 import Id from "../../utils/Id";
 import { postSemester, putSemester } from "../../apis/cs-tutoring/semesters";
-import useFetcher from "../../hooks/useMakeRequest";
 import { useEffect } from "react";
 
 const SemesterDialog = () => {
-  const [axiosFetch] = useFetcher();
   const { semesters, reset, currentSemester, edit } = useContext(ViewContext);
   const { setSemesters, setCurrentSemester } = useContext(ActionsContext);
   const [validated, setValidated] = useState(false);
@@ -39,8 +37,8 @@ const SemesterDialog = () => {
       setErrors({});
 
       const result = edit
-        ? await axiosFetch(putSemester(newItem))
-        : await axiosFetch(postSemester(newItem));
+        ? await putSemester(newItem)
+        : await postSemester(newItem);
       const statusCode = edit ? 200 : 201;
 
       if (result.status === statusCode) {

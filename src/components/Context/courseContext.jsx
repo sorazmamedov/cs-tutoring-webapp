@@ -27,7 +27,9 @@ const CourseDataProvider = ({ children }) => {
       axiosInstance: axios,
       method: "GET",
       url: "/courses",
-      requestConfig: {},
+      requestConfig: {
+        params: { semesterId: loadedSemester.id },
+      },
     });
   };
 
@@ -40,9 +42,7 @@ const CourseDataProvider = ({ children }) => {
   }, [loadedSemester]);
 
   useEffect(() => {
-    if (Object.keys(data).length !== 0) {
-      setCourses([...data]);
-    }
+    setCourses([...data]);
   }, [data]);
 
   return (

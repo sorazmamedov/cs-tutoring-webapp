@@ -1,9 +1,15 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { CancelIcon, CheckIcon } from "../common/iconsWithTooltip";
-import { ViewContext } from "../Context/tutorsContext";
+import SpinnerBtn from "../common/spinnerBtn";
 
-const EditableRow = ({ admin, schedule, handleSave, handleCancel }) => {
-  const { tutors } = useContext(ViewContext);
+const EditableRow = ({
+  saving,
+  admin,
+  tutors,
+  schedule,
+  handleSave,
+  handleCancel,
+}) => {
   const [edited, setEdited] = useState({ ...schedule });
   const tutor = tutors.find((item) => item.id === edited.tutorId);
   const days = [
@@ -20,18 +26,6 @@ const EditableRow = ({ admin, schedule, handleSave, handleCancel }) => {
   return (
     <tr>
       <td className="px-0">
-        {/* {newItemId !== edited.id ? (
-          <input
-            className="text-center roundBorder"
-            type="text"
-            defaultValue={edited.day}
-            style={{
-              width: !edited.day.length ? "10ch" : `${edited.day.length + 1}ch`,
-            }}
-            onChange={(e) => setEdited({ ...edited, day: e.target.value })}
-            required
-          />
-        ) : ( */}
         <select
           className="roundBorder"
           value={edited.day}
@@ -43,7 +37,6 @@ const EditableRow = ({ admin, schedule, handleSave, handleCancel }) => {
             </option>
           ))}
         </select>
-        {/* )} */}
       </td>
       <td className="px-0">
         <input
@@ -75,25 +68,6 @@ const EditableRow = ({ admin, schedule, handleSave, handleCancel }) => {
         />
       </td>
       <td className="px-0">
-        {/* {newItemId !== edited.id ? (
-          <input
-            className="text-center roundBorder"
-            type="text"
-            defaultValue={edited.tutor.name}
-            style={{
-              width: `${edited.tutor.name.length + 1}ch`,
-              minWidth: "10ch",
-              maxWidth: "15ch",
-            }}
-            onChange={(e) =>
-              setEdited({
-                ...edited,
-                tutor: { ...edited.tutor, name: e.target.value },
-              })
-            }
-            required
-          />
-        ) : ( */}
         <select
           className="roundBorder"
           defaultValue={`${tutor?.firstName} ${tutor?.lastName}`}
@@ -114,7 +88,6 @@ const EditableRow = ({ admin, schedule, handleSave, handleCancel }) => {
             </option>
           ))}
         </select>
-        {/* )} */}
       </td>
       <td className="px-0">
         <input
@@ -132,16 +105,22 @@ const EditableRow = ({ admin, schedule, handleSave, handleCancel }) => {
       </td>
       {admin && (
         <td className="px-0 d-flex justify-content-evenly">
-          <CheckIcon
-            onClick={() => handleSave(edited)}
-            aria-label="Save"
-            style={{ color: "green" }}
-          />
-          <CancelIcon
-            onClick={handleCancel}
-            aria-label="Cancel"
-            style={{ color: "red" }}
-          />
+          {saving !== edited.id ? (
+            <>
+              <CheckIcon
+                onClick={() => handleSave(edited)}
+                aria-label="Save"
+                style={{ color: "green" }}
+              />
+              <CancelIcon
+                onClick={handleCancel}
+                aria-label="Cancel"
+                style={{ color: "red" }}
+              />
+            </>
+          ) : (
+            <SpinnerBtn />
+          )}
         </td>
       )}
     </tr>

@@ -1,6 +1,7 @@
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { EditIcon, SwitchIcon } from "../common/iconsWithTooltip";
+import SpinnerBtn from "../common/spinnerBtn";
 
 const ReadOnlyRow = ({
   schedule,
@@ -10,7 +11,6 @@ const ReadOnlyRow = ({
   handleEdit,
   handleToggle,
 }) => {
-  console.log(schedule, tutor);
   return (
     <tr>
       <td>{schedule.day}</td>
@@ -18,9 +18,14 @@ const ReadOnlyRow = ({
       <td>{schedule.endHour}</td>
       <td>{`${tutor.firstName} ${tutor.lastName}`}</td>
       <td className="px-0">
-        <a href={schedule.location} target="_blank" rel="noopener noreferrer">
-          {tutor.firstName}'{!tutor.firstName.endsWith("s") && "s"} Zoom Link
-        </a>
+        {schedule.location.startsWith("www") ||
+        schedule.location.startsWith("https") ? (
+          <a href={schedule.location} target="_blank" rel="noopener noreferrer">
+            {tutor.firstName}'{!tutor.firstName.endsWith("s") && "s"} Zoom Link
+          </a>
+        ) : (
+          <span>{schedule.location}</span>
+        )}
       </td>
       {admin && (
         <td className="pe-0 no-stretch">
@@ -35,16 +40,7 @@ const ReadOnlyRow = ({
               />
             </>
           ) : (
-            <Button className="col-12 p-0 roundBorder" disabled>
-              <Spinner
-                as="span"
-                animation="grow"
-                size="sm"
-                role="save"
-                aria-hidden="true"
-              />
-              <span className="visually-hidden">Saving...</span>
-            </Button>
+            <SpinnerBtn accessibilityText="Saving" />
           )}
         </td>
       )}

@@ -7,10 +7,11 @@ import { GlobalViewContext } from "../Context/dataContext";
 import { ViewContext as TutorContext } from "../Context/tutorsContext";
 import { ActionsContext, ViewContext } from "../Context/scheduleContext";
 import { postSchedule, putSchedule } from "../../apis/cs-tutoring/schedules";
+import { showErrors } from "../common/errorHelper";
 
 const ScheduleRows = ({ newItemId, setNewItemId }) => {
   const { tutors } = useContext(TutorContext);
-  const { loadedSemester, admin } = useContext(GlobalViewContext);
+  const { admin } = useContext(GlobalViewContext);
   const { schedules } = useContext(ViewContext);
   const { setSchedules, setTitle, setModalBody, setShow } =
     useContext(ActionsContext);
@@ -43,24 +44,15 @@ const ScheduleRows = ({ newItemId, setNewItemId }) => {
         ...schedules.slice(++index),
       ]);
     } else {
-      const errorData = {};
-      if (result.status === 400) {
-        errorData.badRequest = result.data.error;
-      } else if (result.message === "Network Error") {
-        errorData.networkError = "Please check your internet connection!";
-      }
-
       setSaving(null);
-      setTitle(result.message ? result.message : "Error Occured");
-      const errorBody = getErrorModalBody(errorData);
-      setModalBody(() => () => errorBody);
-      setShow(true);
+      showErrors(result, setTitle, setShow, setModalBody);
     }
   };
 
   const handleSave = async (edited) => {
+    setSaving(edited.id);
     const actual = schedules.find(({ id }) => id === edited.id);
-    console.log("Edited:", edited);
+
     //Abort if nothing has changed or in case of new schedule, drop it if empty
     if (actual && isEqual(actual, edited)) {
       if (actual.id === newItemId) {
@@ -68,23 +60,14 @@ const ScheduleRows = ({ newItemId, setNewItemId }) => {
         setNewItemId(null);
       }
       setEditId(null);
+      setSaving(null);
       return;
     }
 
-    //Prepare for server format
-    // const schedule = getServerFormatted(edited, loadedSemester.id);
     const result = scheduleValidator(edited);
     if (result) {
-      const errorData = {};
-      for (let item of result.inner) {
-        const name = item.path;
-        const message = item.message;
-        errorData[name] = message;
-      }
-
-      setTitle("Validation Error");
-      setModalBody(() => () => getErrorModalBody(errorData));
-      setShow(true);
+      setSaving(null);
+      showErrors(result, setTitle, setShow, setModalBody);
       return;
     }
 
@@ -93,13 +76,23 @@ const ScheduleRows = ({ newItemId, setNewItemId }) => {
         ? await postSchedule(edited)
         : await putSchedule(edited);
 
-    console.log(response);
+    if (response.status === 200 || response.status === 201) {
+      let index = schedules.findIndex((item) => item.id === edited.id);
+      setSchedules([
+        ...schedules.slice(0, index),
+        edited,
+        ...schedules.slice(++index),
+      ]);
+      setEditId(null);
+      setNewItemId(null);
+    } else {
+      showErrors(response, setTitle, setShow, setModalBody);
+    }
 
-
+    setSaving(null);
   };
 
   const handleCancel = () => {
-    console.log(newItemId);
     if (newItemId) {
       setSchedules([...schedules.filter(({ id }) => id !== newItemId)]);
       setNewItemId(null);
@@ -119,6 +112,7 @@ const ScheduleRows = ({ newItemId, setNewItemId }) => {
         editId === schedule.id ? (
           <EditableRow
             key={schedule.id}
+            saving={saving}
             admin={admin}
             tutors={tutors}
             schedule={schedule}
@@ -129,10 +123,10 @@ const ScheduleRows = ({ newItemId, setNewItemId }) => {
         ) : (
           <ReadOnlyRow
             key={schedule.id}
+            saving={saving}
             schedule={schedule}
             admin={admin}
             tutor={tutors.find((tutor) => tutor.id === schedule.tutorId)}
-            saving={saving}
             handleEdit={handleEdit}
             handleToggle={handleToggle}
           />
@@ -143,26 +137,3 @@ const ScheduleRows = ({ newItemId, setNewItemId }) => {
 };
 
 export default ScheduleRows;
-
-function getErrorModalBody(errorData) {
-  return (
-    <div className="col-10 col-lg-8 mx-auto mb-5 text-center">
-      {Object.entries(errorData).map(([key, value]) => {
-        return <p key={key}>{value}</p>;
-      })}
-    </div>
-  );
-}
-
-function getServerFormatted(schedule, semesterId) {
-  return {
-    id: schedule.id,
-    semesterId,
-    tutorId: schedule.tutorId,
-    day: schedule.day,
-    startHour: schedule.startHour,
-    endHour: schedule.endHour,
-    location: schedule.location,
-    isActive: schedule.isActive,
-  };
-}

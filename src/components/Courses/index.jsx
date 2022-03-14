@@ -3,7 +3,7 @@ import Table from "react-bootstrap/Table";
 import { PlusIcon } from "../common/iconsWithTooltip";
 import MainContainer from "../common/mainContainer";
 import TableHeader from "../CustomTable/tableHeader";
-import CourseRowItem from "./courseRowItem";
+import CourseRows from "./courseRows";
 import CustomPagination from "../common/customPagination";
 import TemplateModal from "../common/templateModal";
 import CourseDialog from "./courseDialog";
@@ -19,8 +19,7 @@ import {
 const Courses = () => {
   const { admin } = useContext(GlobalViewContext);
   const { courses, loading, error } = useContext(ViewContext);
-  const { setShow, setTitle, setModalBody, setCourses } =
-    useContext(ActionsContext);
+  const { setShow, setTitle, setModalBody } = useContext(ActionsContext);
 
   const tableHeader = ["Section", "Course", "Instructor", "Email"];
   const adminTHeader = [...tableHeader, "Edit"];
@@ -30,8 +29,6 @@ const Courses = () => {
     setModalBody(() => CourseDialog);
     setShow(true);
   };
-
-  useEffect(() => {}, [courses]);
 
   return (
     <MainContainer>
@@ -53,7 +50,7 @@ const Courses = () => {
           <Table className="text-center" bordered hover responsive>
             <TableHeader headers={admin ? adminTHeader : tableHeader} />
             <tbody className="text-muted">
-              <CourseRowItem courses={courses} admin={admin} />
+              <CourseRows courses={courses} admin={admin} />
             </tbody>
           </Table>
           <CustomPagination />

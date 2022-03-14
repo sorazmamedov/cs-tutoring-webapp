@@ -9,10 +9,8 @@ import { GlobalViewContext } from "../Context/dataContext";
 import { courseValidator } from "../../utils/validator";
 import Id from "../../utils/Id";
 import { postCourse } from "../../apis/cs-tutoring/courses";
-import useFetcher from "../../hooks/useMakeRequest";
 
 const CourseDialog = () => {
-  const [axiosFetch] = useFetcher();
   const { loadedSemester } = useContext(GlobalViewContext);
   const { reset, courses } = useContext(ViewContext);
   const { setCourses } = useContext(ActionsContext);
@@ -39,7 +37,7 @@ const CourseDialog = () => {
         const semesterId = loadedSemester?.id;
         const rows = await readXlsxFile(file);
         const newCourses = transformAndValidate(semesterId, rows.slice(1));
-        const result = await axiosFetch(postCourse(semesterId, newCourses));
+        const result = await postCourse(semesterId, newCourses);
 
         if (result.status === 201) {
           setSuccess(true);
