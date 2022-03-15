@@ -108,32 +108,48 @@ const ScheduleRows = ({ newItemId, setNewItemId }) => {
 
   return (
     <>
-      {schedules.map((schedule) =>
-        editId === schedule.id ? (
-          <EditableRow
-            key={schedule.id}
-            saving={saving}
-            admin={admin}
-            tutors={tutors}
-            schedule={schedule}
-            schedules={schedules}
-            handleSave={handleSave}
-            handleCancel={handleCancel}
-          />
-        ) : (
-          <ReadOnlyRow
-            key={schedule.id}
-            saving={saving}
-            schedule={schedule}
-            admin={admin}
-            tutor={tutors.find((tutor) => tutor.id === schedule.tutorId)}
-            handleEdit={handleEdit}
-            handleToggle={handleToggle}
-          />
-        )
-      )}
+      {[...schedules]
+        .sort(compare)
+        .map((schedule) =>
+          editId === schedule.id ? (
+            <EditableRow
+              key={schedule.id}
+              saving={saving}
+              admin={admin}
+              tutors={tutors}
+              schedule={schedule}
+              schedules={schedules}
+              handleSave={handleSave}
+              handleCancel={handleCancel}
+            />
+          ) : (
+            <ReadOnlyRow
+              key={schedule.id}
+              saving={saving}
+              schedule={schedule}
+              admin={admin}
+              tutor={tutors.find((tutor) => tutor.id === schedule.tutorId)}
+              handleEdit={handleEdit}
+              handleToggle={handleToggle}
+            />
+          )
+        )}
     </>
   );
 };
 
 export default ScheduleRows;
+
+function compare(a, b) {
+  const days = {
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+    Sunday: 7,
+  };
+
+  return days[a.day] - days[b.day];
+}

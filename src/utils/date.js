@@ -23,3 +23,13 @@ export function utcToLocal(date) {
 
   return "Invalid Date";
 }
+
+export function msToLocal(date) {
+  date = date ? date : Date.now();
+
+  let d = new Date(date);
+
+  let mdyFormat = `${d.getMonth() + 1}-${d.getDate()}-${d.getFullYear()}`;
+
+  return mdyFormat;
+}

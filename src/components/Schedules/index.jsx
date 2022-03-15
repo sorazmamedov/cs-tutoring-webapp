@@ -69,7 +69,7 @@ const Schedules = () => {
     <MainContainer>
       {!loading && !error && !tutorsLoading && !tutorsError && (
         <TitleBar
-          title="Tutor Schedule"
+          title="Schedules"
           icon={<PlusIcon onClick={handleAddSchedule} />}
         />
       )}

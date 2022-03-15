@@ -8,7 +8,7 @@ import AnnouncementDialog from "./announcementDialog";
 import DeleteAnnouncementDialog from "./deleteAnnouncementDialog";
 import { ViewContext, ActionsContext } from "../Context/announcementContext";
 import TitleBar from "../common/titleBar";
-import { localToUtc } from "../../utils/date";
+import { msToLocal } from "../../utils/date";
 import {
   NoDataPlaceholder,
   ErrorPlaceholder,
@@ -17,8 +17,7 @@ import {
 
 const Announcements = () => {
   const { setShow, setTitle, setModalBody } = useContext(ActionsContext);
-  const { announcements, error, loading } =
-    useContext(ViewContext);
+  const { announcements, error, loading } = useContext(ViewContext);
 
   const handleCreateAnnouncement = () => {
     setTitle("New Announcement");
@@ -59,7 +58,7 @@ const Announcements = () => {
         <>
           <Table bordered hover responsive>
             <tbody>
-              {announcements
+              {[...announcements]
                 .sort((a, b) => b.createdOn - a.createdOn)
                 .map((announcement) => (
                   <tr
@@ -69,7 +68,7 @@ const Announcements = () => {
                     onClick={handleShowAnnouncement}
                   >
                     <td className="no-stretch">
-                      {localToUtc(announcement.createdOn)}
+                      {msToLocal(announcement.createdOn)}
                     </td>
                     <td className="d-flex justify-content-between border-start-0 border-end-0">
                       <p className="m-0">
