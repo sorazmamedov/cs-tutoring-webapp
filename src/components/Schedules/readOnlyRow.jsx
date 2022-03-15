@@ -17,7 +17,7 @@ const ReadOnlyRow = ({
       <td>{schedule.startHour}</td>
       <td>{schedule.endHour}</td>
       <td>{`${tutor.firstName} ${tutor.lastName}`}</td>
-      <td className="px-0">
+      <td>
         {schedule.location.startsWith("www") ||
         schedule.location.startsWith("https") ? (
           <a href={schedule.location} target="_blank" rel="noopener noreferrer">
