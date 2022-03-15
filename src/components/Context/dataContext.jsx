@@ -23,6 +23,7 @@ const DataProvider = ({ children }) => {
   useEffect(() => {
     fetchActiveSemester();
     console.log("[Fetching Active");
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -36,6 +37,8 @@ const DataProvider = ({ children }) => {
       value={{
         loadedSemester,
         admin,
+        error,
+        loading,
       }}
     >
       <GlobalActionsContext.Provider

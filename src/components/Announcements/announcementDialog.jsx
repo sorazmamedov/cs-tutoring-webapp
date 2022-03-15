@@ -1,117 +1,199 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
 import { ViewContext, ActionsContext } from "../Context/announcementContext";
+import { isEqual } from "../../utils/isEqual";
+import Id from "../../utils/Id";
+import { GlobalViewContext } from "../Context/dataContext";
+import { announcementValidator } from "../../utils/validator";
+import { getErrors } from "../common/errorHelper";
+import {
+  postAnnouncement,
+  putAnnouncement,
+} from "../../apis/cs-tutoring/announcements";
 
-const AnnouncementDialog = () => {
+const AnnouncementDialog = ({ id }) => {
   const [validated, setValidated] = useState(false);
-  const [subject, setSubject] = useState("");
-  const [content, setContent] = useState("");
-
-  const { announcementId, announcements, reset } = useContext(ViewContext);
+  const [errors, setErrors] = useState({});
+  const { announcements, reset } = useContext(ViewContext);
   const { setAnnouncements } = useContext(ActionsContext);
+  const { loadedSemester } = useContext(GlobalViewContext);
+  const [publish, setPublish] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const current = announcementId
-    ? { ...announcements.find((item) => item.id === announcementId) }
+  const current = id
+    ? { ...announcements.find((item) => item.id === id) }
     : null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    e.stopPropagation();
-
+    setSaving(true);
     setValidated(true);
-    const isPublished =
-      e.target.getAttribute("data-action") === "draft" ? false : true;
-    let announcement = {};
-    if (announcementId) {
-      announcement = {
-        ...current,
-        subject: subject,
-        content: content,
-        published: isPublished,
+    const form = e.currentTarget;
+
+    let newItem = {};
+
+    //if editing existing announcement
+    if (!id) {
+      newItem = {
+        id: Id.makeId(),
+        publisherId: Id.makeId(),
+        semesterId: loadedSemester.id,
+        subject: form.subject.value.trim(),
+        content: form.content.value.trim(),
+        createdOn: Date.now(),
+        published: publish,
       };
     } else {
-      announcement = {
-        id: announcements.length + 1,
-        subject: subject,
-        content: content,
-        published: isPublished,
+      newItem = {
+        ...current,
+        subject: form.subject.value.trim(),
+        content: form.content.value.trim(),
+        published: publish,
       };
+
+      if (isEqual(current, newItem)) {
+        reset();
+        return;
+      }
+
+      newItem.createdOn = Date.now();
     }
 
-    setAnnouncements([
-      ...announcements.filter((item) => item.id !== announcement.id),
-      announcement,
-    ]);
+    const error = announcementValidator(newItem);
+    if (error) {
+      console.log("validation");
+      setErrors(getErrors(error));
+      setValidated(false);
+      setSaving(false);
+      return;
+    }
+    console.log("New Item:", newItem);
+    const response = id
+      ? await putAnnouncement(newItem)
+      : await postAnnouncement(newItem);
 
+    const statusCode = id ? 200 : 201;
+    if (response.status === statusCode) {
+      const filtered = id
+        ? announcements.filter((item) => item.id !== id)
+        : announcements;
+      setAnnouncements([newItem, ...filtered]);
+    } else {
+      setErrors(getErrors(response));
+      setValidated(false);
+      setSaving(false);
+      return;
+    }
+
+    setSaving(false);
     reset();
   };
 
-  useEffect(() => {
-    setSubject(announcementId ? current.subject : null);
-    setContent(announcementId ? current.content : null);
-  }, [announcementId]);
-
   return (
-    <Form
-      noValidate
-      validated={validated}
-      onSubmit={handleSubmit}
-      className="col-10 col-lg-8 mx-auto"
-    >
-      <Row className="mb-2">
-        <Col xs="12">
-          <Form.Label className="text-muted mb-0">Subject</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={2}
-            className="roundBorder"
-            onChange={(e) => setSubject(e.target.value.trim())}
-            defaultValue={current?.subject}
-            required
-          />
-        </Col>
-      </Row>
-      <Row className="mb-5">
-        <Col xs="12">
-          <Form.Label className="text-muted mb-0">Content</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={7}
-            className="roundBorder"
-            onChange={(e) => setContent(e.target.value.trim())}
-            defaultValue={current?.content}
-            required
-          />
-        </Col>
-      </Row>
-      <Row className="mb-5" sm="2">
-        <Col sm="6" className="order-2 order-sm-1 mb-3 mb-sm-auto pe-sm-4">
-          <Button
-            disabled={!subject || !content}
-            data-action="draft"
-            className="col-12 roundBorder dangerBtn"
-            onClick={handleSubmit}
-            type="submit"
+    <>
+      {errors &&
+        !errors.subject &&
+        !errors.content &&
+        Object.entries(errors).map(([key, value]) => (
+          <p
+            key={key}
+            className="col-10 col-lg-8 mx-auto text-center text-danger"
           >
-            DRAFT
-          </Button>
-        </Col>
-        <Col sm="6" className="order-1 order-sm-2 mb-3 mb-sm-auto ps-sm-4">
-          <Button
-            disabled={!subject || !content}
-            data-action="publish"
-            className="col-12 roundBorder primaryBtn"
-            onClick={handleSubmit}
-            type="submit"
-          >
-            PUBLISH
-          </Button>
-        </Col>
-      </Row>
-    </Form>
+            {value}
+          </p>
+        ))}
+      <Form
+        noValidate
+        validated={validated}
+        onSubmit={handleSubmit}
+        className="col-10 col-lg-8 mx-auto"
+      >
+        <Row className="mb-2">
+          <Col xs="12">
+            <Form.Label className="text-muted mb-0">Subject</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={2}
+              name="subject"
+              className="roundBorder"
+              defaultValue={current?.subject}
+              isInvalid={errors.subject}
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.subject}
+            </Form.Control.Feedback>
+          </Col>
+        </Row>
+        <Row className="mb-5">
+          <Col xs="12">
+            <Form.Label className="text-muted mb-0">Content</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={7}
+              name="content"
+              className="roundBorder"
+              defaultValue={current?.content}
+              isInvalid={errors.content}
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.content}
+            </Form.Control.Feedback>
+          </Col>
+        </Row>
+        <Row className="mb-5" sm="2">
+          <Col sm="6" className="order-2 order-sm-1 mb-3 mb-sm-auto pe-sm-4">
+            <Button
+              className="col-12 roundBorder dangerBtn"
+              onClick={() => setPublish(false)}
+              type="submit"
+              disabled={saving}
+            >
+              {saving && (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <span className="visually-hidden">Saving...</span>
+                </>
+              )}
+              DRAFT
+            </Button>
+          </Col>
+          <Col sm="6" className="order-1 order-sm-2 mb-3 mb-sm-auto ps-sm-4">
+            <Button
+              className="col-12 roundBorder primaryBtn"
+              onClick={() => setPublish(true)}
+              type="submit"
+              disabled={saving}
+            >
+              {saving && (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <span className="visually-hidden">Saving...</span>
+                </>
+              )}
+              PUBLISH
+            </Button>
+          </Col>
+        </Row>
+      </Form>
+    </>
   );
 };
 

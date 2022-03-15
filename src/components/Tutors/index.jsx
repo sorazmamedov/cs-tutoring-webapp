@@ -1,12 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Table from "react-bootstrap/Table";
 import MainContainer from "../common/mainContainer";
-import TableHeader from "../CustomTable/tableHeader";
+import TableHeader from "../common/tableHeader";
 import TutorRows from "./tutorRows";
 import CustomPagination from "../common/customPagination";
 import { PlusIcon } from "../common/iconsWithTooltip";
 import { GlobalViewContext } from "../Context/dataContext";
-import { ActionsContext, ViewContext } from "../Context/tutorsContext";
+import { ViewContext } from "../Context/tutorsContext";
 import TitleBar from "../common/titleBar";
 import {
   NoDataPlaceholder,
@@ -18,8 +18,6 @@ import TemplateModal from "../common/templateModal";
 const Tutors = () => {
   const { admin } = useContext(GlobalViewContext);
   const { tutors, loading, error } = useContext(ViewContext);
-  const { setTutors } = useContext(ActionsContext);
-  const [saving, setSaving] = useState(null);
 
   const header = ["ID", "Name", "Email", "About"];
   const adminHeader = [...header, "Actions"];

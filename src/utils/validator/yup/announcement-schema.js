@@ -2,8 +2,9 @@ import { object } from "yup";
 import vs from "./validationSchemas";
 
 export default object().shape({
-  announcementId: vs.nanoid,
+  id: vs.nanoid,
   publisherId: vs.nanoid,
+  semesterId: vs.nanoid,
   createdOn: vs.date,
   subject: vs.shortText,
   content: vs.longText,

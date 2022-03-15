@@ -7,8 +7,8 @@ import CustomPagination from "../common/customPagination";
 import AnnouncementDialog from "./announcementDialog";
 import DeleteAnnouncementDialog from "./deleteAnnouncementDialog";
 import { ViewContext, ActionsContext } from "../Context/announcementContext";
-import { GlobalViewContext } from "../Context/dataContext";
 import TitleBar from "../common/titleBar";
+import { localToUtc } from "../../utils/date";
 import {
   NoDataPlaceholder,
   ErrorPlaceholder,
@@ -16,10 +16,9 @@ import {
 } from "../common/Placeholders/";
 
 const Announcements = () => {
-  const { loadedSemester } = useContext(GlobalViewContext);
-  const { setShow, setTitle, setModalBody, setAnnouncementId } =
-    useContext(ActionsContext);
-  const { announcements, error, loading } = useContext(ViewContext);
+  const { setShow, setTitle, setModalBody } = useContext(ActionsContext);
+  const { announcements, error, loading } =
+    useContext(ViewContext);
 
   const handleCreateAnnouncement = () => {
     setTitle("New Announcement");
@@ -28,19 +27,17 @@ const Announcements = () => {
   };
 
   const handleShowAnnouncement = (e) => {
-    const targetId = parseInt(e.currentTarget.id);
+    const id = e.currentTarget.id;
     setTitle("Announcement");
-    setAnnouncementId(targetId);
-    setModalBody(() => AnnouncementDialog);
+    setModalBody(() => () => AnnouncementDialog({ id }));
     setShow(true);
   };
 
   const handleDelete = (e) => {
     e.stopPropagation();
-    const targetId = parseInt(e.target.id);
+    const id = e.target.id;
     setTitle("Are you sure you want to delete?");
-    setAnnouncementId(targetId);
-    setModalBody(() => DeleteAnnouncementDialog);
+    setModalBody(() => () => DeleteAnnouncementDialog({ id }));
     setShow(true);
   };
 
@@ -63,7 +60,7 @@ const Announcements = () => {
           <Table bordered hover responsive>
             <tbody>
               {announcements
-                .sort((a, b) => a.id - b.id)
+                .sort((a, b) => b.createdOn - a.createdOn)
                 .map((announcement) => (
                   <tr
                     id={announcement.id}
@@ -71,9 +68,12 @@ const Announcements = () => {
                     className={announcement.published ? "" : "draft"}
                     onClick={handleShowAnnouncement}
                   >
+                    <td className="no-stretch">
+                      {localToUtc(announcement.createdOn)}
+                    </td>
                     <td className="d-flex justify-content-between border-start-0 border-end-0">
                       <p className="m-0">
-                        {`${announcement.id}: ${
+                        {`${
                           announcement.subject.length > 100
                             ? announcement.subject.substring(0, 100) + "..."
                             : announcement.subject

@@ -9,7 +9,6 @@ import { localToUtc, utcToLocal } from "../../utils/date";
 import { isEqual } from "../../utils/isEqual";
 import Id from "../../utils/Id";
 import { postSemester, putSemester } from "../../apis/cs-tutoring/semesters";
-import { useEffect } from "react";
 import SpinnerBtn from "../common/spinnerBtn";
 
 const SemesterDialog = () => {
@@ -82,13 +81,6 @@ const SemesterDialog = () => {
       setValidated(false);
     }
   };
-
-  useEffect(() => {
-    return () => {
-      console.log("Aborting fetch from semesters...");
-      // controller && controller.abort();
-    };
-  });
 
   return (
     <>

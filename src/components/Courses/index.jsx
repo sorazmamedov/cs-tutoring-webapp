@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import Table from "react-bootstrap/Table";
 import { PlusIcon } from "../common/iconsWithTooltip";
 import MainContainer from "../common/mainContainer";
-import TableHeader from "../CustomTable/tableHeader";
+import TableHeader from "../common/tableHeader";
 import CourseRows from "./courseRows";
 import CustomPagination from "../common/customPagination";
 import TemplateModal from "../common/templateModal";

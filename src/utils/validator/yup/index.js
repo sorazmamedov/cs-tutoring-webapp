@@ -11,7 +11,7 @@ import timeSlotSchema from "./timeSlot-schema";
 
 let JoiValidator = (payload, schema) => {
   try {
-    let result = schema.validateSync(payload, {
+    schema.validateSync(payload, {
       strict: true,
       abortEarly: false,
     });

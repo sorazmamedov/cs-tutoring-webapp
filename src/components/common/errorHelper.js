@@ -38,3 +38,27 @@ export function showErrors(err, setTitle, setShow, setModalBody) {
   setModalBody(() => () => getErrorModalBody(errorData));
   setShow(true);
 }
+
+export function getErrors(err) {
+  const errorData = {};
+  if (err.inner) {
+    for (let item of err.inner) {
+      const name = item.path;
+      const message = item.message;
+      errorData[name] = message;
+    }
+  } else if (err.status === 404) {
+    errorData.notFound = err.data.error;
+  } else if (err.status === 400) {
+    errorData.validationError = err.data.error;
+  } else if (err?.message === "Network Error") {
+    errorData.networkError = "Please check your internet connection!";
+  } else if (err?.message && err?.title) {
+    errorData.error = err.message;
+  } else {
+    errorData.networkError =
+      "Something went wrong, please try again now or later!";
+  }
+
+  return errorData;
+}

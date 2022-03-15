@@ -29,26 +29,32 @@ const CustomPagination = () => {
     e.preventDefault();
     e.stopPropagation();
     const page = e.target.innerText;
-    if ((page === "›" || page === "›\nNext")) {
+    if (page === "›" || page === "›\nNext") {
       if (active < numbers[numbers.length - 2]) {
         setActive((prev) => prev + 1);
         console.log("active: " + active);
-        active + 1 >= numbers[numbers.length - 2] ? setDisabled(-1) : setDisabled(-5)
+        active + 1 >= numbers[numbers.length - 2]
+          ? setDisabled(-1)
+          : setDisabled(-5);
       }
-    } else if ((page === "‹" || page === "‹\nPrevious")) {
+    } else if (page === "‹" || page === "‹\nPrevious") {
       if (active > 1) {
         setActive((prev) => prev - 1);
-        active -1 > 1 ? setDisabled(-5) : setDisabled(0)
+        active - 1 > 1 ? setDisabled(-5) : setDisabled(0);
       }
-    } else if (parseInt(page) >= 1 && parseInt(page) <= numbers[numbers.length - 2]) {
+    } else if (
+      parseInt(page) >= 1 &&
+      parseInt(page) <= numbers[numbers.length - 2]
+    ) {
       setActive(parseInt(page));
       const selected = parseInt(page);
       if (selected === 1) {
-        setDisabled(0)
+        setDisabled(0);
+      } else if (selected === numbers[numbers.length - 2]) {
+        setDisabled(-1);
+      } else {
+        setDisabled(-5);
       }
-      else if (selected === numbers[numbers.length - 2]) {
-        setDisabled(-1)
-      } else { setDisabled(-5)}
     }
   };
   return (

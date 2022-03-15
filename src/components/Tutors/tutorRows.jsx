@@ -6,7 +6,7 @@ import SpinnerBtn from "../common/spinnerBtn";
 import { putTutor } from "../../apis/cs-tutoring/tutors";
 import { showErrors } from "../common/errorHelper";
 
-const TutorRows = ({}) => {
+const TutorRows = () => {
   const { admin } = useContext(GlobalViewContext);
   const { tutors } = useContext(ViewContext);
   const { setTutors, setShow, setTitle, setModalBody } =

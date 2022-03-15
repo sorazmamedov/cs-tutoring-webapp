@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import Table from "react-bootstrap/Table";
 import MainContainer from "../common/mainContainer";
-import TableHeader from "../CustomTable/tableHeader";
+import TableHeader from "../common/tableHeader";
 import ScheduleRows from "./scheduleRows";
 import CustomPagination from "../common/customPagination";
 import { PlusIcon } from "../common/iconsWithTooltip";
@@ -62,6 +62,7 @@ const Schedules = () => {
       };
       setSchedules([{ ...template, id: newItemId }, ...schedules]);
     }
+    // eslint-disable-next-line
   }, [newItemId]);
 
   return (

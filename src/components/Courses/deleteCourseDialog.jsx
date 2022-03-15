@@ -9,7 +9,8 @@ import SpinnerBtn from "../common/spinnerBtn";
 
 const DeleteCourseDialog = (id) => {
   const { reset, courses } = useContext(ViewContext);
-  const { setCourses, setTitle, setShow, setModalBody } = useContext(ActionsContext);
+  const { setCourses, setTitle, setShow, setModalBody } =
+    useContext(ActionsContext);
   const [deleting, setDeleting] = useState(false);
 
   const removeCourse = async () => {
@@ -18,9 +19,14 @@ const DeleteCourseDialog = (id) => {
 
     if (response.status === 200) {
       setCourses([...courses.filter((item) => item.id !== id)]);
-      setTitle("Success")
-      setModalBody(() => () => <p className="text-center pb-3">Course deleted!</p>)
+      setTitle("Success");
+      setModalBody(() => () => (
+        <p className="text-center pb-3">Course deleted!</p>
+      ));
       setShow(true);
+      setTimeout(() => {
+        reset();
+      }, 1500);
     } else {
       reset();
       showErrors(response, setTitle, setShow, setModalBody);
