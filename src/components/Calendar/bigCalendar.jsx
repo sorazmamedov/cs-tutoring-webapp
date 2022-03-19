@@ -45,10 +45,8 @@ const BigCalendar = ({ events, handleSelectSlot, handleSelectEvent }) => {
       defaultDate={defaultDate}
       formats={formats}
       events={events}
-      startAccessor="start"
-      endAccessor="end"
       defaultView={Views.WEEK}
-      views={["week", "month"]}
+      views={["week"]}
       min={min}
       max={max}
       onView={onView}

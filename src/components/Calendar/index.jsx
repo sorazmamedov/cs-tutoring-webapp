@@ -13,7 +13,7 @@ const TimeSlots = () => {
   const [newEvent, setNewEvent] = useState(null);
   const [events, setEvents] = useState([
     {
-      title: "Tutoring",
+      title: "",
       start: new Date(2022, 2, 15, 18, 25),
       end: new Date(2022, 2, 15, 21),
     },
@@ -29,10 +29,9 @@ const TimeSlots = () => {
     },
   ]);
 
-  const handleSelectSlot = (slots) => {
-    console.log("Selected....", slots);
+  const handleSelectSlot = (event) => {
     setTitle("Appointment Slots");
-    setModalBody(() => () => NewEventDialog(slots));
+    setModalBody(() => () => NewEventDialog(event));
     setShow(true);
   };
 
