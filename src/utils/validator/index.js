@@ -11,6 +11,7 @@ const courseValidator = (payload) => schemas.courseValidator(payload);
 const scheduleValidator = (payload) => schemas.scheduleValidator(payload);
 const semesterValidator = (payload) => schemas.semesterValidator(payload);
 const timeSlotValidator = (payload) => schemas.timeSlotValidator(payload);
+const calendarValidator = (payload) => schemas.calendarValidator(payload);
 
 export {
   adminValidator,
@@ -23,4 +24,5 @@ export {
   scheduleValidator,
   semesterValidator,
   timeSlotValidator,
+  calendarValidator,
 };

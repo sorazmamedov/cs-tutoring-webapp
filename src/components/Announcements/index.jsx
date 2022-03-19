@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { format, parseISO } from "date-fns";
 import Table from "react-bootstrap/Table";
 import { DeleteIcon, MegaphoneIcon } from "../common/iconsWithTooltip";
 import MainContainer from "../common/mainContainer";
@@ -8,7 +9,6 @@ import AnnouncementDialog from "./announcementDialog";
 import DeleteAnnouncementDialog from "./deleteAnnouncementDialog";
 import { ViewContext, ActionsContext } from "../Context/announcementContext";
 import TitleBar from "../common/titleBar";
-import { msToLocal } from "../../utils/date";
 import {
   NoDataPlaceholder,
   ErrorPlaceholder,
@@ -17,7 +17,7 @@ import {
 
 const Announcements = () => {
   const { setShow, setTitle, setModalBody } = useContext(ActionsContext);
-  const { announcements, error, loading } = useContext(ViewContext);
+  const { announcements, admin, error, loading } = useContext(ViewContext);
 
   const handleCreateAnnouncement = () => {
     setTitle("New Announcement");
@@ -68,7 +68,7 @@ const Announcements = () => {
                     onClick={handleShowAnnouncement}
                   >
                     <td className="no-stretch">
-                      {msToLocal(announcement.createdOn)}
+                      {format(parseISO(announcement.createdOn), "M-d-yyyy")}
                     </td>
                     <td className="d-flex justify-content-between border-start-0 border-end-0">
                       <p className="m-0">
@@ -78,16 +78,18 @@ const Announcements = () => {
                             : announcement.subject
                         }`}
                       </p>
-                      <div>
-                        {!announcement.published && (
-                          <span className="me-4">Draft</span>
-                        )}
-                        <DeleteIcon
-                          id={announcement.id}
-                          onClick={handleDelete}
-                          className="me-3"
-                        />
-                      </div>
+                      {admin && (
+                        <div>
+                          {!announcement.published && (
+                            <span className="me-4">Draft</span>
+                          )}
+                          <DeleteIcon
+                            id={announcement.id}
+                            onClick={handleDelete}
+                            className="me-3"
+                          />
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}

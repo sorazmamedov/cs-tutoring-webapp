@@ -5,7 +5,6 @@ import TableHeader from "../common/tableHeader";
 import ScheduleRows from "./scheduleRows";
 import CustomPagination from "../common/customPagination";
 import { PlusIcon } from "../common/iconsWithTooltip";
-import { GlobalViewContext } from "../Context/dataContext";
 import TitleBar from "../common/titleBar";
 import Id from "../../utils/Id";
 import {
@@ -24,8 +23,8 @@ const Schedules = () => {
     error: tutorsError,
     loading: tutorsLoading,
   } = useContext(TutorContext);
-  const { loadedSemester, admin } = useContext(GlobalViewContext);
-  const { error, loading, schedules } = useContext(ViewContext);
+  const { error, loading, schedules, loadedSemester, admin } =
+    useContext(ViewContext);
   const { setSchedules, setModalBody, setTitle, setShow } =
     useContext(ActionsContext);
   const [newItemId, setNewItemId] = useState(null);
@@ -34,7 +33,7 @@ const Schedules = () => {
   const adminHeader = [...header, "Actions"];
 
   const handleAddSchedule = () => {
-    if (tutors.length) {
+    if (tutors.filter((tutor) => tutor.isActive).length) {
       if (!newItemId) {
         setNewItemId(() => Id.makeId());
       }
@@ -43,7 +42,7 @@ const Schedules = () => {
 
     const err = {
       title: "Requirement Error",
-      message: `You need to add tutors first to ${loadedSemester.semesterName} ${loadedSemester.academicYear}`,
+      message: `You have to activate or add tutors first to ${loadedSemester.semesterName} ${loadedSemester.academicYear}`,
     };
     showErrors(err, setTitle, setShow, setModalBody);
   };

@@ -4,12 +4,13 @@ import Schedules from "./Schedules";
 import Announcements from "./Announcements";
 import Courses from "./Courses";
 import Tutors from "./Tutors";
-import TimeSlots from "./TimeSlots";
+import Calendar from "./Calendar";
 import SemesterDataProvider from "./Context/semesterContext";
 import AnnouncementDataProvider from "./Context/announcementContext";
 import CourseDataProvider from "./Context/courseContext";
 import TutorDataProvider from "./Context/tutorsContext";
 import ScheduleDataProvider from "./Context/scheduleContext";
+import CalendarDataProvider from "./Context/calendarContext";
 
 const Home = () => {
   return (
@@ -21,6 +22,7 @@ const Home = () => {
         <ScheduleDataProvider>
           <Schedules />
         </ScheduleDataProvider>
+        <Tutors />
       </TutorDataProvider>
       <AnnouncementDataProvider>
         <Announcements />
@@ -28,10 +30,9 @@ const Home = () => {
       <CourseDataProvider>
         <Courses />
       </CourseDataProvider>
-      <TutorDataProvider>
-        <Tutors />
-      </TutorDataProvider>
-      <TimeSlots />
+      <CalendarDataProvider>
+        <Calendar />
+      </CalendarDataProvider>
     </>
   );
 };

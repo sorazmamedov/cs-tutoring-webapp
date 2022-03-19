@@ -3,7 +3,6 @@ import { scheduleValidator } from "../../utils/validator";
 import { isEqual } from "../../utils/isEqual";
 import ReadOnlyRow from "./readOnlyRow";
 import EditableRow from "./editableRow";
-import { GlobalViewContext } from "../Context/dataContext";
 import { ViewContext as TutorContext } from "../Context/tutorsContext";
 import { ActionsContext, ViewContext } from "../Context/scheduleContext";
 import { postSchedule, putSchedule } from "../../apis/cs-tutoring/schedules";
@@ -11,8 +10,7 @@ import { showErrors } from "../common/errorHelper";
 
 const ScheduleRows = ({ newItemId, setNewItemId }) => {
   const { tutors } = useContext(TutorContext);
-  const { admin } = useContext(GlobalViewContext);
-  const { schedules } = useContext(ViewContext);
+  const { schedules, admin } = useContext(ViewContext);
   const { setSchedules, setTitle, setModalBody, setShow } =
     useContext(ActionsContext);
   const [saving, setSaving] = useState(null);
@@ -116,7 +114,7 @@ const ScheduleRows = ({ newItemId, setNewItemId }) => {
               key={schedule.id}
               saving={saving}
               admin={admin}
-              tutors={tutors}
+              tutors={tutors.filter((tutor) => tutor.isActive)}
               schedule={schedule}
               schedules={schedules}
               handleSave={handleSave}

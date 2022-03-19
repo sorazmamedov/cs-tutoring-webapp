@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import useAxios from "../../hooks/useAxios";
 import axios from "../../apis/cs-tutoring";
 import { GlobalViewContext } from "./dataContext";
@@ -6,16 +6,14 @@ import { GlobalViewContext } from "./dataContext";
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
-const TutorDataProvider = ({ children }) => {
+const CalendarDataProvider = ({ children }) => {
   const { loadedSemester, admin } = useContext(GlobalViewContext);
   const [data, error, loading, axiosFetch] = useAxios();
-  const [tutors, setTutors] = useState([]);
-
+  const [events, setEvents] = useState([]);
   const [show, setShow] = useState(false);
   const [modalBody, setModalBody] = useState("");
   const [title, setTitle] = useState("");
   const [current, setCurrent] = useState("");
-
   const handleReset = () => {
     setShow(false);
     setTitle("");
@@ -24,11 +22,11 @@ const TutorDataProvider = ({ children }) => {
 
   const [reset] = useState(() => handleReset);
 
-  const fetchTutors = () => {
+  const fetchCalendar = () => {
     axiosFetch({
       axiosInstance: axios,
       method: "GET",
-      url: "/tutors",
+      url: "/calendars",
       requestConfig: {
         params: { semesterId: loadedSemester.id },
       },
@@ -38,14 +36,14 @@ const TutorDataProvider = ({ children }) => {
   useEffect(() => {
     if (loadedSemester.id && current !== loadedSemester.id) {
       setCurrent(loadedSemester.id);
-      fetchTutors();
-      console.log("[Fetching tutors]");
+      fetchCalendar();
+      console.log("[Fetching slots]");
     }
     // eslint-disable-next-line
   }, [loadedSemester]);
 
   useEffect(() => {
-    setTutors([...data]);
+    setEvents([...data]);
   }, [data]);
 
   return (
@@ -54,10 +52,11 @@ const TutorDataProvider = ({ children }) => {
         show,
         title,
         modalBody,
-        admin,
-        tutors,
+        slots: events,
         error,
         loading,
+        loadedSemester,
+        admin,
         reset,
       }}
     >
@@ -66,7 +65,7 @@ const TutorDataProvider = ({ children }) => {
           setShow,
           setTitle,
           setModalBody,
-          setTutors,
+          setSlots: setEvents,
         }}
       >
         {children}
@@ -75,5 +74,5 @@ const TutorDataProvider = ({ children }) => {
   );
 };
 
-export default TutorDataProvider;
+export default CalendarDataProvider;
 export { ViewContext, ActionsContext };

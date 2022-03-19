@@ -9,7 +9,6 @@ import TemplateModal from "../common/templateModal";
 import CourseDialog from "./courseDialog";
 import TitleBar from "../common/titleBar";
 import { ActionsContext, ViewContext } from "../Context/courseContext";
-import { GlobalViewContext } from "../Context/dataContext";
 import {
   NoDataPlaceholder,
   ErrorPlaceholder,
@@ -17,8 +16,7 @@ import {
 } from "../common/Placeholders/";
 
 const Courses = () => {
-  const { admin } = useContext(GlobalViewContext);
-  const { courses, loading, error } = useContext(ViewContext);
+  const { courses, loading, error, admin } = useContext(ViewContext);
   const { setShow, setTitle, setModalBody } = useContext(ActionsContext);
 
   const tableHeader = ["Section", "Course", "Instructor", "Email"];
@@ -50,7 +48,7 @@ const Courses = () => {
           <Table className="text-center" bordered hover responsive>
             <TableHeader headers={admin ? adminTHeader : tableHeader} />
             <tbody className="text-muted">
-              <CourseRows admin={admin} />
+              <CourseRows />
             </tbody>
           </Table>
           <CustomPagination />

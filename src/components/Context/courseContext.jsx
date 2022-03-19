@@ -7,7 +7,7 @@ const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const CourseDataProvider = ({ children }) => {
-  const { loadedSemester } = useContext(GlobalViewContext);
+  const { loadedSemester, admin } = useContext(GlobalViewContext);
   const [data, error, loading, axiosFetch] = useAxios();
   const [courses, setCourses] = useState([]);
   const [show, setShow] = useState(false);
@@ -53,6 +53,8 @@ const CourseDataProvider = ({ children }) => {
         title,
         modalBody,
         courses,
+        admin,
+        loadedSemester,
         error,
         loading,
         reset,

@@ -1,4 +1,4 @@
-import { string, number, boolean, ref } from "yup";
+import { string, number, boolean, ref, date } from "yup";
 import { len, messages } from "../validationMessages";
 
 export default Object.freeze({
@@ -41,10 +41,8 @@ export default Object.freeze({
     .required()
     .typeError(messages.isRequired),
 
-  date: number()
-    .integer()
-    .positive()
-    .moreThan(len.minDate)
+  date: date()
+    .min(new Date(len.minDate), messages.dateError)
     .required()
     .typeError(messages.isRequired),
 
@@ -79,12 +77,12 @@ export default Object.freeze({
     .min(len.minYear, messages.minYearError)
     .required()
     .typeError(messages.isRequired),
-  startDate: number()
-    .min(len.minDate, messages.dateError)
+  startDate: date()
+    .min(new Date(len.minDate), messages.dateError)
     .required()
     .typeError(messages.isRequired),
-  endDate: number()
-    .moreThan(ref("startDate"), messages.dateError)
+  endDate: date()
+    .min(ref("startDate"), messages.dateError)
     .required()
     .typeError(messages.isRequired),
 

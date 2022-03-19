@@ -8,6 +8,7 @@ import courseSchema from "./course-schema";
 import scheduleSchema from "./schedule-schema";
 import semesterSchema from "./semester-schema";
 import timeSlotSchema from "./timeSlot-schema";
+import calendarSchema from "./calendar-schema";
 
 let JoiValidator = (payload, schema) => {
   try {
@@ -33,4 +34,5 @@ export default Object.freeze({
   scheduleValidator: (payload) => JoiValidator(payload, scheduleSchema),
   semesterValidator: (payload) => JoiValidator(payload, semesterSchema),
   timeSlotValidator: (payload) => JoiValidator(payload, timeSlotSchema),
+  calendarValidator: (payload) => JoiValidator(payload, calendarSchema),
 });

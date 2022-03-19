@@ -1,9 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import Placeholder from "react-bootstrap/Placeholder";
-import {
-  GlobalViewContext,
-  GlobalActionsContext,
-} from "../Context/dataContext";
 import { ViewContext, ActionsContext } from "../Context/semesterContext";
 import MainContainer from "../common/mainContainer";
 import TitleBar from "../common/titleBar";
@@ -22,9 +18,7 @@ import InfoDialog from "../common/infoDialog";
 
 const Semesters = () => {
   const [changingStatus, setChangingStatus] = useState(false);
-  const { loadedSemester } = useContext(GlobalViewContext);
-  const { setLoadedSemester } = useContext(GlobalActionsContext);
-  const { semesters, currentSemester, loading, error } =
+  const { semesters, currentSemester, loading, error, loadedSemester } =
     useContext(ViewContext);
   const {
     setTitle,
@@ -32,6 +26,7 @@ const Semesters = () => {
     setModalBody,
     setShow,
     setCurrentSemester,
+    setLoadedSemester,
     setEdit,
     setMessage,
   } = useContext(ActionsContext);
@@ -58,7 +53,11 @@ const Semesters = () => {
       active: !currentSemester.active,
     };
 
-    let error = semesterValidator(modified);
+    let error = semesterValidator({
+      ...modified,
+      startDate: new Date(modified.startDate),
+      endDate: new Date(modified.endDate),
+    });
 
     if (!error) {
       const response = await putSemester(modified);
@@ -92,7 +91,6 @@ const Semesters = () => {
         }
       }
     } else {
-      console.log("Error: ", error.inner);
       setChangingStatus(false);
     }
   };

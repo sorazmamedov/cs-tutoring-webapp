@@ -8,8 +8,8 @@ import { showErrors } from "../common/errorHelper";
 import { putCourse } from "../../apis/cs-tutoring/courses";
 import DeleteCourseDialog from "./deleteCourseDialog";
 
-const CourseRows = ({ admin }) => {
-  const { courses } = useContext(ViewContext);
+const CourseRows = () => {
+  const { courses, admin } = useContext(ViewContext);
   const { setShow, setTitle, setModalBody, setCourses } =
     useContext(ActionsContext);
   const [editId, setEditId] = useState(null);

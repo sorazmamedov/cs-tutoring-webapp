@@ -1,12 +1,18 @@
 import { useEffect } from "react";
-import { createContext, useState } from "react";
+import { createContext, useState, useContext } from "react";
 import axios from "../../apis/cs-tutoring";
 import useAxios from "../../hooks/useAxios";
+import {
+  GlobalViewContext,
+  GlobalActionsContext,
+} from "../Context/dataContext";
 
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const SemesterDataProvider = ({ children }) => {
+  const { loadedSemester } = useContext(GlobalViewContext);
+  const { setLoadedSemester } = useContext(GlobalActionsContext);
   const [data, error, loading, axiosFetch] = useAxios();
 
   //Semesters
@@ -59,6 +65,7 @@ const SemesterDataProvider = ({ children }) => {
         currentSemester,
         edit,
         reset,
+        loadedSemester,
         error,
         loading,
         message,
@@ -70,6 +77,7 @@ const SemesterDataProvider = ({ children }) => {
           setTitle,
           setModalBody,
           setCurrentSemester,
+          setLoadedSemester,
           setEdit,
           setSemesters,
           setMessage,

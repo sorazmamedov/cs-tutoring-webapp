@@ -7,7 +7,7 @@ const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const AnnouncementDataProvider = ({ children }) => {
-  const { loadedSemester } = useContext(GlobalViewContext);
+  const { loadedSemester, admin } = useContext(GlobalViewContext);
   const [data, error, loading, axiosFetch] = useAxios();
   const [announcements, setAnnouncements] = useState([]);
 
@@ -54,6 +54,8 @@ const AnnouncementDataProvider = ({ children }) => {
         title,
         modalBody,
         announcements,
+        loadedSemester,
+        admin,
         error,
         loading,
         reset,

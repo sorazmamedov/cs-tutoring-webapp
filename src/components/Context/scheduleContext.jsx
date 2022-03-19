@@ -7,7 +7,7 @@ const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const ScheduleDataProvider = ({ children }) => {
-  const { loadedSemester } = useContext(GlobalViewContext);
+  const { loadedSemester, admin } = useContext(GlobalViewContext);
   const [data, error, loading, axiosFetch] = useAxios();
   const [schedules, setSchedules] = useState([]);
 
@@ -55,6 +55,8 @@ const ScheduleDataProvider = ({ children }) => {
         title,
         modalBody,
         schedules,
+        loadedSemester,
+        admin,
         error,
         loading,
         reset,

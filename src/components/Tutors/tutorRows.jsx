@@ -1,5 +1,4 @@
 import { useState, useContext } from "react";
-import { GlobalViewContext } from "../Context/dataContext";
 import { ActionsContext, ViewContext } from "../Context/tutorsContext";
 import { EditIcon, SwitchIcon } from "../common/iconsWithTooltip";
 import SpinnerBtn from "../common/spinnerBtn";
@@ -7,8 +6,7 @@ import { putTutor } from "../../apis/cs-tutoring/tutors";
 import { showErrors } from "../common/errorHelper";
 
 const TutorRows = () => {
-  const { admin } = useContext(GlobalViewContext);
-  const { tutors } = useContext(ViewContext);
+  const { admin, tutors } = useContext(ViewContext);
   const { setTutors, setShow, setTitle, setModalBody } =
     useContext(ActionsContext);
   const [saving, setSaving] = useState(null);

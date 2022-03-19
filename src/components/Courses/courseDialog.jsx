@@ -5,14 +5,12 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { ActionsContext, ViewContext } from "../Context/courseContext";
-import { GlobalViewContext } from "../Context/dataContext";
 import { courseValidator } from "../../utils/validator";
 import Id from "../../utils/Id";
 import { postCourse } from "../../apis/cs-tutoring/courses";
 
 const CourseDialog = () => {
-  const { loadedSemester } = useContext(GlobalViewContext);
-  const { reset, courses } = useContext(ViewContext);
+  const { reset, courses, loadedSemester } = useContext(ViewContext);
   const { setCourses } = useContext(ActionsContext);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});

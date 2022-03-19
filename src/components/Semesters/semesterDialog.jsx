@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { format } from "date-fns";
 import { ViewContext, ActionsContext } from "../Context/semesterContext";
 import { semesterValidator } from "../../utils/validator";
 import { localToUtc, utcToLocal } from "../../utils/date";
@@ -13,23 +14,23 @@ import SpinnerBtn from "../common/spinnerBtn";
 
 const SemesterDialog = () => {
   const { semesters, reset, currentSemester, edit } = useContext(ViewContext);
-  const { setSemesters, setCurrentSemester } = useContext(ActionsContext);
+  const { setSemesters } = useContext(ActionsContext);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-    const form = e.currentTarget;
     e.preventDefault();
     e.stopPropagation();
+    const form = e.currentTarget;
 
-    const newItem = getServerFotmatted(edit, currentSemester, form);
+    let newItem = getServerFotmatted(edit, currentSemester, form);
     if (isEqual(currentSemester, newItem)) {
       reset();
+      return;
     }
 
     let error = semesterValidator(newItem);
-
     if (!error) {
       setLoading(true);
       setValidated(true);
@@ -41,6 +42,11 @@ const SemesterDialog = () => {
       const statusCode = edit ? 200 : 201;
 
       if (result.status === statusCode) {
+        newItem = {
+          ...newItem,
+          startDate: newItem.startDate.toISOString(),
+          endDate: newItem.endDate.toISOString(),
+        };
         if (edit) {
           let index = semesters.findIndex(
             (item) => item.id === currentSemester.id
@@ -54,7 +60,6 @@ const SemesterDialog = () => {
           setSemesters([...semesters, { ...newItem }]);
         }
 
-        setCurrentSemester({ ...newItem });
         setErrors({});
         setValidated(true);
         setLoading(false);
@@ -127,7 +132,10 @@ const SemesterDialog = () => {
               type="date"
               className="roundBorder"
               name="startDate"
-              defaultValue={edit && localToUtc(currentSemester.startDate)}
+              defaultValue={
+                edit &&
+                format(new Date(currentSemester.startDate), "yyyy-MM-dd")
+              }
               isInvalid={errors.startDate}
               required
             />
@@ -141,7 +149,9 @@ const SemesterDialog = () => {
               type="date"
               className="roundBorder"
               name="endDate"
-              defaultValue={edit && localToUtc(currentSemester.endDate)}
+              defaultValue={
+                edit && format(new Date(currentSemester.endDate), "yyyy-MM-dd")
+              }
               isInvalid={errors.endDate}
               required
             />
@@ -174,14 +184,22 @@ const SemesterDialog = () => {
 export default SemesterDialog;
 
 function getServerFotmatted(edit, currentSemester, form) {
+  let start =
+    +new Date(form.startDate.value.trim()) +
+    new Date(form.startDate.value.trim()).getTimezoneOffset() * 60 * 1000;
+  let end =
+    +new Date(form.endDate.value.trim()) +
+    new Date(form.endDate.value.trim()).getTimezoneOffset() * 60 * 1000;
+  const academicYear = new Date(start).getFullYear();
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
   return {
     id: edit ? currentSemester.id : Id.makeId(),
     semesterName: form.semesterName.value.trim(),
-    academicYear: new Date(
-      utcToLocal(form.startDate.value.trim())
-    ).getFullYear(),
-    startDate: +new Date(utcToLocal(form.startDate.value.trim())),
-    endDate: +new Date(utcToLocal(form.endDate.value.trim())),
+    academicYear,
+    startDate,
+    endDate,
     active: edit ? currentSemester.active : false,
   };
 }

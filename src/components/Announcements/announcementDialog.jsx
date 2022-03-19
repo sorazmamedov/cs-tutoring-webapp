@@ -7,7 +7,6 @@ import Spinner from "react-bootstrap/Spinner";
 import { ViewContext, ActionsContext } from "../Context/announcementContext";
 import { isEqual } from "../../utils/isEqual";
 import Id from "../../utils/Id";
-import { GlobalViewContext } from "../Context/dataContext";
 import { announcementValidator } from "../../utils/validator";
 import { getErrors } from "../common/errorHelper";
 import {
@@ -18,9 +17,8 @@ import {
 const AnnouncementDialog = ({ id }) => {
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
-  const { announcements, reset } = useContext(ViewContext);
+  const { announcements, loadedSemester, reset } = useContext(ViewContext);
   const { setAnnouncements } = useContext(ActionsContext);
-  const { loadedSemester } = useContext(GlobalViewContext);
   const [publish, setPublish] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -36,7 +34,6 @@ const AnnouncementDialog = ({ id }) => {
 
     let newItem = {};
 
-    //if editing existing announcement
     if (!id) {
       newItem = {
         id: Id.makeId(),
@@ -44,7 +41,6 @@ const AnnouncementDialog = ({ id }) => {
         semesterId: loadedSemester.id,
         subject: form.subject.value.trim(),
         content: form.content.value.trim(),
-        createdOn: Date.now(),
         published: publish,
       };
     } else {
@@ -59,19 +55,16 @@ const AnnouncementDialog = ({ id }) => {
         reset();
         return;
       }
-
-      newItem.createdOn = Date.now();
     }
+    newItem.createdOn = new Date();
 
     const error = announcementValidator(newItem);
     if (error) {
-      console.log("validation");
       setErrors(getErrors(error));
       setValidated(false);
       setSaving(false);
       return;
     }
-    console.log("New Item:", newItem);
     const response = id
       ? await putAnnouncement(newItem)
       : await postAnnouncement(newItem);
@@ -81,7 +74,10 @@ const AnnouncementDialog = ({ id }) => {
       const filtered = id
         ? announcements.filter((item) => item.id !== id)
         : announcements;
-      setAnnouncements([newItem, ...filtered]);
+      setAnnouncements([
+        { ...newItem, createdOn: newItem.createdOn.toISOString() },
+        ...filtered,
+      ]);
     } else {
       setErrors(getErrors(response));
       setValidated(false);

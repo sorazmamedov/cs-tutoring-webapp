@@ -5,7 +5,6 @@ import TableHeader from "../common/tableHeader";
 import TutorRows from "./tutorRows";
 import CustomPagination from "../common/customPagination";
 import { PlusIcon } from "../common/iconsWithTooltip";
-import { GlobalViewContext } from "../Context/dataContext";
 import { ViewContext } from "../Context/tutorsContext";
 import TitleBar from "../common/titleBar";
 import {
@@ -16,15 +15,14 @@ import {
 import TemplateModal from "../common/templateModal";
 
 const Tutors = () => {
-  const { admin } = useContext(GlobalViewContext);
-  const { tutors, loading, error } = useContext(ViewContext);
+  const { admin, tutors, loading, error } = useContext(ViewContext);
 
   const header = ["ID", "Name", "Email", "About"];
   const adminHeader = [...header, "Actions"];
 
   return (
     <MainContainer>
-      {!loading && !error && <TitleBar title="Tutors" icon={<PlusIcon />} />}
+      {!loading && !error && <TitleBar title="Tutors" />}
       {loading && <LoadingPlaceholder />}
       {!loading && error && <ErrorPlaceholder />}
       {!loading && !error && tutors && tutors.length === 0 && (
