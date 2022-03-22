@@ -3,10 +3,10 @@ import MainContainer from "../common/mainContainer";
 import TitleBar from "../common/titleBar";
 import BigCalendar from "./bigCalendar";
 import TemplateModal from "../common/templateModal";
-import NewEventDialog from "./newEventDialog";
+import NewEventDialog from "./NewEventDialog/";
 import { ActionsContext, ViewContext } from "../Context/calendarContext";
 
-const TimeSlots = () => {
+const Calendar = () => {
   const { loadedSemester, admin } = useContext(ViewContext);
   const { setShow, setTitle, setModalBody } = useContext(ActionsContext);
 
@@ -59,4 +59,4 @@ const TimeSlots = () => {
   );
 };
 
-export default TimeSlots;
+export default Calendar;

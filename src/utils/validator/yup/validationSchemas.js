@@ -1,4 +1,4 @@
-import { string, number, boolean, ref, date } from "yup";
+import { string, number, boolean, ref, date, object, array } from "yup";
 import { len, messages } from "../validationMessages";
 
 export default Object.freeze({
@@ -41,11 +41,6 @@ export default Object.freeze({
     .required()
     .typeError(messages.isRequired),
 
-  date: date()
-    .min(new Date(len.minDate), messages.dateError)
-    .required()
-    .typeError(messages.isRequired),
-
   shortText: string()
     .trim()
     .min(len.minShortTextLength)
@@ -77,16 +72,71 @@ export default Object.freeze({
     .min(len.minYear, messages.minYearError)
     .required()
     .typeError(messages.isRequired),
+
+  // Dates
+  date: date()
+    .min(new Date(len.minDate), "${path} " + messages.dateError)
+    .required()
+    .typeError(messages.isRequired),
+
   startDate: date()
     .min(new Date(len.minDate), messages.dateError)
     .required()
     .typeError(messages.isRequired),
+
   endDate: date()
     .min(ref("startDate"), messages.dateError)
     .required()
     .typeError(messages.isRequired),
 
-  //Schedule
+  start: date()
+    .min(ref("$min"), "Event start and end dates must be within the semester")
+    .max(ref("$max"), "Event start and end dates must be within the semester")
+    .required()
+    .typeError(messages.isRequired),
+
+  end: date()
+    .min(ref("start"), "Event start and end dates must be within the semester")
+    .max(
+      ref("$rangeMax"),
+      "Event start and end dates must be within the semester"
+    )
+    .required()
+    .typeError(messages.isRequired),
+
+  range: object()
+    .shape({
+      start: date()
+        .min(ref("$min"), "Repeat range must be within the semester")
+        .max(ref("$min"), "Repeat range must be within the semester")
+        .typeError(messages.isRequired),
+      end: date()
+        .min(ref("start"), "Repeat range must be within the semester")
+        .max(ref("$rangeMax"), "Repeat range must be within the semester")
+        .typeError(messages.isRequired),
+    })
+    .when("repeat", {
+      is: true,
+      then: (schema) => schema.required(),
+    }),
+
+  slotsArray: array(
+    object().shape({
+      start: date()
+        .min(ref("$min"), "${path} " + "Slots must be within selected date range")
+        .max(ref("$max"), "${path} " + "Slots must be within selected date range")
+        .max(ref("$rangeMax"), "${path} " + "Slots must be within selected date range")
+        .required()
+        .typeError(messages.isRequired),
+      end: date()
+        .min(ref("start"), "${path} " + "Slots must be within selected date range")
+        .max(ref("$max"), "${path} " + "Slots must be within selected date range")
+        .max(ref("$rangeMax"), "${path} " + "Slots must be within selected date range")
+        .required()
+        .typeError(messages.isRequired),
+    })
+  ).min(1),
+
   weekday: string()
     .trim()
     .matches(

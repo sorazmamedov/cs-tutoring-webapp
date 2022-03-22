@@ -1,10 +1,10 @@
 import { makeRequest } from "../";
 
-export const postCalendar = (semesterId, data) => {
+export const postCalendar = (data) => {
   const configObj = {
     method: "post",
     url: "/calendars",
-    requestConfig: { data: { semesterId, data } },
+    requestConfig: { data },
   };
   return makeRequest(configObj);
 };

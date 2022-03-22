@@ -3,14 +3,14 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { format } from "date-fns";
+import { addMinutes, format } from "date-fns";
 import { ViewContext, ActionsContext } from "../Context/semesterContext";
 import { semesterValidator } from "../../utils/validator";
-import { localToUtc, utcToLocal } from "../../utils/date";
 import { isEqual } from "../../utils/isEqual";
 import Id from "../../utils/Id";
 import { postSemester, putSemester } from "../../apis/cs-tutoring/semesters";
 import SpinnerBtn from "../common/spinnerBtn";
+import { getErrors } from "../common/errorHelper";
 
 const SemesterDialog = () => {
   const { semesters, reset, currentSemester, edit } = useContext(ViewContext);
@@ -36,12 +36,12 @@ const SemesterDialog = () => {
       setValidated(true);
       setErrors({});
 
-      const result = edit
+      const response = edit
         ? await putSemester(newItem)
         : await postSemester(newItem);
       const statusCode = edit ? 200 : 201;
 
-      if (result.status === statusCode) {
+      if (response.status === statusCode) {
         newItem = {
           ...newItem,
           startDate: newItem.startDate.toISOString(),
@@ -65,44 +65,30 @@ const SemesterDialog = () => {
         setLoading(false);
         reset();
       } else {
-        if (result.message) {
-          setErrors({ response: result.message });
-        } else if (result) {
-          setErrors({ response: result });
-        } else {
-          setErrors({ response: result });
-        }
+        setErrors(getErrors(response));
         setValidated(false);
         setLoading(false);
       }
     } else if (error) {
-      const errorData = {};
-      for (let item of error.inner) {
-        const name = item.path;
-        const message = item.message;
-        errorData[name] = message;
-      }
-      setErrors(errorData);
+      setErrors(getErrors(error));
       setValidated(false);
     }
   };
 
   return (
     <>
-      {errors.response && (
-        <p className="col-10 col-lg-8 mx-auto text-center text-danger">
-          {errors.response === "Network Error" &&
-            "Please check your internet connection!"}
-          {errors.response.status === 404 && errors.response.data.error}
-          {Object.keys(errors.response).length === 0 &&
-            "Something went wrong! Please, try again!"}
-        </p>
-      )}
-      {errors.id && (
-        <p className="col-10 col-lg-8 mx-auto text-center text-danger">
-          {errors.id}
-        </p>
-      )}
+      {errors &&
+        !errors.semesterName &&
+        !errors.startDate &&
+        !errors.endDate &&
+        Object.entries(errors).map(([key, value]) => (
+          <p
+            key={key}
+            className="col-10 col-lg-8 mx-auto text-center text-danger"
+          >
+            {value}
+          </p>
+        ))}
       <Form
         noValidate
         validated={validated}
@@ -184,16 +170,14 @@ const SemesterDialog = () => {
 export default SemesterDialog;
 
 function getServerFotmatted(edit, currentSemester, form) {
-  let start =
-    +new Date(form.startDate.value.trim()) +
-    new Date(form.startDate.value.trim()).getTimezoneOffset() * 60 * 1000;
-  let end =
-    +new Date(form.endDate.value.trim()) +
-    new Date(form.endDate.value.trim()).getTimezoneOffset() * 60 * 1000;
-  const academicYear = new Date(start).getFullYear();
-  const startDate = new Date(start);
-  const endDate = new Date(end);
+  const start = new Date(form.startDate.value.trim());
+  const end = new Date(form.endDate.value.trim());
+  let startOffset = start.getTimezoneOffset();
+  let endOffset = end.getTimezoneOffset();
 
+  const startDate = addMinutes(start, startOffset);
+  const endDate = addMinutes(end, endOffset);
+  const academicYear = startDate.getFullYear();
   return {
     id: edit ? currentSemester.id : Id.makeId(),
     semesterName: form.semesterName.value.trim(),

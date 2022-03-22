@@ -78,7 +78,6 @@ const CourseDialog = () => {
             "Please check your internet connection!"}
           {errors?.response?.status === 404 && errors.response?.data?.error}
           {errors.validationError}
-          {}
         </p>
       )}
       <Form

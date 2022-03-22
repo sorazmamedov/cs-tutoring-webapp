@@ -7,4 +7,7 @@ export default object().shape({
   semesterId: vs.nanoid,
   start: vs.start,
   end: vs.end,
+  slots: vs.slotsArray,
+  repeat: vs.boolean,
+  range: vs.range,
 });

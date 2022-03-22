@@ -10,11 +10,12 @@ import semesterSchema from "./semester-schema";
 import timeSlotSchema from "./timeSlot-schema";
 import calendarSchema from "./calendar-schema";
 
-let JoiValidator = (payload, schema) => {
+let JoiValidator = (payload, schema, context) => {
   try {
     schema.validateSync(payload, {
       strict: true,
       abortEarly: false,
+      ...context,
     });
 
     return;
@@ -34,5 +35,6 @@ export default Object.freeze({
   scheduleValidator: (payload) => JoiValidator(payload, scheduleSchema),
   semesterValidator: (payload) => JoiValidator(payload, semesterSchema),
   timeSlotValidator: (payload) => JoiValidator(payload, timeSlotSchema),
-  calendarValidator: (payload) => JoiValidator(payload, calendarSchema),
+  calendarValidator: (payload, context) =>
+    JoiValidator(payload, calendarSchema, context),
 });

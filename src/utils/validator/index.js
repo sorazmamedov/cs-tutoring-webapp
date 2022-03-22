@@ -3,15 +3,16 @@ import schemas from "./yup";
 const adminValidator = (payload) => schemas.adminValidator(payload);
 const tutorValidator = (payload) => schemas.tutorValidator(payload);
 const studentValidator = (payload) => schemas.studentValidator(payload);
-const announcementValidator = (payload) =>
-  schemas.announcementValidator(payload);
+const announcementValidator = (payload, context) =>
+  schemas.announcementValidator(payload, context);
 const appointmentValidator = (payload) => schemas.appointmentValidator(payload);
 const reportValidator = (payload) => schemas.reportValidator(payload);
 const courseValidator = (payload) => schemas.courseValidator(payload);
 const scheduleValidator = (payload) => schemas.scheduleValidator(payload);
 const semesterValidator = (payload) => schemas.semesterValidator(payload);
 const timeSlotValidator = (payload) => schemas.timeSlotValidator(payload);
-const calendarValidator = (payload) => schemas.calendarValidator(payload);
+const calendarValidator = (payload, context) =>
+  schemas.calendarValidator(payload, context);
 
 export {
   adminValidator,
