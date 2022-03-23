@@ -4,8 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { format, differenceInMinutes, addWeeks, addMinutes } from "date-fns";
 import { ViewContext } from "../../Context/calendarContext";
-import Id from "../../../utils/Id";
-import { calendarValidator } from "../../../utils/validator";
+import { eventValidator } from "../../../utils/validator";
 import { getErrors } from "../../common/errorHelper";
 import { postCalendar } from "../../../apis/cs-tutoring/calendars";
 import Preview from "./preview";
@@ -27,48 +26,50 @@ const NewEventDialog = (event) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // setSaving(true);
+    setErrors({})
+    setSaving(true);
     setValidated(true);
     const form = e.currentTarget;
 
     let newEvent = {
-      id: Id.makeId(),
       tutorId: "123456789123",
       semesterId: loadedSemester.id,
       start: event.start,
       end: event.end,
       slots,
       repeat,
-      range,
+      repeatUntil: range?.end,
     };
 
-    const error = calendarValidator(newEvent, {
+    const error = eventValidator(newEvent, {
       context: {
         min: newEvent.start,
         max: newEvent.end,
+        rangeMin: new Date(loadedSemester.startDate),
         rangeMax: new Date(loadedSemester.endDate),
       },
     });
+
     if (error) {
       setErrors(getErrors(error));
       setValidated(false);
       setSaving(false);
       return;
     }
-    // console.log("New Item:", newEvent);
-    // const response = await postCalendar(newEvent);
+    const response = await postCalendar(newEvent);
 
-    // console.log(response);
-    // const statusCode = 201;
-    // if (response.status === statusCode) {
-    // } else {
-    //   setErrors(getErrors(response));
-    //   setValidated(false);
-    //   setSaving(false);
-    //   return;
-    // }
+    console.log(response);
+    const statusCode = 201;
+    if (response.status === statusCode) {
+      console.log(response.data);
+    } else {
+      setErrors(getErrors(response));
+      setValidated(false);
+      setSaving(false);
+      return;
+    }
 
-    // setSaving(false);
+    setSaving(false);
     // reset();
   };
 
@@ -77,6 +78,7 @@ const NewEventDialog = (event) => {
   };
 
   const handleRepeatChange = () => {
+    setErrors({});
     setRange({});
     setRepeat(false);
     const form = formRef.current;
@@ -103,7 +105,7 @@ const NewEventDialog = (event) => {
         let offset = new Date(form.customDate.value.trim()).getTimezoneOffset();
         end = addMinutes(new Date(form.customDate.value.trim()), offset);
       } else {
-        end = addWeeks(event.start, 1);
+        end = addWeeks(event.end, 1);
       }
     } else {
       end = new Date(loadedSemester.endDate);
@@ -115,6 +117,7 @@ const NewEventDialog = (event) => {
   useEffect(() => {
     handleChange();
   }, [event]);
+
   return (
     <>
       {errors &&

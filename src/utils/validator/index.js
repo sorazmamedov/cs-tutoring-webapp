@@ -13,6 +13,8 @@ const semesterValidator = (payload) => schemas.semesterValidator(payload);
 const timeSlotValidator = (payload) => schemas.timeSlotValidator(payload);
 const calendarValidator = (payload, context) =>
   schemas.calendarValidator(payload, context);
+const eventValidator = (payload, context) =>
+  schemas.eventValidator(payload, context);
 
 export {
   adminValidator,
@@ -26,4 +28,5 @@ export {
   semesterValidator,
   timeSlotValidator,
   calendarValidator,
+  eventValidator,
 };

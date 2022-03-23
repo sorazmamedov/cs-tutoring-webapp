@@ -71,29 +71,32 @@ export default Object.freeze({
     .positive()
     .min(len.minYear, messages.minYearError)
     .required()
-    .typeError(messages.isRequired),
+    .typeError("${path} " + messages.isRequired),
 
   // Dates
   date: date()
     .min(new Date(len.minDate), "${path} " + messages.dateError)
     .required()
-    .typeError(messages.isRequired),
+    .typeError("${path} " + messages.isRequired),
 
   startDate: date()
     .min(new Date(len.minDate), messages.dateError)
     .required()
-    .typeError(messages.isRequired),
+    .typeError("${path} " + messages.isRequired),
 
   endDate: date()
     .min(ref("startDate"), messages.dateError)
     .required()
-    .typeError(messages.isRequired),
+    .typeError("${path} " + messages.isRequired),
 
   start: date()
-    .min(ref("$min"), "Event start and end dates must be within the semester")
+    .min(
+      ref("$rangeMin"),
+      "Event start and end dates must be within the semester"
+    )
     .max(ref("$max"), "Event start and end dates must be within the semester")
     .required()
-    .typeError(messages.isRequired),
+    .typeError("${path} " + messages.isRequired),
 
   end: date()
     .min(ref("start"), "Event start and end dates must be within the semester")
@@ -102,38 +105,49 @@ export default Object.freeze({
       "Event start and end dates must be within the semester"
     )
     .required()
-    .typeError(messages.isRequired),
+    .typeError("${path} " + messages.isRequired),
 
-  range: object()
-    .shape({
-      start: date()
+  repeatUntil: date().when("repeat", {
+    is: true,
+    then: (schema) =>
+      schema
         .min(ref("$min"), "Repeat range must be within the semester")
-        .max(ref("$min"), "Repeat range must be within the semester")
-        .typeError(messages.isRequired),
-      end: date()
-        .min(ref("start"), "Repeat range must be within the semester")
         .max(ref("$rangeMax"), "Repeat range must be within the semester")
-        .typeError(messages.isRequired),
-    })
-    .when("repeat", {
-      is: true,
-      then: (schema) => schema.required(),
-    }),
+        .required(),
+  }),
 
   slotsArray: array(
     object().shape({
       start: date()
-        .min(ref("$min"), "${path} " + "Slots must be within selected date range")
-        .max(ref("$max"), "${path} " + "Slots must be within selected date range")
-        .max(ref("$rangeMax"), "${path} " + "Slots must be within selected date range")
+        .min(
+          ref("$min"),
+          "${path} " + "Slots must be within selected date range"
+        )
+        .max(
+          ref("$max"),
+          "${path} " + "Slots must be within selected date range"
+        )
+        .max(
+          ref("$rangeMax"),
+          "${path} " + "Slots must be within selected date range"
+        )
         .required()
-        .typeError(messages.isRequired),
+        .typeError("${path} " + messages.isRequired),
       end: date()
-        .min(ref("start"), "${path} " + "Slots must be within selected date range")
-        .max(ref("$max"), "${path} " + "Slots must be within selected date range")
-        .max(ref("$rangeMax"), "${path} " + "Slots must be within selected date range")
+        .min(
+          ref("start"),
+          "${path} " + "Slots must be within selected date range"
+        )
+        .max(
+          ref("$max"),
+          "${path} " + "Slots must be within selected date range"
+        )
+        .max(
+          ref("$rangeMax"),
+          "${path} " + "Slots must be within selected date range"
+        )
         .required()
-        .typeError(messages.isRequired),
+        .typeError("${path} " + messages.isRequired),
     })
   ).min(1),
 
@@ -144,7 +158,7 @@ export default Object.freeze({
       "Day must be on the week days and must begin with capital letter!"
     )
     .required()
-    .typeError(messages.isRequired),
+    .typeError("${path} " + messages.isRequired),
 
   startHour: string()
     .trim()
@@ -153,7 +167,7 @@ export default Object.freeze({
       "From: Format mismatch! Example: 1:45 a.m."
     )
     .required()
-    .typeError(messages.isRequired),
+    .typeError("${path} " + messages.isRequired),
 
   endHour: string()
     .trim()
@@ -162,5 +176,5 @@ export default Object.freeze({
       "To: Format mismatch! Example: 1:45 a.m."
     )
     .required()
-    .typeError(messages.isRequired),
+    .typeError("${path} " + messages.isRequired),
 });
