@@ -16,8 +16,8 @@ const BigCalendar = ({ events, handleSelectSlot, handleSelectEvent }) => {
   const { defaultDate, min, max, formats } = useMemo(
     () => ({
       defaultDate: new Date(),
-      min: new Date(2022, 2, 15, 9),
-      max: new Date(2022, 2, 15, 22, 30),
+      min: new Date(2022, 3, 15, 9),
+      max: new Date(2022, 3, 15, 22, 30),
       formats: {
         dateFormat: (date, culture, localizer) =>
           localizer.format(date, "d", culture),
@@ -52,6 +52,7 @@ const BigCalendar = ({ events, handleSelectSlot, handleSelectEvent }) => {
       onView={onView}
       onSelectEvent={(event) => handleSelectEvent(event)}
       onSelectSlot={(event) => handleSelectSlot(event)}
+      onRangeChange={(event) => console.log(event)}
     />
   );
 };

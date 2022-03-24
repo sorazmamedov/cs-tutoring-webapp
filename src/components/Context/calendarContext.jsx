@@ -14,13 +14,12 @@ const CalendarDataProvider = ({ children }) => {
   const [modalBody, setModalBody] = useState("");
   const [title, setTitle] = useState("");
   const [current, setCurrent] = useState("");
-  const handleReset = () => {
+  const [refetch, setRefetch] = useState(false);
+  const reset = () => {
     setShow(false);
     setTitle("");
     setModalBody("");
   };
-
-  const [reset] = useState(() => handleReset);
 
   const fetchCalendar = () => {
     axiosFetch({
@@ -28,7 +27,7 @@ const CalendarDataProvider = ({ children }) => {
       method: "GET",
       url: "/calendars",
       requestConfig: {
-        params: { semesterId: loadedSemester.id },
+        params: { semesterId: loadedSemester.id, tutorId: "123456789123" },
       },
     });
   };
@@ -37,13 +36,20 @@ const CalendarDataProvider = ({ children }) => {
     if (loadedSemester.id && current !== loadedSemester.id) {
       setCurrent(loadedSemester.id);
       fetchCalendar();
-      console.log("[Fetching slots]");
+      console.log("[Fetching calendar events]");
+    } else if (refetch) {
+      setRefetch(false);
+      fetchCalendar();
+      console.log("[*Refetching calendar events*]");
     }
     // eslint-disable-next-line
-  }, [loadedSemester]);
+  }, [loadedSemester, refetch]);
 
   useEffect(() => {
-    setEvents([...data]);
+    const temp = data.map((item) => {
+      return { ...item, start: new Date(item.start), end: new Date(item.end) };
+    });
+    setEvents([...temp]);
   }, [data]);
 
   return (
@@ -52,7 +58,7 @@ const CalendarDataProvider = ({ children }) => {
         show,
         title,
         modalBody,
-        slots: events,
+        events,
         error,
         loading,
         loadedSemester,
@@ -65,7 +71,8 @@ const CalendarDataProvider = ({ children }) => {
           setShow,
           setTitle,
           setModalBody,
-          setSlots: setEvents,
+          setEvents,
+          setRefetch,
         }}
       >
         {children}

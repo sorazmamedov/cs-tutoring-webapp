@@ -16,13 +16,11 @@ const ScheduleDataProvider = ({ children }) => {
   const [title, setTitle] = useState("");
   const [current, setCurrent] = useState("");
 
-  const handleReset = () => {
+  const reset = () => {
     setShow(false);
     setTitle("");
     setModalBody("");
   };
-
-  const [reset] = useState(() => handleReset);
 
   const fetchSchedules = () => {
     axiosFetch({

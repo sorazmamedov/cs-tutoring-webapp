@@ -10,19 +10,15 @@ const AnnouncementDataProvider = ({ children }) => {
   const { loadedSemester, admin } = useContext(GlobalViewContext);
   const [data, error, loading, axiosFetch] = useAxios();
   const [announcements, setAnnouncements] = useState([]);
-
   const [show, setShow] = useState(false);
   const [modalBody, setModalBody] = useState("");
   const [title, setTitle] = useState("");
   const [current, setCurrent] = useState("");
-
-  const handleReset = () => {
+  const reset = () => {
     setShow(false);
     setTitle("");
     setModalBody("");
   };
-
-  const [reset] = useState(() => handleReset);
 
   const fetchAnnouncements = () => {
     axiosFetch({

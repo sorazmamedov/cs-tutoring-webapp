@@ -19,11 +19,13 @@ export const putCalendar = (data) => {
   return makeRequest(configObj);
 };
 
-export const deleteCalendar = (id) => {
+export const deleteCalendar = ({ id, deleteAll }) => {
   const configObj = {
     method: "delete",
     url: `/calendars/${id}`,
-    requestConfig: {},
+    requestConfig: {
+      params: { deleteAll },
+    },
   };
   return makeRequest(configObj);
 };

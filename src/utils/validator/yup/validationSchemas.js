@@ -113,7 +113,10 @@ export default Object.freeze({
       schema
         .min(ref("$min"), "Repeat range must be within the semester")
         .max(ref("$rangeMax"), "Repeat range must be within the semester")
-        .required(),
+        .required()
+        .typeError(
+          "Repeat until must be a 'date' type and " + messages.isRequired
+        ),
   }),
 
   slotsArray: array(

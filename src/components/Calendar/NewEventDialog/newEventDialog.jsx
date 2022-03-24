@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { format, differenceInMinutes, addWeeks, addMinutes } from "date-fns";
-import { ViewContext } from "../../Context/calendarContext";
+import { ViewContext, ActionsContext } from "../../Context/calendarContext";
 import { eventValidator } from "../../../utils/validator";
 import { getErrors } from "../../common/errorHelper";
 import { postCalendar } from "../../../apis/cs-tutoring/calendars";
@@ -13,7 +13,7 @@ import Choose from "./choose";
 
 const NewEventDialog = (event) => {
   const { reset, loadedSemester } = useContext(ViewContext);
-  const [validated, setValidated] = useState(false);
+  const { setRefetch } = useContext(ActionsContext);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
   const [showDurations, setShowDurations] = useState(true);
@@ -22,14 +22,13 @@ const NewEventDialog = (event) => {
   const [slots, setSlots] = useState([]);
   const [repeat, setRepeat] = useState(false);
   const [range, setRange] = useState({});
+  const [success, setSuccess] = useState(false);
   const formRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({})
+    setErrors({});
     setSaving(true);
-    setValidated(true);
-    const form = e.currentTarget;
 
     let newEvent = {
       tutorId: "123456789123",
@@ -52,33 +51,31 @@ const NewEventDialog = (event) => {
 
     if (error) {
       setErrors(getErrors(error));
-      setValidated(false);
       setSaving(false);
       return;
     }
     const response = await postCalendar(newEvent);
 
-    console.log(response);
-    const statusCode = 201;
-    if (response.status === statusCode) {
-      console.log(response.data);
+    if (response.status === 201) {
+      setRefetch(true);
     } else {
       setErrors(getErrors(response));
-      setValidated(false);
       setSaving(false);
       return;
     }
 
     setSaving(false);
-    // reset();
+    setSuccess(true);
+    setTimeout(() => {
+      reset();
+    }, 2000);
   };
 
   const handleChange = () => {
-    calculate(formRef, setErrors, event, setValidated, setSlots, setPreview);
+    calculate(formRef, setErrors, event, setSlots, setPreview);
   };
 
   const handleRepeatChange = () => {
-    setErrors({});
     setRange({});
     setRepeat(false);
     const form = formRef.current;
@@ -129,12 +126,23 @@ const NewEventDialog = (event) => {
             {value}
           </p>
         ))}
+      {success && (
+        <p
+          className="text-success text-center mt-2"
+          style={
+            success
+              ? { opacity: "1", transition: "opacity 0.6s linear" }
+              : { opacity: 0 }
+          }
+        >
+          Successfully created!
+        </p>
+      )}
       <Form
         ref={formRef}
         noValidate
-        validated={validated}
         onSubmit={handleSubmit}
-        className="col-10 mx-auto"
+        className="col-10 mx-auto mb-5"
       >
         <Row className="mb-5">
           <Col xs="6" className="order-1 border-end border-primary">
@@ -153,8 +161,13 @@ const NewEventDialog = (event) => {
             <Preview preview={preview} repeat={repeat} range={range} />
           </Col>
         </Row>
-        <Row className="mb-5 justify-content-around" sm="2">
-          <ActionButtons saving={saving} reset={reset} preview={preview} />
+        <Row className="justify-content-around" sm="2">
+          <ActionButtons
+            saving={saving}
+            reset={reset}
+            preview={preview}
+            success={success}
+          />
         </Row>
       </Form>
     </>
@@ -163,14 +176,7 @@ const NewEventDialog = (event) => {
 
 export default NewEventDialog;
 
-const calculate = (
-  formRef,
-  setErrors,
-  event,
-  setValidated,
-  setSlots,
-  setPreview
-) => {
+const calculate = (formRef, setErrors, event, setSlots, setPreview) => {
   setErrors({});
   const form = formRef.current;
   const tempPreview = [];
@@ -187,7 +193,6 @@ const calculate = (
         -
         ${format(event.end, "h:mm bbb")}`,
       });
-      setValidated(false);
       return;
     }
     const slotCount = duration / 15;

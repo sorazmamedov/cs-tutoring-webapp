@@ -26,15 +26,13 @@ const SemesterDataProvider = ({ children }) => {
   const [edit, setEdit] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleReset = () => {
+  const reset = () => {
     setShow(false);
     setModalBody("");
     setTitle("");
     setEdit(false);
     setMessage("");
   };
-
-  const [reset] = useState(() => handleReset);
 
   const fetchSemesters = () => {
     axiosFetch({
