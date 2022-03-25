@@ -14,11 +14,11 @@ import {
   putAnnouncement,
 } from "../../apis/cs-tutoring/announcements";
 
-const AnnouncementDialog = ({ id }) => {
+const AnnouncementDialog = ({ id, reset }) => {
+  const { announcements, loadedSemester } = useContext(ViewContext);
+  const { setAnnouncements } = useContext(ActionsContext);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
-  const { announcements, loadedSemester, reset } = useContext(ViewContext);
-  const { setAnnouncements } = useContext(ActionsContext);
   const [publish, setPublish] = useState(false);
   const [saving, setSaving] = useState(false);
 

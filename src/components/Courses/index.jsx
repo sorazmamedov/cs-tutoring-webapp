@@ -8,7 +8,8 @@ import CustomPagination from "../common/customPagination";
 import TemplateModal from "../common/templateModal";
 import CourseDialog from "./courseDialog";
 import TitleBar from "../common/titleBar";
-import { ActionsContext, ViewContext } from "../Context/courseContext";
+import { ViewContext } from "../Context/courseContext";
+import useModal from "../../hooks/useModalStates";
 import {
   NoDataPlaceholder,
   ErrorPlaceholder,
@@ -17,14 +18,15 @@ import {
 
 const Courses = () => {
   const { courses, loading, error, admin } = useContext(ViewContext);
-  const { setShow, setTitle, setModalBody } = useContext(ActionsContext);
+  const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
+    useModal();
 
   const tableHeader = ["Section", "Course", "Instructor", "Email"];
   const adminTHeader = [...tableHeader, "Actions"];
 
   const handleAddCourse = () => {
     setTitle("Add New Courses");
-    setModalBody(() => CourseDialog);
+    setModalBody(<CourseDialog {...{ reset }} />);
     setShow(true);
   };
 
@@ -48,13 +50,13 @@ const Courses = () => {
           <Table className="text-center" bordered hover responsive>
             <TableHeader headers={admin ? adminTHeader : tableHeader} />
             <tbody className="text-muted">
-              <CourseRows />
+              <CourseRows {...{ reset, setShow, setTitle, setModalBody }} />
             </tbody>
           </Table>
           <CustomPagination />
         </>
       )}
-      <TemplateModal viewContext={ViewContext} />
+      <TemplateModal {...{ show, title, ModalBody, reset }} />
     </MainContainer>
   );
 };

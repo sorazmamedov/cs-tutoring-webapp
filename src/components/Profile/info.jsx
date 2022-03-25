@@ -13,12 +13,12 @@ const ProfileInfo = () => {
           className="col-12 col-md-11 justify-content-md-between"
         >
           <Form.Group className="col-6 pe-4">
-            <Form.Label className="text-muted mb-0">Firstname</Form.Label>
-            <Form.Control type="text" placeholder="" className="roundBorder" />
+            <Form.Label className="text-muted mb-0">Name</Form.Label>
+            <Form.Control disabled type="text" className="roundBorder" />
           </Form.Group>
           <Form.Group className="col-6 ps-4 ms-sm-0">
-            <Form.Label className="text-muted mb-0">Lastname</Form.Label>
-            <Form.Control type="text" placeholder="" className="roundBorder" />
+            <Form.Label className="text-muted mb-0">Email</Form.Label>
+            <Form.Control disabled type="email" className="roundBorder" />
           </Form.Group>
         </Stack>
         <Stack
@@ -27,12 +27,8 @@ const ProfileInfo = () => {
           className="col-12 col-md-11 justify-content-md-between"
         >
           <Form.Group className="col-6 pe-4">
-            <Form.Label className="text-muted mb-0">Email</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="example@neiu.edu"
-              className="roundBorder"
-            />
+            <Form.Label className="text-muted mb-0">Pronoun</Form.Label>
+            <Form.Control type="text" placeholder="" className="roundBorder" />
           </Form.Group>
           <Form.Group className="col-6 ps-4 ms-sm-0">
             <Form.Label className="text-muted mb-0">
@@ -56,9 +52,9 @@ const ProfileInfo = () => {
           gap={5}
           className="col-12 col-md-11 justify-content-center justify-content-md-end"
         >
-          <Button className="col-5 col-md-4 col-lg-3 roundBorder dangerBtn">
+          {/* <Button className="col-5 col-md-4 col-lg-3 roundBorder dangerBtn">
             CANCEL
-          </Button>
+          </Button> */}
           <Button className="col-5 col-md-4 col-lg-3 roundBorder primaryBtn">
             SAVE CHANGES
           </Button>

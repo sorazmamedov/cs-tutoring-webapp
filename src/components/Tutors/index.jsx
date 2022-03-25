@@ -4,7 +4,6 @@ import MainContainer from "../common/mainContainer";
 import TableHeader from "../common/tableHeader";
 import TutorRows from "./tutorRows";
 import CustomPagination from "../common/customPagination";
-import { PlusIcon } from "../common/iconsWithTooltip";
 import { ViewContext } from "../Context/tutorsContext";
 import TitleBar from "../common/titleBar";
 import {
@@ -12,11 +11,13 @@ import {
   ErrorPlaceholder,
   LoadingPlaceholder,
 } from "../common/Placeholders/";
+import useModal from "../../hooks/useModalStates";
 import TemplateModal from "../common/templateModal";
 
 const Tutors = () => {
   const { admin, tutors, loading, error } = useContext(ViewContext);
-
+  const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
+    useModal();
   const header = ["ID", "Name", "Email", "About"];
   const adminHeader = [...header, "Actions"];
 
@@ -33,13 +34,13 @@ const Tutors = () => {
           <Table hover responsive>
             <TableHeader headers={admin ? adminHeader : header} />
             <tbody className="text-muted">
-              <TutorRows />
+              <TutorRows {...{ setShow, setTitle, setModalBody }} />
             </tbody>
           </Table>
           <CustomPagination />
         </>
       )}
-      <TemplateModal viewContext={ViewContext} />
+      <TemplateModal {...{ show, title, ModalBody, reset }} />
     </MainContainer>
   );
 };

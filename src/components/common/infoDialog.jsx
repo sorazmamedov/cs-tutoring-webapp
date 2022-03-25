@@ -1,11 +1,8 @@
-import React, { useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { ViewContext } from "../Context/semesterContext";
 
-const InfoDialog = () => {
-  const { message, reset } = useContext(ViewContext);
+const InfoDialog = ({ message, reset }) => {
   return (
     <>
       <Row className="col-10 col-lg-8 mx-auto m-0 mb-5">

@@ -5,10 +5,9 @@ import SpinnerBtn from "../common/spinnerBtn";
 import { putTutor } from "../../apis/cs-tutoring/tutors";
 import { showErrors } from "../common/errorHelper";
 
-const TutorRows = () => {
+const TutorRows = ({ setShow, setTitle, setModalBody }) => {
   const { admin, tutors } = useContext(ViewContext);
-  const { setTutors, setShow, setTitle, setModalBody } =
-    useContext(ActionsContext);
+  const { setTutors } = useContext(ActionsContext);
   const [saving, setSaving] = useState(null);
 
   const handleEdit = (e) => {
@@ -43,7 +42,6 @@ const TutorRows = () => {
     <tr id={tutor.id} key={tutor.id}>
       <td>{tutor.neiuId}</td>
       <td>{tutor.firstName + " " + tutor.lastName}</td>
-      {/* <td>{tutor.lastName}</td> */}
       <td>{tutor.email}</td>
       <td>
         {tutor.about.length > 30

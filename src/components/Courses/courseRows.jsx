@@ -8,10 +8,9 @@ import { showErrors } from "../common/errorHelper";
 import { putCourse } from "../../apis/cs-tutoring/courses";
 import DeleteCourseDialog from "./deleteCourseDialog";
 
-const CourseRows = () => {
+const CourseRows = ({ reset, setShow, setTitle, setModalBody }) => {
   const { courses, admin } = useContext(ViewContext);
-  const { setShow, setTitle, setModalBody, setCourses } =
-    useContext(ActionsContext);
+  const { setCourses } = useContext(ActionsContext);
   const [editId, setEditId] = useState(null);
   const [saving, setSaving] = useState(null);
 
@@ -27,7 +26,7 @@ const CourseRows = () => {
     e.stopPropagation();
     const id = e.target.getAttribute("courseid");
     setTitle("Are you sure you want to delete?");
-    setModalBody(() => () => DeleteCourseDialog(id));
+    setModalBody(<DeleteCourseDialog {...{ id, reset }} />);
     setShow(true);
   };
 

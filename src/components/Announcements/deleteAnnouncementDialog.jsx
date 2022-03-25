@@ -5,13 +5,14 @@ import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
 import { ViewContext, ActionsContext } from "../Context/announcementContext";
 import { deleteAnnouncement } from "../../apis/cs-tutoring/announcements";
-import { showErrors } from "../common/errorHelper";
+import { getErrors } from "../common/errorHelper";
 
-const DeleteAnnouncementDialog = ({ id }) => {
-  const { reset, announcements } = useContext(ViewContext);
-  const { setAnnouncements, setShow, setTitle, setModalBody } =
-    useContext(ActionsContext);
+const DeleteAnnouncementDialog = ({ id, reset }) => {
+  const { announcements } = useContext(ViewContext);
+  const { setAnnouncements } = useContext(ActionsContext);
   const [deleting, setDeleting] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [success, setSuccess] = useState(false);
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -19,53 +20,76 @@ const DeleteAnnouncementDialog = ({ id }) => {
 
     if (response.status === 200) {
       setAnnouncements([...announcements.filter((item) => item.id !== id)]);
-      setTitle("Success");
-      setModalBody(() => () => (
-        <p className="text-center pb-3">Announcement deleted!</p>
-      ));
-      setShow(true);
+      setSuccess(true);
       setTimeout(() => {
         reset();
       }, 1500);
     } else {
-      reset();
-      showErrors(response, setTitle, setShow, setModalBody);
+      setDeleting(false);
+      setErrors(getErrors(response));
     }
   };
 
   return (
-    <Row className="col-10 col-lg-8 mx-auto m-0 mb-5">
-      <Col xs="6" className="mb-3 mb-sm-auto pe-sm-4">
-        <Button
-          className="col-12 roundBorder dangerBtn"
-          onClick={handleDelete}
-          disabled={deleting}
+    <>
+      {errors &&
+        !errors.subject &&
+        !errors.content &&
+        Object.entries(errors).map(([key, value]) => (
+          <p
+            key={key}
+            className="col-10 col-lg-8 mx-auto text-center text-danger"
+          >
+            {value}
+          </p>
+        ))}
+      {success && (
+        <p
+          className="text-success text-center mt-2"
+          style={
+            success
+              ? { opacity: "1", transition: "opacity 0.6s linear" }
+              : { opacity: 0 }
+          }
         >
-          {deleting && (
-            <>
-              <Spinner
-                as="span"
-                animation="grow"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-              />
-              <span className="visually-hidden">Deleting...</span>
-            </>
-          )}
-          DELETE
-        </Button>
-      </Col>
-      <Col xs="6" className="mb-3 mb-sm-auto ps-sm-4">
-        <Button
-          className="col-12 roundBorder primaryBtn"
-          onClick={reset}
-          disabled={deleting}
-        >
-          CANCEL
-        </Button>
-      </Col>
-    </Row>
+          Announcement deleted!
+        </p>
+      )}
+      {!success && (
+        <Row className="col-10 col-lg-8 mx-auto m-0 mb-5">
+          <Col xs="6" className="mb-3 mb-sm-auto pe-sm-4">
+            <Button
+              className="col-12 roundBorder dangerBtn"
+              onClick={handleDelete}
+              disabled={deleting}
+            >
+              {deleting && (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <span className="visually-hidden">Deleting...</span>
+                </>
+              )}
+              DELETE
+            </Button>
+          </Col>
+          <Col xs="6" className="mb-3 mb-sm-auto ps-sm-4">
+            <Button
+              className="col-12 roundBorder primaryBtn"
+              onClick={reset}
+              disabled={deleting}
+            >
+              CANCEL
+            </Button>
+          </Col>
+        </Row>
+      )}
+    </>
   );
 };
 

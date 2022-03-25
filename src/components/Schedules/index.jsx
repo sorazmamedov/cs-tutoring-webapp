@@ -16,8 +16,11 @@ import TemplateModal from "../common/templateModal";
 import { ViewContext as TutorContext } from "../Context/tutorsContext";
 import { ActionsContext, ViewContext } from "../Context/scheduleContext";
 import { showErrors } from "../common/errorHelper";
+import useModal from "../../hooks/useModalStates";
 
 const Schedules = () => {
+  const { show, title, ModalBody, reset, setModalBody, setTitle, setShow } =
+    useModal();
   const {
     tutors,
     error: tutorsError,
@@ -25,8 +28,7 @@ const Schedules = () => {
   } = useContext(TutorContext);
   const { error, loading, schedules, loadedSemester, admin } =
     useContext(ViewContext);
-  const { setSchedules, setModalBody, setTitle, setShow } =
-    useContext(ActionsContext);
+  const { setSchedules } = useContext(ActionsContext);
   const [newItemId, setNewItemId] = useState(null);
 
   const header = ["Day", "From", "To", "Tutor", "Zoom Link"];
@@ -94,15 +96,20 @@ const Schedules = () => {
               <TableHeader headers={admin ? adminHeader : header} />
               <tbody className="text-muted">
                 <ScheduleRows
-                  newItemId={newItemId}
-                  setNewItemId={setNewItemId}
+                  {...{
+                    newItemId,
+                    setNewItemId,
+                    setTitle,
+                    setModalBody,
+                    setShow,
+                  }}
                 />
               </tbody>
             </Table>
             <CustomPagination />
           </>
         )}
-      <TemplateModal viewContext={ViewContext} />
+      <TemplateModal {...{ show, title, ModalBody, reset }} />
     </MainContainer>
   );
 };

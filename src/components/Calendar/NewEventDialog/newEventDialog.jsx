@@ -11,8 +11,8 @@ import Preview from "./preview";
 import ActionButtons from "./actionButtons";
 import Choose from "./choose";
 
-const NewEventDialog = (event) => {
-  const { reset, loadedSemester } = useContext(ViewContext);
+const NewEventDialog = ({ event, reset }) => {
+  const { loadedSemester } = useContext(ViewContext);
   const { setRefetch } = useContext(ActionsContext);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -147,26 +147,30 @@ const NewEventDialog = (event) => {
         <Row className="mb-5">
           <Col xs="6" className="order-1 border-end border-primary">
             <Choose
-              event={event}
-              loadedSemester={loadedSemester}
-              showDurations={showDurations}
-              setShowDurations={setShowDurations}
-              handleChange={handleChange}
-              showDatePicker={showDatePicker}
-              handleRepeatChange={handleRepeatChange}
-              handleCustomDateChange={handleCustomDateChange}
+              {...{
+                event,
+                loadedSemester,
+                showDurations,
+                setShowDurations,
+                handleChange,
+                showDatePicker,
+                handleRepeatChange,
+                handleCustomDateChange,
+              }}
             />
           </Col>
           <Col xs="6" className="order-2 border-start border-primary">
-            <Preview preview={preview} repeat={repeat} range={range} />
+            <Preview {...{ preview, repeat, range }} />
           </Col>
         </Row>
         <Row className="justify-content-around" sm="2">
           <ActionButtons
-            saving={saving}
-            reset={reset}
-            preview={preview}
-            success={success}
+            {...{
+              saving,
+              reset,
+              preview,
+              success,
+            }}
           />
         </Row>
       </Form>

@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "react-bootstrap/Button";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Header from "./components/header";
@@ -31,7 +32,9 @@ function App() {
                 path="/login"
                 element={
                   <MainContainer>
-                    <h3>Login Page</h3>
+                    <Button className="btn roundBorder primaryBtn">
+                      Sing In With Google
+                    </Button>
                   </MainContainer>
                 }
               />

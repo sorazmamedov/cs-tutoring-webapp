@@ -8,10 +8,10 @@ import { ActionsContext, ViewContext } from "../Context/scheduleContext";
 import { postSchedule, putSchedule } from "../../apis/cs-tutoring/schedules";
 import { showErrors } from "../common/errorHelper";
 
-const ScheduleRows = ({ newItemId, setNewItemId }) => {
+const ScheduleRows = ({ newItemId, setNewItemId, setTitle, setModalBody, setShow }) => {
   const { tutors } = useContext(TutorContext);
   const { schedules, admin } = useContext(ViewContext);
-  const { setSchedules, setTitle, setModalBody, setShow } =
+  const { setSchedules } =
     useContext(ActionsContext);
   const [saving, setSaving] = useState(null);
   const [editId, setEditId] = useState(newItemId);

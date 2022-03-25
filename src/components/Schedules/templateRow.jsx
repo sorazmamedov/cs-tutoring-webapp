@@ -13,8 +13,7 @@ const TemplateRow = ({ admin, schedule, tutors, handleSave, handleCancel }) => {
     "Saturday",
     "Sunday",
   ];
-  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  const hours = [...numbers.map((h) => `${h}:00`)];
+
   return (
     <tr>
       <td className="px-0">

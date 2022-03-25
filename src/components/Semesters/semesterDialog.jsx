@@ -12,8 +12,8 @@ import { postSemester, putSemester } from "../../apis/cs-tutoring/semesters";
 import SpinnerBtn from "../common/spinnerBtn";
 import { getErrors } from "../common/errorHelper";
 
-const SemesterDialog = () => {
-  const { semesters, reset, currentSemester, edit } = useContext(ViewContext);
+const SemesterDialog = ({ edit, reset }) => {
+  const { semesters, currentSemester } = useContext(ViewContext);
   const { setSemesters } = useContext(ActionsContext);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});

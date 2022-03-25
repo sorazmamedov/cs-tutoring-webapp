@@ -15,21 +15,16 @@ import { PlusIcon } from "../common/iconsWithTooltip";
 import { semesterValidator } from "../../utils/validator";
 import { putSemester } from "../../apis/cs-tutoring/semesters";
 import InfoDialog from "../common/infoDialog";
+import useModal from "../../hooks/useModalStates";
 
 const Semesters = () => {
+  const { show, title, ModalBody, reset, setModalBody, setTitle, setShow } =
+    useModal();
   const [changingStatus, setChangingStatus] = useState(false);
   const { semesters, currentSemester, loading, error, loadedSemester } =
     useContext(ViewContext);
-  const {
-    setTitle,
-    setSemesters,
-    setModalBody,
-    setShow,
-    setCurrentSemester,
-    setLoadedSemester,
-    setEdit,
-    setMessage,
-  } = useContext(ActionsContext);
+  const { setSemesters, setCurrentSemester, setLoadedSemester } =
+    useContext(ActionsContext);
 
   const handleYearChange = (selected) => {
     const year = parseInt(selected);
@@ -84,9 +79,8 @@ const Semesters = () => {
           } else if (response.data.error) {
             message = response.data.error;
           }
-          setMessage(message);
           setChangingStatus(false);
-          setModalBody(() => InfoDialog);
+          setModalBody(<InfoDialog {...{ message, reset }} />);
           setShow(true);
         }
       }
@@ -97,14 +91,14 @@ const Semesters = () => {
 
   const handleAddSemester = () => {
     setTitle("Add New Semester");
-    setModalBody(() => SemesterDialog);
+    setModalBody(<SemesterDialog {...{ reset }} />);
     setShow(true);
   };
 
   const handleEditSemester = () => {
+    const edit = true;
     setTitle("Edit Semester");
-    setEdit(true);
-    setModalBody(() => SemesterDialog);
+    setModalBody(<SemesterDialog {...{ edit, reset }} />);
     setShow(true);
   };
 
@@ -122,6 +116,7 @@ const Semesters = () => {
         setCurrentSemester({ ...active });
       }
     }
+    // eslint-disable-next-line
   }, [semesters]);
 
   return (
@@ -179,12 +174,14 @@ const Semesters = () => {
             />
           </div>
           <ActionsDropDown
-            handleAddSemester={handleAddSemester}
-            handleEditSemester={handleEditSemester}
+            {...{
+              handleAddSemester,
+              handleEditSemester,
+            }}
           />
         </TitleBar>
       )}
-      <TemplateModal viewContext={ViewContext} />
+      <TemplateModal {...{ show, title, ModalBody, reset }} />
     </MainContainer>
   );
 };

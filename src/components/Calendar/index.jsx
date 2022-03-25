@@ -1,26 +1,27 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import MainContainer from "../common/mainContainer";
 import TitleBar from "../common/titleBar";
 import BigCalendar from "./bigCalendar";
 import TemplateModal from "../common/templateModal";
 import NewEventDialog from "./NewEventDialog";
 import DeleteEventDialog from "./DeleteEventDialog";
-import { ActionsContext, ViewContext } from "../Context/calendarContext";
+import { ViewContext } from "../Context/calendarContext";
+import useModal from "../../hooks/useModalStates";
 
 const Calendar = () => {
-  const { loadedSemester, admin, events } = useContext(ViewContext);
-  const { setShow, setTitle, setModalBody } = useContext(ActionsContext);
+  const { events } = useContext(ViewContext);
+  const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
+    useModal();
 
   const handleSelectSlot = (event) => {
     setTitle("Appointment Slots");
-    setModalBody(() => () => NewEventDialog(event));
+    setModalBody(<NewEventDialog {...{ event, reset }} />);
     setShow(true);
   };
 
   const handleSelectEvent = (event) => {
-    console.log("Selected....", event);
     setTitle("Delete Event");
-    setModalBody(() => () => DeleteEventDialog(event));
+    setModalBody(<DeleteEventDialog {...{ event, reset }} />);
     setShow(true);
   };
 
@@ -28,11 +29,13 @@ const Calendar = () => {
     <MainContainer>
       <TitleBar title="My Calendar" />
       <BigCalendar
-        events={events}
-        handleSelectSlot={handleSelectSlot}
-        handleSelectEvent={handleSelectEvent}
+        {...{
+          events,
+          handleSelectSlot,
+          handleSelectEvent,
+        }}
       />
-      <TemplateModal viewContext={ViewContext} />
+      <TemplateModal {...{ show, title, ModalBody, reset }} />
     </MainContainer>
   );
 };

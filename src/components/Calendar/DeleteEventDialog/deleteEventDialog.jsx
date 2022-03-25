@@ -9,8 +9,8 @@ import { ActionsContext, ViewContext } from "../../Context/calendarContext";
 import { SwitchIcon } from "../../common/iconsWithTooltip";
 import { deleteCalendar } from "../../../apis/cs-tutoring/calendars";
 
-const DeleteEventDialog = (event) => {
-  const { reset, events } = useContext(ViewContext);
+const DeleteEventDialog = ({ event, reset }) => {
+  const { events } = useContext(ViewContext);
   const { setEvents } = useContext(ActionsContext);
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -27,7 +27,6 @@ const DeleteEventDialog = (event) => {
 
     const response = await deleteCalendar(query);
     if (response.status === 200) {
-      console.log(response);
       const temp = deleteAll
         ? events.filter(
             (item) =>
@@ -101,7 +100,7 @@ const DeleteEventDialog = (event) => {
           )}
         </Row>
         <Row className="justify-content-around" sm="2">
-          <ActionButtons saving={saving} reset={reset} success={success} />
+          <ActionButtons {...{ saving, reset, success }} />
         </Row>
       </Form>
     </>

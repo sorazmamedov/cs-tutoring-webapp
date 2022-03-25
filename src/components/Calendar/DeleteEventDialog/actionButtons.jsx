@@ -39,7 +39,7 @@ const ActionButtons = ({ saving, reset, success }) => {
       <Col lg="4" className="order-1 order-sm-2 mb-3 mb-sm-auto ps-sm-4">
         <Button
           className="col-12 roundBorder primaryBtn"
-          onClick={() => reset()}
+          onClick={reset}
           disabled={saving}
         >
           CANCEL

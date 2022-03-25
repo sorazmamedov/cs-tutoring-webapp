@@ -7,28 +7,30 @@ import TemplateModal from "../common/templateModal";
 import CustomPagination from "../common/customPagination";
 import AnnouncementDialog from "./announcementDialog";
 import DeleteAnnouncementDialog from "./deleteAnnouncementDialog";
-import { ViewContext, ActionsContext } from "../Context/announcementContext";
+import { ViewContext } from "../Context/announcementContext";
 import TitleBar from "../common/titleBar";
 import {
   NoDataPlaceholder,
   ErrorPlaceholder,
   LoadingPlaceholder,
 } from "../common/Placeholders/";
+import useModal from "../../hooks/useModalStates";
 
 const Announcements = () => {
-  const { setShow, setTitle, setModalBody } = useContext(ActionsContext);
+  const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
+    useModal();
   const { announcements, admin, error, loading } = useContext(ViewContext);
 
   const handleCreateAnnouncement = () => {
     setTitle("New Announcement");
-    setModalBody(() => AnnouncementDialog);
+    setModalBody(<AnnouncementDialog {...{ reset }} />);
     setShow(true);
   };
 
   const handleShowAnnouncement = (e) => {
     const id = e.currentTarget.id;
     setTitle("Announcement");
-    setModalBody(() => () => AnnouncementDialog({ id }));
+    setModalBody(<AnnouncementDialog {...{ id, reset }} />);
     setShow(true);
   };
 
@@ -36,7 +38,7 @@ const Announcements = () => {
     e.stopPropagation();
     const id = e.target.id;
     setTitle("Are you sure you want to delete?");
-    setModalBody(() => () => DeleteAnnouncementDialog({ id }));
+    setModalBody(<DeleteAnnouncementDialog {...{ id, reset }} />);
     setShow(true);
   };
 
@@ -98,7 +100,7 @@ const Announcements = () => {
           <CustomPagination />
         </>
       )}
-      <TemplateModal viewContext={ViewContext} />
+      <TemplateModal {...{ show, title, ModalBody, reset }} />
     </MainContainer>
   );
 };

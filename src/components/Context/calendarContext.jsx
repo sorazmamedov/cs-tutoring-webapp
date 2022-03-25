@@ -10,16 +10,8 @@ const CalendarDataProvider = ({ children }) => {
   const { loadedSemester, admin } = useContext(GlobalViewContext);
   const [data, error, loading, axiosFetch] = useAxios();
   const [events, setEvents] = useState([]);
-  const [show, setShow] = useState(false);
-  const [modalBody, setModalBody] = useState("");
-  const [title, setTitle] = useState("");
   const [current, setCurrent] = useState("");
   const [refetch, setRefetch] = useState(false);
-  const reset = () => {
-    setShow(false);
-    setTitle("");
-    setModalBody("");
-  };
 
   const fetchCalendar = () => {
     axiosFetch({
@@ -55,22 +47,15 @@ const CalendarDataProvider = ({ children }) => {
   return (
     <ViewContext.Provider
       value={{
-        show,
-        title,
-        modalBody,
         events,
         error,
         loading,
         loadedSemester,
         admin,
-        reset,
       }}
     >
       <ActionsContext.Provider
         value={{
-          setShow,
-          setTitle,
-          setModalBody,
           setEvents,
           setRefetch,
         }}

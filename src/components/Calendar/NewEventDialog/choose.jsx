@@ -34,19 +34,17 @@ const Choose = (props) => {
         </Form.Label>
       </Row>
       <Row className="mb-4">
-        <SlotSelector
-          showDurations={showDurations}
-          setShowDurations={setShowDurations}
-          handleChange={handleChange}
-        />
+        <SlotSelector {...{ showDurations, setShowDurations, handleChange }} />
       </Row>
       <Row className="mb-4">
         <RepeatDateSelector
-          event={event}
-          loadedSemester={loadedSemester}
-          showDatePicker={showDatePicker}
-          handleRepeatChange={handleRepeatChange}
-          handleCustomDateChange={handleCustomDateChange}
+          {...{
+            event,
+            loadedSemester,
+            showDatePicker,
+            handleRepeatChange,
+            handleCustomDateChange,
+          }}
         />
       </Row>
     </>

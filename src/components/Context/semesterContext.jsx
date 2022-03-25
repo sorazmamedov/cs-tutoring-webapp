@@ -17,22 +17,7 @@ const SemesterDataProvider = ({ children }) => {
 
   //Semesters
   const [semesters, setSemesters] = useState([]);
-
-  //Modal
-  const [show, setShow] = useState(false);
-  const [title, setTitle] = useState("");
-  const [modalBody, setModalBody] = useState("");
   const [currentSemester, setCurrentSemester] = useState({});
-  const [edit, setEdit] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const reset = () => {
-    setShow(false);
-    setModalBody("");
-    setTitle("");
-    setEdit(false);
-    setMessage("");
-  };
 
   const fetchSemesters = () => {
     axiosFetch({
@@ -56,29 +41,18 @@ const SemesterDataProvider = ({ children }) => {
   return (
     <ViewContext.Provider
       value={{
-        show,
-        title,
-        modalBody,
         semesters,
         currentSemester,
-        edit,
-        reset,
         loadedSemester,
         error,
         loading,
-        message,
       }}
     >
       <ActionsContext.Provider
         value={{
-          setShow,
-          setTitle,
-          setModalBody,
           setCurrentSemester,
           setLoadedSemester,
-          setEdit,
           setSemesters,
-          setMessage,
         }}
       >
         {children}

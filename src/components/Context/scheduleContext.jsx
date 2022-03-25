@@ -10,17 +10,7 @@ const ScheduleDataProvider = ({ children }) => {
   const { loadedSemester, admin } = useContext(GlobalViewContext);
   const [data, error, loading, axiosFetch] = useAxios();
   const [schedules, setSchedules] = useState([]);
-
-  const [show, setShow] = useState(false);
-  const [modalBody, setModalBody] = useState("");
-  const [title, setTitle] = useState("");
   const [current, setCurrent] = useState("");
-
-  const reset = () => {
-    setShow(false);
-    setTitle("");
-    setModalBody("");
-  };
 
   const fetchSchedules = () => {
     axiosFetch({
@@ -49,22 +39,15 @@ const ScheduleDataProvider = ({ children }) => {
   return (
     <ViewContext.Provider
       value={{
-        show,
-        title,
-        modalBody,
         schedules,
         loadedSemester,
         admin,
         error,
         loading,
-        reset,
       }}
     >
       <ActionsContext.Provider
         value={{
-          setShow,
-          setTitle,
-          setModalBody,
           setSchedules,
         }}
       >

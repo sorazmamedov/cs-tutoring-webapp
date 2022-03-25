@@ -9,8 +9,8 @@ import { courseValidator } from "../../utils/validator";
 import Id from "../../utils/Id";
 import { postCourse } from "../../apis/cs-tutoring/courses";
 
-const CourseDialog = () => {
-  const { reset, courses, loadedSemester } = useContext(ViewContext);
+const CourseDialog = ({ reset }) => {
+  const { courses, loadedSemester } = useContext(ViewContext);
   const { setCourses } = useContext(ActionsContext);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
@@ -80,6 +80,18 @@ const CourseDialog = () => {
           {errors.validationError}
         </p>
       )}
+      {success && (
+        <p
+          className="text-success text-center mt-2"
+          style={
+            success
+              ? { opacity: "1", transition: "opacity 0.6s linear" }
+              : { opacity: 0 }
+          }
+        >
+          Successfully uploaded!
+        </p>
+      )}
       <Form
         noValidate
         validated={validated}
@@ -102,37 +114,29 @@ const CourseDialog = () => {
             </Form.Control.Feedback>
           </Col>
         </Row>
-        <Row className="m-5">
-          <Col xs="8" md="6" className="mt-2 mx-auto">
-            {!uploading ? (
-              <Button type="submit" className="col-12 roundBorder primaryBtn">
-                UPLOAD
-              </Button>
-            ) : (
-              <Button className="col-12 roundBorder" disabled>
-                <Spinner
-                  as="span"
-                  animation="grow"
-                  size="sm"
-                  role="upload"
-                  aria-hidden="true"
-                />
-                <span className="visually-hidden">Uploading...</span>
-                Uploading...
-              </Button>
-            )}
-            <p
-              className="text-success text-center mt-2"
-              style={
-                success
-                  ? { opacity: "1", transition: "opacity 0.6s linear" }
-                  : { opacity: 0 }
-              }
-            >
-              Successfully uploaded!
-            </p>
-          </Col>
-        </Row>
+        {!success && (
+          <Row className="m-5">
+            <Col xs="8" md="6" className="mt-2 mx-auto">
+              {!uploading ? (
+                <Button type="submit" className="col-12 roundBorder primaryBtn">
+                  UPLOAD
+                </Button>
+              ) : (
+                <Button className="col-12 roundBorder" disabled>
+                  <Spinner
+                    as="span"
+                    animation="grow"
+                    size="sm"
+                    role="upload"
+                    aria-hidden="true"
+                  />
+                  <span className="visually-hidden">Uploading...</span>
+                  Uploading...
+                </Button>
+              )}
+            </Col>
+          </Row>
+        )}
       </Form>
     </>
   );

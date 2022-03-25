@@ -1,4 +1,4 @@
-export function getErrorModalBody(errorData) {
+export function ErrorModalBody({ errorData }) {
   return (
     <div className="col-10 col-lg-8 mx-auto mb-5 text-center">
       {Object.entries(errorData).map(([key, value]) => {
@@ -35,7 +35,7 @@ export function showErrors(err, setTitle, setShow, setModalBody) {
     setTitle("Unexpected Error");
   }
 
-  setModalBody(() => () => getErrorModalBody(errorData));
+  setModalBody(<ErrorModalBody {...{ errorData }} />);
   setShow(true);
 }
 
