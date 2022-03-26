@@ -1,5 +1,3 @@
-import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
 import { EditIcon, SwitchIcon } from "../common/iconsWithTooltip";
 import SpinnerBtn from "../common/spinnerBtn";
 

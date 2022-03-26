@@ -22,7 +22,7 @@ const DataProvider = ({ children }) => {
 
   useEffect(() => {
     fetchActiveSemester();
-    console.log("[Fetching Active");
+    console.log("[Fetching Active]");
     // eslint-disable-next-line
   }, []);
 

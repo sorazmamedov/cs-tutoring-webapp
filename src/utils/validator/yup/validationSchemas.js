@@ -87,7 +87,7 @@ export default Object.freeze({
   endDate: date()
     .min(ref("startDate"), messages.dateError)
     .required()
-    .typeError("${path} " + messages.isRequired),
+    .typeError("${path}" + messages.isRequired),
 
   start: date()
     .min(

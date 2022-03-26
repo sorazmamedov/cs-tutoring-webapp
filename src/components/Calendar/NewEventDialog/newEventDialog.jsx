@@ -113,6 +113,7 @@ const NewEventDialog = ({ event, reset }) => {
 
   useEffect(() => {
     handleChange();
+    // eslint-disable-next-line
   }, [event]);
 
   return (
