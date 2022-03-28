@@ -1,3 +1,5 @@
+import React from 'react'
+
 export function ErrorModalBody({ errorData }) {
   return (
     <div className="col-10 col-lg-8 mx-auto mb-5 text-center">

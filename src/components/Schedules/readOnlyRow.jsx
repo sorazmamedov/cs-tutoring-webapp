@@ -1,3 +1,4 @@
+import React from "react";
 import { EditIcon, SwitchIcon } from "../common/iconsWithTooltip";
 import SpinnerBtn from "../common/spinnerBtn";
 

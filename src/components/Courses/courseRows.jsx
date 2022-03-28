@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { isEqual } from "../../utils/isEqual";
 import { courseValidator } from "../../utils/validator";
 import { ActionsContext, ViewContext } from "../Context/courseContext";

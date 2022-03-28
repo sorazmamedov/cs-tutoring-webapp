@@ -1,3 +1,5 @@
+import React from "react";
+
 const TableHeader = ({ headers }) => {
   return (
     <thead className="text-muted fw-bolder border-white">

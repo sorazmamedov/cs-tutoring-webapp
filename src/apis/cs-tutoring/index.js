@@ -1,5 +1,4 @@
 import axios from "axios";
-
 const BASE_URL = "http://localhost:4000/api";
 
 const axiosInstance = axios.create({
@@ -7,6 +6,7 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
+    withCredentials: true,
   },
 });
 

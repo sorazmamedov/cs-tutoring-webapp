@@ -1,3 +1,4 @@
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 
 const TemplateModal = ({ title, show, ModalBody, reset }) => {
