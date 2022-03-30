@@ -5,7 +5,7 @@ import BigCalendar from "./bigCalendar";
 import TemplateModal from "../common/templateModal";
 import NewEventDialog from "./NewEventDialog";
 import DeleteEventDialog from "./DeleteEventDialog";
-import { ViewContext } from "../Context/calendarContext";
+import { ViewContext } from "../../Context/calendarContext";
 import useModal from "../../hooks/useModalStates";
 
 const Calendar = () => {

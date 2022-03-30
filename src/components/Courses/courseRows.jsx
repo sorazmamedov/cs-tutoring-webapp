@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { isEqual } from "../../utils/isEqual";
 import { courseValidator } from "../../utils/validator";
-import { ActionsContext, ViewContext } from "../Context/courseContext";
+import { ActionsContext, ViewContext } from "../../Context/courseContext";
 import EditableRow from "./editableRow";
 import ReadOnlyRow from "./readOnlyRow";
 import { showErrors } from "../common/errorHelper";

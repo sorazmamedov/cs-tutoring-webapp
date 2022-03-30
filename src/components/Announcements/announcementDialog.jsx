@@ -4,7 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-import { ViewContext, ActionsContext } from "../Context/announcementContext";
+import { ViewContext, ActionsContext } from "../../Context/announcementContext";
 import { isEqual } from "../../utils/isEqual";
 import Id from "../../utils/Id";
 import { announcementValidator } from "../../utils/validator";
@@ -14,7 +14,7 @@ import {
   putAnnouncement,
 } from "../../apis/cs-tutoring/announcements";
 
-const AnnouncementDialog = ({ id, reset }) => {
+const AnnouncementDialog = ({ id, reset, isAdmin }) => {
   const { announcements, loadedSemester } = useContext(ViewContext);
   const { setAnnouncements } = useContext(ActionsContext);
   const [validated, setValidated] = useState(false);
@@ -106,7 +106,7 @@ const AnnouncementDialog = ({ id, reset }) => {
         noValidate
         validated={validated}
         onSubmit={handleSubmit}
-        className="col-10 col-lg-8 mx-auto"
+        className="col-10 col-lg-8 mx-auto mb-5"
       >
         <Row className="mb-2">
           <Col xs="12">
@@ -118,6 +118,7 @@ const AnnouncementDialog = ({ id, reset }) => {
               className="roundBorder"
               defaultValue={current?.subject}
               isInvalid={errors.subject}
+              readOnly={!isAdmin}
               required
             />
             <Form.Control.Feedback type="invalid">
@@ -135,6 +136,7 @@ const AnnouncementDialog = ({ id, reset }) => {
               className="roundBorder"
               defaultValue={current?.content}
               isInvalid={errors.content}
+              readOnly={!isAdmin}
               required
             />
             <Form.Control.Feedback type="invalid">
@@ -142,52 +144,54 @@ const AnnouncementDialog = ({ id, reset }) => {
             </Form.Control.Feedback>
           </Col>
         </Row>
-        <Row className="mb-5" sm="2">
-          <Col sm="6" className="order-2 order-sm-1 mb-3 mb-sm-auto pe-sm-4">
-            <Button
-              className="col-12 roundBorder dangerBtn"
-              onClick={() => setPublish(false)}
-              type="submit"
-              disabled={saving}
-            >
-              {saving && (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="grow"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  <span className="visually-hidden">Saving...</span>
-                </>
-              )}
-              DRAFT
-            </Button>
-          </Col>
-          <Col sm="6" className="order-1 order-sm-2 mb-3 mb-sm-auto ps-sm-4">
-            <Button
-              className="col-12 roundBorder primaryBtn"
-              onClick={() => setPublish(true)}
-              type="submit"
-              disabled={saving}
-            >
-              {saving && (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="grow"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  <span className="visually-hidden">Saving...</span>
-                </>
-              )}
-              PUBLISH
-            </Button>
-          </Col>
-        </Row>
+        {isAdmin && (
+          <Row className="mb-5" sm="2">
+            <Col sm="6" className="order-2 order-sm-1 mb-3 mb-sm-auto pe-sm-4">
+              <Button
+                className="col-12 roundBorder dangerBtn"
+                onClick={() => setPublish(false)}
+                type="submit"
+                disabled={saving}
+              >
+                {saving && (
+                  <>
+                    <Spinner
+                      as="span"
+                      animation="grow"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                    <span className="visually-hidden">Saving...</span>
+                  </>
+                )}
+                DRAFT
+              </Button>
+            </Col>
+            <Col sm="6" className="order-1 order-sm-2 mb-3 mb-sm-auto ps-sm-4">
+              <Button
+                className="col-12 roundBorder primaryBtn"
+                onClick={() => setPublish(true)}
+                type="submit"
+                disabled={saving}
+              >
+                {saving && (
+                  <>
+                    <Spinner
+                      as="span"
+                      animation="grow"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                    <span className="visually-hidden">Saving...</span>
+                  </>
+                )}
+                PUBLISH
+              </Button>
+            </Col>
+          </Row>
+        )}
       </Form>
     </>
   );

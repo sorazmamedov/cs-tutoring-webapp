@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { ActionsContext, ViewContext } from "../Context/tutorsContext";
+import { ActionsContext, ViewContext } from "../../Context/tutorsContext";
 import { EditIcon, SwitchIcon } from "../common/iconsWithTooltip";
 import SpinnerBtn from "../common/spinnerBtn";
 import { putTutor } from "../../apis/cs-tutoring/tutors";

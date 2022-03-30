@@ -4,7 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-import { ActionsContext, ViewContext } from "../Context/courseContext";
+import { ActionsContext, ViewContext } from "../../Context/courseContext";
 import { courseValidator } from "../../utils/validator";
 import Id from "../../utils/Id";
 import { postCourse } from "../../apis/cs-tutoring/courses";

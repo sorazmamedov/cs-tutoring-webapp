@@ -4,7 +4,7 @@ import MainContainer from "../common/mainContainer";
 import TableHeader from "../common/tableHeader";
 import TutorRows from "./tutorRows";
 import CustomPagination from "../common/customPagination";
-import { ViewContext } from "../Context/tutorsContext";
+import { ViewContext } from "../../Context/tutorsContext";
 import TitleBar from "../common/titleBar";
 import {
   NoDataPlaceholder,

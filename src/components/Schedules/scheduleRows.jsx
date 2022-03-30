@@ -3,16 +3,21 @@ import { scheduleValidator } from "../../utils/validator";
 import { isEqual } from "../../utils/isEqual";
 import ReadOnlyRow from "./readOnlyRow";
 import EditableRow from "./editableRow";
-import { ViewContext as TutorContext } from "../Context/tutorsContext";
-import { ActionsContext, ViewContext } from "../Context/scheduleContext";
+import { ViewContext as TutorContext } from "../../Context/tutorsContext";
+import { ActionsContext, ViewContext } from "../../Context/scheduleContext";
 import { postSchedule, putSchedule } from "../../apis/cs-tutoring/schedules";
 import { showErrors } from "../common/errorHelper";
 
-const ScheduleRows = ({ newItemId, setNewItemId, setTitle, setModalBody, setShow }) => {
+const ScheduleRows = ({
+  newItemId,
+  setNewItemId,
+  setTitle,
+  setModalBody,
+  setShow,
+}) => {
   const { tutors } = useContext(TutorContext);
-  const { schedules, admin } = useContext(ViewContext);
-  const { setSchedules } =
-    useContext(ActionsContext);
+  const { schedules, auth, ROLES } = useContext(ViewContext);
+  const { setSchedules } = useContext(ActionsContext);
   const [saving, setSaving] = useState(null);
   const [editId, setEditId] = useState(newItemId);
 
@@ -104,36 +109,33 @@ const ScheduleRows = ({ newItemId, setNewItemId, setTitle, setModalBody, setShow
     }
   }, [newItemId]);
 
-  return (
-    <>
-      {[...schedules]
-        .sort(compare)
-        .map((schedule) =>
-          editId === schedule.id ? (
-            <EditableRow
-              key={schedule.id}
-              saving={saving}
-              admin={admin}
-              tutors={tutors.filter((tutor) => tutor.isActive)}
-              schedule={schedule}
-              schedules={schedules}
-              handleSave={handleSave}
-              handleCancel={handleCancel}
-            />
-          ) : (
-            <ReadOnlyRow
-              key={schedule.id}
-              saving={saving}
-              schedule={schedule}
-              admin={admin}
-              tutor={tutors.find((tutor) => tutor.id === schedule.tutorId)}
-              handleEdit={handleEdit}
-              handleToggle={handleToggle}
-            />
-          )
-        )}
-    </>
-  );
+  return [...schedules]
+    .sort(compare)
+    .map((schedule) =>
+      editId === schedule.id ? (
+        <EditableRow
+          key={schedule.id}
+          saving={saving}
+          admin={auth?.user?.roles.includes(ROLES.Admin)}
+          tutors={tutors.filter((tutor) => tutor.isActive)}
+          schedule={schedule}
+          schedules={schedules}
+          handleSave={handleSave}
+          handleCancel={handleCancel}
+        />
+      ) : (
+        <ReadOnlyRow
+          key={schedule.id}
+          saving={saving}
+          schedule={schedule}
+          admin={auth?.user?.roles.includes(ROLES.Admin)}
+          isLogged={auth?.user}
+          tutor={tutors.find((tutor) => tutor.id === schedule.tutorId)}
+          handleEdit={handleEdit}
+          handleToggle={handleToggle}
+        />
+      )
+    );
 };
 
 export default ScheduleRows;

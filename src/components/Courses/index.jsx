@@ -8,7 +8,7 @@ import CustomPagination from "../common/customPagination";
 import TemplateModal from "../common/templateModal";
 import CourseDialog from "./courseDialog";
 import TitleBar from "../common/titleBar";
-import { ViewContext } from "../Context/courseContext";
+import { ViewContext } from "../../Context/courseContext";
 import useModal from "../../hooks/useModalStates";
 import {
   NoDataPlaceholder,

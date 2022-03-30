@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Placeholder from "react-bootstrap/Placeholder";
-import { ViewContext, ActionsContext } from "../Context/semesterContext";
+import { ViewContext, ActionsContext } from "../../Context/semesterContext";
 import MainContainer from "../common/mainContainer";
 import TitleBar from "../common/titleBar";
 import YearSelector from "./yearSelector";

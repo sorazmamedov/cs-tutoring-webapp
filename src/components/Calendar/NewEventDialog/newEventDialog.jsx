@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { format, differenceInMinutes, addWeeks, addMinutes } from "date-fns";
-import { ViewContext, ActionsContext } from "../../Context/calendarContext";
+import { ViewContext, ActionsContext } from "../../../Context/calendarContext";
 import { eventValidator } from "../../../utils/validator";
 import { getErrors } from "../../common/errorHelper";
 import { postCalendar } from "../../../apis/cs-tutoring/calendars";

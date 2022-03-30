@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { ViewContext, ActionsContext } from "../Context/courseContext";
+import { ViewContext, ActionsContext } from "../../Context/courseContext";
 import { deleteCourse } from "../../apis/cs-tutoring/courses";
 import { getErrors } from "../common/errorHelper";
 import SpinnerBtn from "../common/spinnerBtn";

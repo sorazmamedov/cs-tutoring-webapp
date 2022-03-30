@@ -1,10 +1,10 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
 
-const TemplateModal = ({ title, show, ModalBody, reset }) => {
+const TemplateModal = ({ title, show, ModalBody, reset, size = "lg" }) => {
   return (
     <Modal
-      size="lg"
+      size={size}
       show={show}
       onHide={reset}
       backdrop="static"

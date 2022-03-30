@@ -5,31 +5,37 @@ import Announcements from "./Announcements";
 import Courses from "./Courses";
 import Tutors from "./Tutors";
 import Calendar from "./Calendar";
-import SemesterDataProvider from "./Context/semesterContext";
-import AnnouncementDataProvider from "./Context/announcementContext";
-import CourseDataProvider from "./Context/courseContext";
-import TutorDataProvider from "./Context/tutorsContext";
-import ScheduleDataProvider from "./Context/scheduleContext";
-import CalendarDataProvider from "./Context/calendarContext";
+import SemesterDataProvider from "../Context/semesterContext";
+import AnnouncementDataProvider from "../Context/announcementContext";
+import CourseDataProvider from "../Context/courseContext";
+import TutorDataProvider from "../Context/tutorsContext";
+import ScheduleDataProvider from "../Context/scheduleContext";
+import CalendarDataProvider from "../Context/calendarContext";
+import useAuth from "../hooks/useAuth";
 
 const Home = () => {
+  const { auth, ROLES } = useAuth();
   return (
     <>
-      <SemesterDataProvider>
-        <Semesters />
-      </SemesterDataProvider>
+      {auth?.user?.roles.includes(ROLES.Admin) && (
+        <SemesterDataProvider>
+          <Semesters />
+        </SemesterDataProvider>
+      )}
       <TutorDataProvider>
         <ScheduleDataProvider>
           <Schedules />
         </ScheduleDataProvider>
-        <Tutors />
+        {auth?.user?.roles.includes(ROLES.Admin) && <Tutors />}
       </TutorDataProvider>
       <AnnouncementDataProvider>
         <Announcements />
       </AnnouncementDataProvider>
-      <CourseDataProvider>
-        <Courses />
-      </CourseDataProvider>
+      {auth?.user?.roles.includes(ROLES.Admin) && (
+        <CourseDataProvider>
+          <Courses />
+        </CourseDataProvider>
+      )}
       <CalendarDataProvider>
         <Calendar />
       </CalendarDataProvider>

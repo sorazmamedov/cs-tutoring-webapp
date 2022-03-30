@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { GlobalViewContext } from "../Context/dataContext";
+import { GlobalViewContext } from "../../Context/dataContext";
 
 const TitleBar = ({ className, title, icon, children, ...props }) => {
   const { loadedSemester } = useContext(GlobalViewContext);

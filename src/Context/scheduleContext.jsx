@@ -1,53 +1,57 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import useAxios from "../../hooks/useAxios";
-import axios from "../../apis/cs-tutoring";
+import useAxios from "../hooks/useAxios";
+import axios from "../apis/cs-tutoring";
 import { GlobalViewContext } from "./dataContext";
+import useAuth from "../hooks/useAuth";
 
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
-const AnnouncementDataProvider = ({ children }) => {
-  const { loadedSemester, admin } = useContext(GlobalViewContext);
+const ScheduleDataProvider = ({ children }) => {
+  const { auth, ROLES } = useAuth();
+  const { loadedSemester } = useContext(GlobalViewContext);
   const [data, error, loading, axiosFetch] = useAxios();
-  const [announcements, setAnnouncements] = useState([]);
+  const [schedules, setSchedules] = useState([]);
   const [current, setCurrent] = useState("");
 
-  const fetchAnnouncements = () => {
+  const fetchSchedules = () => {
     axiosFetch({
       axiosInstance: axios,
       method: "GET",
-      url: "/announcements",
-      requestConfig: { params: { semesterId: loadedSemester.id } },
+      url: "/schedules",
+      requestConfig: {
+        params: { semesterId: loadedSemester.id },
+      },
     });
   };
 
   useEffect(() => {
     if (loadedSemester.id && current !== loadedSemester.id) {
       setCurrent(loadedSemester.id);
-      fetchAnnouncements();
-      console.log("[Fetching announcements]");
+      fetchSchedules();
+      console.log("[Fetching schedules]");
     }
-
     // eslint-disable-next-line
   }, [loadedSemester]);
 
   useEffect(() => {
-    setAnnouncements([...data]);
+    setSchedules([...data]);
   }, [data]);
 
   return (
     <ViewContext.Provider
       value={{
-        announcements,
+        schedules,
         loadedSemester,
-        admin,
+        auth,
+        ROLES,
         error,
         loading,
       }}
     >
       <ActionsContext.Provider
         value={{
-          setAnnouncements,
+          setSchedules,
         }}
       >
         {children}
@@ -56,5 +60,5 @@ const AnnouncementDataProvider = ({ children }) => {
   );
 };
 
-export default AnnouncementDataProvider;
+export default ScheduleDataProvider;
 export { ViewContext, ActionsContext };

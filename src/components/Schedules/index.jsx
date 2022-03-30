@@ -13,8 +13,8 @@ import {
   LoadingPlaceholder,
 } from "../common/Placeholders/";
 import TemplateModal from "../common/templateModal";
-import { ViewContext as TutorContext } from "../Context/tutorsContext";
-import { ActionsContext, ViewContext } from "../Context/scheduleContext";
+import { ViewContext as TutorContext } from "../../Context/tutorsContext";
+import { ActionsContext, ViewContext } from "../../Context/scheduleContext";
 import { showErrors } from "../common/errorHelper";
 import useModal from "../../hooks/useModalStates";
 
@@ -26,14 +26,16 @@ const Schedules = () => {
     error: tutorsError,
     loading: tutorsLoading,
   } = useContext(TutorContext);
-  const { error, loading, schedules, loadedSemester, admin } =
+  const { error, loading, schedules, loadedSemester, auth, ROLES } =
     useContext(ViewContext);
   const { setSchedules } = useContext(ActionsContext);
   const [newItemId, setNewItemId] = useState(null);
 
+  const isAdmin = auth?.user?.roles.includes(ROLES.Admin);
   const header = ["Day", "From", "To", "Tutor", "Zoom Link"];
-  const adminHeader = [...header, "Actions"];
-
+  if (isAdmin) {
+    header.push("Actions");
+  }
   const handleAddSchedule = () => {
     if (tutors.filter((tutor) => tutor.isActive).length) {
       if (!newItemId) {
@@ -71,7 +73,7 @@ const Schedules = () => {
       {!loading && !error && !tutorsLoading && !tutorsError && (
         <TitleBar
           title="Schedules"
-          icon={<PlusIcon onClick={handleAddSchedule} />}
+          icon={isAdmin && <PlusIcon onClick={handleAddSchedule} />}
         />
       )}
 
@@ -93,7 +95,9 @@ const Schedules = () => {
         schedules.length !== 0 && (
           <>
             <Table className="text-center" bordered hover responsive>
-              <TableHeader headers={admin ? adminHeader : header} />
+              <TableHeader
+                headers={auth?.user ? header : header.slice(0, -1)}
+              />
               <tbody className="text-muted">
                 <ScheduleRows
                   {...{

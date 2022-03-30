@@ -3,7 +3,7 @@ import Stack from "react-bootstrap/Stack";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-const ProfileInfo = () => {
+const ProfileInfo = ({ user }) => {
   return (
     <Form className="mb-4">
       <Stack gap={4}>
@@ -14,11 +14,23 @@ const ProfileInfo = () => {
         >
           <Form.Group className="col-6 pe-4">
             <Form.Label className="text-muted mb-0">Name</Form.Label>
-            <Form.Control disabled type="text" className="roundBorder" />
+            <Form.Control
+              type="text"
+              className="roundBorder"
+              disabled
+              readOnly
+              placeholder={`${user?.firstName} ${user?.lastName}`}
+            />
           </Form.Group>
           <Form.Group className="col-6 ps-4 ms-sm-0">
             <Form.Label className="text-muted mb-0">Email</Form.Label>
-            <Form.Control disabled type="email" className="roundBorder" />
+            <Form.Control
+              type="email"
+              className="roundBorder"
+              disabled
+              readOnly
+              placeholder={user?.email}
+            />
           </Form.Group>
         </Stack>
         <Stack
@@ -38,13 +50,19 @@ const ProfileInfo = () => {
               type="number"
               placeholder="example: 000123456"
               className="roundBorder"
+              defaultValue={user?.neiuId}
             />
           </Form.Group>
         </Stack>
         <Stack className="col-12 col-md-11">
           <Form.Group>
             <Form.Label className="text-muted mb-0">Bio</Form.Label>
-            <Form.Control as="textarea" rows={3} className="roundBorder" />
+            <Form.Control
+              as="textarea"
+              rows={3}
+              className="roundBorder"
+              placeholder={user?.about}
+            />
           </Form.Group>
         </Stack>
         <Stack

@@ -7,7 +7,7 @@ import TemplateModal from "../common/templateModal";
 import CustomPagination from "../common/customPagination";
 import AnnouncementDialog from "./announcementDialog";
 import DeleteAnnouncementDialog from "./deleteAnnouncementDialog";
-import { ViewContext } from "../Context/announcementContext";
+import { ViewContext } from "../../Context/announcementContext";
 import TitleBar from "../common/titleBar";
 import {
   NoDataPlaceholder,
@@ -19,7 +19,10 @@ import useModal from "../../hooks/useModalStates";
 const Announcements = () => {
   const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
     useModal();
-  const { announcements, admin, error, loading } = useContext(ViewContext);
+  const { announcements, auth, ROLES, error, loading } =
+    useContext(ViewContext);
+
+  const isAdmin = auth?.user?.roles.includes(ROLES.Admin);
 
   const handleCreateAnnouncement = () => {
     setTitle("New Announcement");
@@ -30,7 +33,7 @@ const Announcements = () => {
   const handleShowAnnouncement = (e) => {
     const id = e.currentTarget.id;
     setTitle("Announcement");
-    setModalBody(<AnnouncementDialog {...{ id, reset }} />);
+    setModalBody(<AnnouncementDialog {...{ id, reset, isAdmin }} />);
     setShow(true);
   };
 
@@ -47,7 +50,7 @@ const Announcements = () => {
       {!loading && !error && (
         <TitleBar
           title="Announcements"
-          icon={<MegaphoneIcon onClick={handleCreateAnnouncement} />}
+          icon={isAdmin && <MegaphoneIcon onClick={handleCreateAnnouncement} />}
         />
       )}
 
@@ -80,7 +83,7 @@ const Announcements = () => {
                             : announcement.subject
                         }`}
                       </p>
-                      {admin && (
+                      {isAdmin && (
                         <div>
                           {!announcement.published && (
                             <span className="me-4">Draft</span>

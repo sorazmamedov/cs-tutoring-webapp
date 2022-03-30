@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import { format, isBefore } from "date-fns";
 import ActionButtons from "./actionButtons";
 import { getErrors } from "../../common/errorHelper";
-import { ActionsContext, ViewContext } from "../../Context/calendarContext";
+import { ActionsContext, ViewContext } from "../../../Context/calendarContext";
 import { SwitchIcon } from "../../common/iconsWithTooltip";
 import { deleteCalendar } from "../../../apis/cs-tutoring/calendars";
 

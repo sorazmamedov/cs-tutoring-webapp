@@ -1,54 +1,56 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import useAxios from "../../hooks/useAxios";
-import axios from "../../apis/cs-tutoring";
+import useAxios from "../hooks/useAxios";
+import axios from "../apis/cs-tutoring";
 import { GlobalViewContext } from "./dataContext";
+import useAuth from "../hooks/useAuth";
 
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
-const CourseDataProvider = ({ children }) => {
-  const { loadedSemester, admin } = useContext(GlobalViewContext);
+const AnnouncementDataProvider = ({ children }) => {
+  const { auth, ROLES } = useAuth();
+  const { loadedSemester } = useContext(GlobalViewContext);
   const [data, error, loading, axiosFetch] = useAxios();
-  const [courses, setCourses] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
   const [current, setCurrent] = useState("");
 
-  const fetchCourses = () => {
+  const fetchAnnouncements = () => {
     axiosFetch({
       axiosInstance: axios,
       method: "GET",
-      url: "/courses",
-      requestConfig: {
-        params: { semesterId: loadedSemester.id },
-      },
+      url: "/announcements",
+      requestConfig: { params: { semesterId: loadedSemester.id } },
     });
   };
 
   useEffect(() => {
     if (loadedSemester.id && current !== loadedSemester.id) {
       setCurrent(loadedSemester.id);
-      fetchCourses();
-      console.log("[Fetching courses]");
+      fetchAnnouncements();
+      console.log("[Fetching announcements]");
     }
+
     // eslint-disable-next-line
   }, [loadedSemester]);
 
   useEffect(() => {
-    setCourses([...data]);
+    setAnnouncements([...data]);
   }, [data]);
 
   return (
     <ViewContext.Provider
       value={{
-        courses,
-        admin,
+        announcements,
         loadedSemester,
+        auth,
+        ROLES,
         error,
         loading,
       }}
     >
       <ActionsContext.Provider
         value={{
-          setCourses,
+          setAnnouncements,
         }}
       >
         {children}
@@ -57,5 +59,5 @@ const CourseDataProvider = ({ children }) => {
   );
 };
 
-export default CourseDataProvider;
+export default AnnouncementDataProvider;
 export { ViewContext, ActionsContext };

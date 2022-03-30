@@ -1,57 +1,34 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import Header from "./components/header";
-import MainContainer from "./components/common/mainContainer";
-import Main from "./components/main";
+import Layout from "./components/layout";
 import Home from "./components/home";
 import Profile from "./components/Profile";
-import Footer from "./components/footer";
-import DataProvider from "./components/Context/dataContext";
+import NotFound from "./components/notFound";
+import RequireAuth from "./components/requireAuth";
+import Settings from "./components/settings";
+import useAuth from "./hooks/useAuth";
 
 function App() {
+  const { ROLES } = useAuth();
   return (
-    <div className="App">
-      <DataProvider>
-        <Router>
-          <Header />
-          <Main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route
-                path="/settings"
-                element={
-                  <MainContainer>
-                    <h3>Admin related settings</h3>
-                  </MainContainer>
-                }
-              />
-              <Route
-                path="/login"
-                element={
-                  <MainContainer>
-                    <Button className="btn roundBorder primaryBtn">
-                      Sing In With Google
-                    </Button>
-                  </MainContainer>
-                }
-              />
-              <Route
-                path="*"
-                element={
-                  <MainContainer>
-                    <h2>There is no route like this...</h2>
-                  </MainContainer>
-                }
-              />
-            </Routes>
-          </Main>
-          <Footer />
-        </Router>
-      </DataProvider>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+            <Route path="profile" element={<Profile />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+
+      <div
+        id="g_id_onload"
+        data-client_id="194487620046-42s15er9fv10ct1aghe1gu6hi3lm60ed.apps.googleusercontent.com"
+      />
+    </>
   );
 }
 

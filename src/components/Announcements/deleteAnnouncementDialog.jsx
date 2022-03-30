@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
-import { ViewContext, ActionsContext } from "../Context/announcementContext";
+import { ViewContext, ActionsContext } from "../../Context/announcementContext";
 import { deleteAnnouncement } from "../../apis/cs-tutoring/announcements";
 import { getErrors } from "../common/errorHelper";
 

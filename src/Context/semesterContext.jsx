@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { createContext, useState, useContext } from "react";
-import axios from "../../apis/cs-tutoring";
-import useAxios from "../../hooks/useAxios";
+import axios from "../apis/cs-tutoring";
+import useAxios from "../hooks/useAxios";
 import {
   GlobalViewContext,
   GlobalActionsContext,

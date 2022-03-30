@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { addMinutes, format } from "date-fns";
-import { ViewContext, ActionsContext } from "../Context/semesterContext";
+import { ViewContext, ActionsContext } from "../../Context/semesterContext";
 import { semesterValidator } from "../../utils/validator";
 import { isEqual } from "../../utils/isEqual";
 import Id from "../../utils/Id";

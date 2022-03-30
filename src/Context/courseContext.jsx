@@ -1,22 +1,22 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import useAxios from "../../hooks/useAxios";
-import axios from "../../apis/cs-tutoring";
+import useAxios from "../hooks/useAxios";
+import axios from "../apis/cs-tutoring";
 import { GlobalViewContext } from "./dataContext";
 
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
-const ScheduleDataProvider = ({ children }) => {
+const CourseDataProvider = ({ children }) => {
   const { loadedSemester, admin } = useContext(GlobalViewContext);
   const [data, error, loading, axiosFetch] = useAxios();
-  const [schedules, setSchedules] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [current, setCurrent] = useState("");
 
-  const fetchSchedules = () => {
+  const fetchCourses = () => {
     axiosFetch({
       axiosInstance: axios,
       method: "GET",
-      url: "/schedules",
+      url: "/courses",
       requestConfig: {
         params: { semesterId: loadedSemester.id },
       },
@@ -26,29 +26,29 @@ const ScheduleDataProvider = ({ children }) => {
   useEffect(() => {
     if (loadedSemester.id && current !== loadedSemester.id) {
       setCurrent(loadedSemester.id);
-      fetchSchedules();
-      console.log("[Fetching schedules]");
+      fetchCourses();
+      console.log("[Fetching courses]");
     }
     // eslint-disable-next-line
   }, [loadedSemester]);
 
   useEffect(() => {
-    setSchedules([...data]);
+    setCourses([...data]);
   }, [data]);
 
   return (
     <ViewContext.Provider
       value={{
-        schedules,
-        loadedSemester,
+        courses,
         admin,
+        loadedSemester,
         error,
         loading,
       }}
     >
       <ActionsContext.Provider
         value={{
-          setSchedules,
+          setCourses,
         }}
       >
         {children}
@@ -57,5 +57,5 @@ const ScheduleDataProvider = ({ children }) => {
   );
 };
 
-export default ScheduleDataProvider;
+export default CourseDataProvider;
 export { ViewContext, ActionsContext };

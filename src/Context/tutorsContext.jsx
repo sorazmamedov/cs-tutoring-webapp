@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import useAxios from "../../hooks/useAxios";
-import axios from "../../apis/cs-tutoring";
+import useAxios from "../hooks/useAxios";
+import axios from "../apis/cs-tutoring";
 import { GlobalViewContext } from "./dataContext";
 
 const ViewContext = createContext({});
