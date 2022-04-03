@@ -26,7 +26,7 @@ const Announcements = () => {
 
   const handleCreateAnnouncement = () => {
     setTitle("New Announcement");
-    setModalBody(<AnnouncementDialog {...{ reset }} />);
+    setModalBody(<AnnouncementDialog {...{ reset, isAdmin }} />);
     setShow(true);
   };
 

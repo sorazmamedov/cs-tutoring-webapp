@@ -6,24 +6,39 @@ import { NavLink } from "react-router-dom";
 import useModal from "../hooks/useModalStates";
 import TemplateModal from "./common/templateModal";
 import Login from "./Login";
+import Logout from "./Logout";
 import useAuth from "../hooks/useAuth";
 
 const Header = () => {
-  const { auth, ROLES, setAuth } = useAuth();
-  const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
-    useModal();
+  const { auth, ROLES } = useAuth();
+  const {
+    show,
+    title,
+    ModalBody,
+    size,
+    reset,
+    setShow,
+    setTitle,
+    setModalBody,
+    setSize,
+  } = useModal();
 
   const classes = ({ isActive }) =>
     isActive ? "nav-link activeNav" : "nav-link";
 
   const handleLogin = () => {
+    console.log("clicking no issues");
     setTitle("Sign In");
-    setModalBody(<Login />);
+    setSize("");
     setShow(true);
+    setModalBody(<Login reset={reset} />);
   };
 
   const handleLogout = () => {
-    setAuth({});
+    setTitle("Are you sure you want to log out?");
+    setSize("");
+    setModalBody(<Logout reset={reset} />);
+    setShow(true);
   };
 
   return (
@@ -54,7 +69,7 @@ const Header = () => {
           </Nav>
         </Container>
       </Navbar>
-      <TemplateModal {...{ show, title, ModalBody, reset, size: "" }} />
+      <TemplateModal {...{ show, title, ModalBody, reset, size }} />
     </header>
   );
 };

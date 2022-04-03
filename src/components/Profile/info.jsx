@@ -39,7 +39,7 @@ const ProfileInfo = ({ user }) => {
           className="col-12 col-md-11 justify-content-md-between"
         >
           <Form.Group className="col-6 pe-4">
-            <Form.Label className="text-muted mb-0">Pronoun</Form.Label>
+            <Form.Label className="text-muted mb-0">Pronouns</Form.Label>
             <Form.Control type="text" placeholder="" className="roundBorder" />
           </Form.Group>
           <Form.Group className="col-6 ps-4 ms-sm-0">

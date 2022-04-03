@@ -36,9 +36,11 @@ const Home = () => {
           <Courses />
         </CourseDataProvider>
       )}
-      <CalendarDataProvider>
-        <Calendar />
-      </CalendarDataProvider>
+      {auth?.user && (
+        <CalendarDataProvider>
+          <Calendar />
+        </CalendarDataProvider>
+      )}
     </>
   );
 };

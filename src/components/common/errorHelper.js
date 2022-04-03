@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export function ErrorModalBody({ errorData }) {
   return (
@@ -53,13 +53,14 @@ export function getErrors(err) {
     errorData.notFound = err.data.error;
   } else if (err.status === 400) {
     errorData.validationError = err.data.error;
+  } else if (err.status === 401) {
+    errorData.unauthorized = err.data.error;
   } else if (err?.message === "Network Error") {
     errorData.networkError = "Please check your internet connection!";
   } else if (err?.message && err?.title) {
     errorData.error = err.message;
   } else {
-    errorData.networkError =
-      "Something went wrong, please try again now or later!";
+    errorData.networkError = "Something went wrong, please try again!";
   }
 
   return errorData;
