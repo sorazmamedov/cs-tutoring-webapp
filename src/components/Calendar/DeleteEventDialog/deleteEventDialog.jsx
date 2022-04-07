@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -7,26 +7,28 @@ import ActionButtons from "./actionButtons";
 import { getErrors } from "../../common/errorHelper";
 import { ActionsContext, ViewContext } from "../../../Context/calendarContext";
 import { SwitchIcon } from "../../common/iconsWithTooltip";
-import { deleteCalendar } from "../../../apis/cs-tutoring/calendars";
+import useAxios from "../../../hooks/useAxios";
 
 const DeleteEventDialog = ({ event, reset }) => {
+  const { data, error, loading, axiosFetch } = useAxios();
   const { events } = useContext(ViewContext);
   const { setEvents } = useContext(ActionsContext);
-  const [errors, setErrors] = useState({});
-  const [saving, setSaving] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [deleteAll, setDeleteAll] = useState(false);
   const formRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
-    setSaving(true);
+    axiosFetch({
+      method: "DELETE",
+      url: `/calendars/${event.id}`,
+      requestConfig: {
+        params: { deleteAll },
+      },
+    });
+  };
 
-    let query = { id: event.id, deleteAll };
-
-    const response = await deleteCalendar(query);
-    if (response.status === 200) {
+  useEffect(() => {
+    if (Object.keys(data).length) {
       const temp = deleteAll
         ? events.filter(
             (item) =>
@@ -35,22 +37,18 @@ const DeleteEventDialog = ({ event, reset }) => {
           )
         : events.filter((item) => item.id !== event.id);
       setEvents([...temp]);
-    } else {
-      setErrors(getErrors(response));
-      setSaving(false);
-      return;
+      setTimeout(() => {
+        reset();
+      }, 2000);
     }
+    // eslint-disable-next-line
+  }, [data]);
 
-    setSaving(false);
-    setSuccess(true);
-    setTimeout(() => {
-      reset();
-    }, 2000);
-  };
   return (
     <>
-      {errors &&
-        Object.entries(errors).map(([key, value]) => (
+      {!loading &&
+        error &&
+        Object.entries(getErrors(error)).map(([key, value]) => (
           <p
             key={key}
             className="col-10 col-lg-8 mx-auto text-center text-danger"
@@ -58,15 +56,8 @@ const DeleteEventDialog = ({ event, reset }) => {
             {value}
           </p>
         ))}
-      {success && (
-        <p
-          className="text-success text-center mt-2"
-          style={
-            success
-              ? { opacity: "1", transition: "opacity 0.6s linear" }
-              : { opacity: 0 }
-          }
-        >
+      {Object.keys(data).length !== 0 && (
+        <p className="text-success text-center mt-2">
           {deleteAll ? "Events deleted!" : "Event deleted!"}
         </p>
       )}
@@ -100,7 +91,7 @@ const DeleteEventDialog = ({ event, reset }) => {
           )}
         </Row>
         <Row className="justify-content-around" sm="2">
-          <ActionButtons {...{ saving, reset, success }} />
+          <ActionButtons {...{ saving: loading, reset, success: Object.keys(data).length !== 0 }} />
         </Row>
       </Form>
     </>

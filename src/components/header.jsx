@@ -27,7 +27,6 @@ const Header = () => {
     isActive ? "nav-link activeNav" : "nav-link";
 
   const handleLogin = () => {
-    console.log("clicking no issues");
     setTitle("Sign In");
     setSize("");
     setShow(true);

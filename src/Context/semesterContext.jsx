@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { createContext, useState, useContext } from "react";
-import axios from "../apis/cs-tutoring";
 import useAxios from "../hooks/useAxios";
 import {
   GlobalViewContext,
@@ -13,7 +12,7 @@ const ActionsContext = createContext({});
 const SemesterDataProvider = ({ children }) => {
   const { loadedSemester } = useContext(GlobalViewContext);
   const { setLoadedSemester } = useContext(GlobalActionsContext);
-  const [data, error, loading, axiosFetch] = useAxios();
+  const { data, error, loading, axiosFetch } = useAxios();
 
   //Semesters
   const [semesters, setSemesters] = useState([]);
@@ -21,7 +20,6 @@ const SemesterDataProvider = ({ children }) => {
 
   const fetchSemesters = () => {
     axiosFetch({
-      axiosInstance: axios,
       method: "GET",
       url: "/semesters",
       requestConfig: {},

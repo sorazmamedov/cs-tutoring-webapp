@@ -9,7 +9,7 @@ import { putCourse } from "../../apis/cs-tutoring/courses";
 import DeleteCourseDialog from "./deleteCourseDialog";
 
 const CourseRows = ({ reset, setShow, setTitle, setModalBody }) => {
-  const { courses, admin } = useContext(ViewContext);
+  const { courses, auth, ROLES } = useContext(ViewContext);
   const { setCourses } = useContext(ActionsContext);
   const [editId, setEditId] = useState(null);
   const [saving, setSaving] = useState(null);
@@ -80,7 +80,7 @@ const CourseRows = ({ reset, setShow, setTitle, setModalBody }) => {
       <ReadOnlyRow
         key={course.id}
         course={course}
-        admin={admin}
+        admin={auth?.user?.roles.includes(ROLES.Admin)}
         saving={saving}
         handleEdit={handleEdit}
         handleDelete={handleDelete}

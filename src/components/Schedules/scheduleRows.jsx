@@ -3,7 +3,6 @@ import { scheduleValidator } from "../../utils/validator";
 import { isEqual } from "../../utils/isEqual";
 import ReadOnlyRow from "./readOnlyRow";
 import EditableRow from "./editableRow";
-import { ViewContext as TutorContext } from "../../Context/tutorsContext";
 import { ActionsContext, ViewContext } from "../../Context/scheduleContext";
 import { postSchedule, putSchedule } from "../../apis/cs-tutoring/schedules";
 import { showErrors } from "../common/errorHelper";
@@ -14,8 +13,8 @@ const ScheduleRows = ({
   setTitle,
   setModalBody,
   setShow,
+  tutors
 }) => {
-  const { tutors } = useContext(TutorContext);
   const { schedules, auth, ROLES } = useContext(ViewContext);
   const { setSchedules } = useContext(ActionsContext);
   const [saving, setSaving] = useState(null);

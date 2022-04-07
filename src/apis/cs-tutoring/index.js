@@ -6,11 +6,19 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
-    withCredentials: true,
   },
 });
 
 export default axiosInstance;
+
+export const axiosPrivate = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+  withCredentials: true,
+});
 
 export const makeRequest = async (configObj) => {
   const { requestConfig = {}, ...endpoint } = configObj;

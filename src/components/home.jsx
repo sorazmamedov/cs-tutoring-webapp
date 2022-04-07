@@ -12,10 +12,13 @@ import TutorDataProvider from "../Context/tutorsContext";
 import ScheduleDataProvider from "../Context/scheduleContext";
 import CalendarDataProvider from "../Context/calendarContext";
 import useAuth from "../hooks/useAuth";
+import Public from "./Public";
 
 const Home = () => {
   const { auth, ROLES } = useAuth();
-  return (
+  return !auth?.user ? (
+    <Public />
+  ) : (
     <>
       {auth?.user?.roles.includes(ROLES.Admin) && (
         <SemesterDataProvider>

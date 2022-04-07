@@ -5,7 +5,7 @@ import Spinner from "react-bootstrap/Spinner";
 import useAuth from "../../hooks/useAuth";
 
 const Login = ({ reset }) => {
-  const { errors, loading, isLogged } = useAuth();
+  const { errors, signingIn, isLogged } = useAuth();
 
   useEffect(() => {
     window.google.accounts.id.renderButton(
@@ -26,7 +26,7 @@ const Login = ({ reset }) => {
     if (isLogged) {
       reset();
     }
-  }, [isLogged]);
+  }, [isLogged, reset]);
 
   return (
     <>
@@ -39,7 +39,7 @@ const Login = ({ reset }) => {
             {value}
           </p>
         ))}
-      {loading && (
+      {signingIn && (
         <>
           <Spinner
             as="span"

@@ -6,7 +6,7 @@ import { putTutor } from "../../apis/cs-tutoring/tutors";
 import { showErrors } from "../common/errorHelper";
 
 const TutorRows = ({ setShow, setTitle, setModalBody }) => {
-  const { admin, tutors } = useContext(ViewContext);
+  const { auth, ROLES, tutors } = useContext(ViewContext);
   const { setTutors } = useContext(ActionsContext);
   const [saving, setSaving] = useState(null);
 
@@ -48,7 +48,7 @@ const TutorRows = ({ setShow, setTitle, setModalBody }) => {
           ? tutor.about.substring(0, 30) + "..."
           : tutor.about}
       </td>
-      {admin && (
+      {auth?.user?.roles.includes(ROLES.Admin) && (
         <td className="pe-0 no-stretch">
           {saving !== tutor.id ? (
             <>

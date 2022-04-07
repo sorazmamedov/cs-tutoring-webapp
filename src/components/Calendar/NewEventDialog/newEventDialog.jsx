@@ -6,32 +6,28 @@ import { format, differenceInMinutes, addWeeks, addMinutes } from "date-fns";
 import { ViewContext, ActionsContext } from "../../../Context/calendarContext";
 import { eventValidator } from "../../../utils/validator";
 import { getErrors } from "../../common/errorHelper";
-import { postCalendar } from "../../../apis/cs-tutoring/calendars";
 import Preview from "./preview";
 import ActionButtons from "./actionButtons";
 import Choose from "./choose";
+import useAxios from "../../../hooks/useAxios";
 
 const NewEventDialog = ({ event, reset }) => {
+  const { data, error, setError, loading, axiosFetch } = useAxios();
   const { loadedSemester } = useContext(ViewContext);
   const { setRefetch } = useContext(ActionsContext);
-  const [errors, setErrors] = useState({});
-  const [saving, setSaving] = useState(false);
   const [showDurations, setShowDurations] = useState(true);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [preview, setPreview] = useState([]);
   const [slots, setSlots] = useState([]);
   const [repeat, setRepeat] = useState(false);
   const [range, setRange] = useState({});
-  const [success, setSuccess] = useState(false);
   const formRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
-    setSaving(true);
 
     let newEvent = {
-      tutorId: "123456789123",
+      tutorId: "123456789124",
       semesterId: loadedSemester.id,
       start: event.start,
       end: event.end,
@@ -50,29 +46,29 @@ const NewEventDialog = ({ event, reset }) => {
     });
 
     if (error) {
-      setErrors(getErrors(error));
-      setSaving(false);
-      return;
-    }
-    const response = await postCalendar(newEvent);
-
-    if (response.status === 201) {
-      setRefetch(true);
-    } else {
-      setErrors(getErrors(response));
-      setSaving(false);
+      setError(error);
       return;
     }
 
-    setSaving(false);
-    setSuccess(true);
-    setTimeout(() => {
-      reset();
-    }, 2000);
+    axiosFetch({
+      method: "POST",
+      url: "/calendars",
+      requestConfig: { data: newEvent },
+    });
   };
 
+  useEffect(() => {
+    if (Object.keys(data).length) {
+      setRefetch(true);
+      setTimeout(() => {
+        reset();
+      }, 2000);
+    }
+    // eslint-disable-next-line
+  }, [data]);
+
   const handleChange = () => {
-    calculate(formRef, setErrors, event, setSlots, setPreview);
+    calculate(formRef, setError, event, setSlots, setPreview);
   };
 
   const handleRepeatChange = () => {
@@ -118,8 +114,9 @@ const NewEventDialog = ({ event, reset }) => {
 
   return (
     <>
-      {errors &&
-        Object.entries(errors).map(([key, value]) => (
+      {!loading &&
+        error &&
+        Object.entries(getErrors(error)).map(([key, value]) => (
           <p
             key={key}
             className="col-10 col-lg-8 mx-auto text-center text-danger"
@@ -127,11 +124,11 @@ const NewEventDialog = ({ event, reset }) => {
             {value}
           </p>
         ))}
-      {success && (
+      {Object.keys(data).length !== 0 && (
         <p
           className="text-success text-center mt-2"
           style={
-            success
+            Object.keys(data).length !== 0
               ? { opacity: "1", transition: "opacity 0.6s linear" }
               : { opacity: 0 }
           }
@@ -167,10 +164,10 @@ const NewEventDialog = ({ event, reset }) => {
         <Row className="justify-content-around" sm="2">
           <ActionButtons
             {...{
-              saving,
+              saving: loading,
               reset,
               preview,
-              success,
+              success: Object.keys(data).length !== 0,
             }}
           />
         </Row>
@@ -181,8 +178,7 @@ const NewEventDialog = ({ event, reset }) => {
 
 export default NewEventDialog;
 
-const calculate = (formRef, setErrors, event, setSlots, setPreview) => {
-  setErrors({});
+const calculate = (formRef, setError, event, setSlots, setPreview) => {
   const form = formRef.current;
   const tempPreview = [];
   const tempSlots = [];
@@ -192,7 +188,7 @@ const calculate = (formRef, setErrors, event, setSlots, setPreview) => {
 
     if (difference < duration) {
       setPreview([]);
-      setErrors({
+      setError({
         insufficientRange: `Not possible to create a ${duration} minute slot between
         ${format(event.start, "h:mm bbb")}
         -

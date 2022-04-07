@@ -1,21 +1,18 @@
 import React, { createContext, useState } from "react";
 import useAxios from "../hooks/useAxios";
-import axios from "../apis/cs-tutoring";
 import { useEffect } from "react";
 
 const GlobalViewContext = createContext({});
 const GlobalActionsContext = createContext({});
 
 const DataProvider = ({ children }) => {
-  const [data, error, loading, axiosFetch] = useAxios();
+  const { data, error, loading, axiosFetch } = useAxios();
   const [loadedSemester, setLoadedSemester] = useState({});
-  const [admin, setAdmin] = useState(true);
 
   const fetchActiveSemester = () => {
     axiosFetch({
-      axiosInstance: axios,
       method: "GET",
-      url: "/semesters/active",
+      url: "/semesters/public/active",
       requestConfig: {},
     });
   };
@@ -36,7 +33,6 @@ const DataProvider = ({ children }) => {
     <GlobalViewContext.Provider
       value={{
         loadedSemester,
-        admin,
         error,
         loading,
       }}
@@ -44,7 +40,6 @@ const DataProvider = ({ children }) => {
       <GlobalActionsContext.Provider
         value={{
           setLoadedSemester,
-          setAdmin,
         }}
       >
         {children}

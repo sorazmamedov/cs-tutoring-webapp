@@ -5,7 +5,8 @@ const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({});
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
 
   const ROLES = {
@@ -27,8 +28,10 @@ export const AuthProvider = ({ children }) => {
       value={{
         errors,
         setErrors,
-        loading,
-        setLoading,
+        signingIn,
+        setSigningIn,
+        signingOut,
+        setSigningOut,
         isLogged,
         auth,
         setAuth,

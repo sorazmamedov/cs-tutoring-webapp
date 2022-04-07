@@ -106,6 +106,7 @@ const Schedules = () => {
                     setTitle,
                     setModalBody,
                     setShow,
+                    tutors
                   }}
                 />
               </tbody>

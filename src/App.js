@@ -34,6 +34,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
             <Route path="profile" element={<Profile />} />
+          </Route>
+          <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
             <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="*" element={<NotFound />} />

@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import useAxios from "../hooks/useAxios";
-import axios from "../apis/cs-tutoring";
 import { GlobalViewContext } from "./dataContext";
 import useAuth from "../hooks/useAuth";
 
@@ -8,15 +7,14 @@ const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const ScheduleDataProvider = ({ children }) => {
-  const { auth, ROLES } = useAuth();
+  const { auth, ROLES, signingIn } = useAuth();
   const { loadedSemester } = useContext(GlobalViewContext);
-  const [data, error, loading, axiosFetch] = useAxios();
+  const { data, error, loading, axiosFetch } = useAxios();
   const [schedules, setSchedules] = useState([]);
   const [current, setCurrent] = useState("");
 
   const fetchSchedules = () => {
     axiosFetch({
-      axiosInstance: axios,
       method: "GET",
       url: "/schedules",
       requestConfig: {
@@ -45,6 +43,7 @@ const ScheduleDataProvider = ({ children }) => {
         loadedSemester,
         auth,
         ROLES,
+        signingIn,
         error,
         loading,
       }}

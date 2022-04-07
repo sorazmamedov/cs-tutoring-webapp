@@ -1,41 +1,38 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
 import { ViewContext, ActionsContext } from "../../Context/announcementContext";
-import { deleteAnnouncement } from "../../apis/cs-tutoring/announcements";
 import { getErrors } from "../common/errorHelper";
+import useAxios from "../../hooks/useAxios";
 
 const DeleteAnnouncementDialog = ({ id, reset }) => {
+  const { data, error, loading, axiosFetch } = useAxios();
   const { announcements } = useContext(ViewContext);
   const { setAnnouncements } = useContext(ActionsContext);
-  const [deleting, setDeleting] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false);
 
   const handleDelete = async () => {
-    setDeleting(true);
-    const response = await deleteAnnouncement(id);
+    axiosFetch({
+      method: "DELETE",
+      url: `/announcements/${id}`,
+    });
+  };
 
-    if (response.status === 200) {
+  useEffect(() => {
+    if (Object.keys(data).length) {
       setAnnouncements([...announcements.filter((item) => item.id !== id)]);
-      setSuccess(true);
       setTimeout(() => {
         reset();
       }, 1500);
-    } else {
-      setDeleting(false);
-      setErrors(getErrors(response));
     }
-  };
+  }, [data]);
 
   return (
     <>
-      {errors &&
-        !errors.subject &&
-        !errors.content &&
-        Object.entries(errors).map(([key, value]) => (
+      {!loading &&
+        error &&
+        Object.entries(getErrors(error)).map(([key, value]) => (
           <p
             key={key}
             className="col-10 col-lg-8 mx-auto text-center text-danger"
@@ -43,11 +40,11 @@ const DeleteAnnouncementDialog = ({ id, reset }) => {
             {value}
           </p>
         ))}
-      {success && (
+      {Object.keys(data).length !== 0 && (
         <p
           className="text-success text-center mt-2"
           style={
-            success
+            Object.keys(data).length !== 0
               ? { opacity: "1", transition: "opacity 0.6s linear" }
               : { opacity: 0 }
           }
@@ -55,15 +52,15 @@ const DeleteAnnouncementDialog = ({ id, reset }) => {
           Announcement deleted!
         </p>
       )}
-      {!success && (
+      {!Object.keys(data).length && (
         <Row className="col-10 col-lg-8 mx-auto m-0 mb-5">
           <Col xs="6" className="mb-3 mb-sm-auto pe-sm-4">
             <Button
               className="col-12 roundBorder dangerBtn"
               onClick={handleDelete}
-              disabled={deleting}
+              disabled={loading}
             >
-              {deleting && (
+              {loading && (
                 <>
                   <Spinner
                     as="span"
@@ -82,7 +79,7 @@ const DeleteAnnouncementDialog = ({ id, reset }) => {
             <Button
               className="col-12 roundBorder primaryBtn"
               onClick={reset}
-              disabled={deleting}
+              disabled={loading}
             >
               CANCEL
             </Button>

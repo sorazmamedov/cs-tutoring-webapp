@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -9,30 +9,23 @@ import { isEqual } from "../../utils/isEqual";
 import Id from "../../utils/Id";
 import { announcementValidator } from "../../utils/validator";
 import { getErrors } from "../common/errorHelper";
-import {
-  postAnnouncement,
-  putAnnouncement,
-} from "../../apis/cs-tutoring/announcements";
+import useAxios from "../../hooks/useAxios";
 
 const AnnouncementDialog = ({ id, reset, isAdmin }) => {
+  const { data, error, setError, loading, axiosFetch } = useAxios();
   const { announcements, loadedSemester } = useContext(ViewContext);
   const { setAnnouncements } = useContext(ActionsContext);
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
   const [publish, setPublish] = useState(false);
-  const [saving, setSaving] = useState(false);
 
-  const current = id
-    ? { ...announcements.find((item) => item.id === id) }
-    : null;
+  const current = id && { ...announcements.find((item) => item.id === id) };
+  let newItem = {};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSaving(true);
     setValidated(true);
     const form = e.currentTarget;
-
-    let newItem = {};
 
     if (!id) {
       newItem = {
@@ -60,34 +53,42 @@ const AnnouncementDialog = ({ id, reset, isAdmin }) => {
 
     const error = announcementValidator(newItem);
     if (error) {
-      setErrors(getErrors(error));
+      setError(error);
       setValidated(false);
-      setSaving(false);
       return;
     }
-    const response = id
-      ? await putAnnouncement(newItem)
-      : await postAnnouncement(newItem);
 
-    const statusCode = id ? 200 : 201;
-    if (response.status === statusCode) {
+    if (id) {
+      axiosFetch({
+        method: "PUT",
+        url: `/announcements/${id}`,
+        requestConfig: { data: newItem },
+      });
+    } else {
+      axiosFetch({
+        method: "POST",
+        url: "/announcements",
+        requestConfig: { data: newItem },
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (Object.keys(data).length) {
       const filtered = id
         ? announcements.filter((item) => item.id !== id)
         : announcements;
       setAnnouncements([
-        { ...newItem, createdOn: newItem.createdOn.toISOString() },
+        { ...data, createdOn: new Date(data.createdOn) },
         ...filtered,
       ]);
-    } else {
-      setErrors(getErrors(response));
+      reset();
+    } else if (error) {
+      setErrors(getErrors(error));
       setValidated(false);
-      setSaving(false);
       return;
     }
-
-    setSaving(false);
-    reset();
-  };
+  }, [data, error]);
 
   return (
     <>
@@ -151,9 +152,9 @@ const AnnouncementDialog = ({ id, reset, isAdmin }) => {
                 className="col-12 roundBorder dangerBtn"
                 onClick={() => setPublish(false)}
                 type="submit"
-                disabled={saving}
+                disabled={loading}
               >
-                {saving && (
+                {loading && (
                   <>
                     <Spinner
                       as="span"
@@ -173,9 +174,9 @@ const AnnouncementDialog = ({ id, reset, isAdmin }) => {
                 className="col-12 roundBorder primaryBtn"
                 onClick={() => setPublish(true)}
                 type="submit"
-                disabled={saving}
+                disabled={loading}
               >
-                {saving && (
+                {loading && (
                   <>
                     <Spinner
                       as="span"

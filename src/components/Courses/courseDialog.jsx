@@ -8,6 +8,7 @@ import { ActionsContext, ViewContext } from "../../Context/courseContext";
 import { courseValidator } from "../../utils/validator";
 import Id from "../../utils/Id";
 import { postCourse } from "../../apis/cs-tutoring/courses";
+import { getErrors } from "../common/errorHelper";
 
 const CourseDialog = ({ reset }) => {
   const { courses, loadedSemester } = useContext(ViewContext);
@@ -56,15 +57,7 @@ const CourseDialog = ({ reset }) => {
         throw new Error("FileTypeMismatch");
       }
     } catch (err) {
-      if (err.name === "ChunkLoadError") {
-        setErrors({ response: "Network Error" });
-      } else if (err.name === "ValidationError") {
-        setErrors({ validationError: err.error });
-      } else if (err.message === "FileTypeMismatch") {
-        setErrors({ coursesFile: ".xlsx format excel file is required!" });
-      } else {
-        setErrors({ validationError: err.error });
-      }
+      setErrors(getErrors(err));
       setValidated(false);
     }
     setUploading(false);
@@ -72,14 +65,16 @@ const CourseDialog = ({ reset }) => {
 
   return (
     <>
-      {errors && (
-        <p className="col-10 col-lg-8 mx-auto text-center text-danger">
-          {errors.response === "Network Error" &&
-            "Please check your internet connection!"}
-          {errors?.response?.status === 404 && errors.response?.data?.error}
-          {errors.validationError}
-        </p>
-      )}
+      {errors &&
+        !errors.fileTypeMismatch &&
+        Object.entries(errors).map(([key, value]) => (
+          <p
+            key={key}
+            className="col-10 col-lg-8 mx-auto text-center text-danger"
+          >
+            {value}
+          </p>
+        ))}
       {success && (
         <p
           className="text-success text-center mt-2"
@@ -106,11 +101,11 @@ const CourseDialog = ({ reset }) => {
               name="coursesFile"
               className="roundBorder"
               accept={fileTypes.join(", ")}
-              isInvalid={errors.coursesFile}
+              isInvalid={errors.fileTypeMismatch}
               required
             />
             <Form.Control.Feedback type="invalid">
-              {errors.coursesFile}
+              {errors.fileTypeMismatch}
             </Form.Control.Feedback>
           </Col>
         </Row>
@@ -161,14 +156,18 @@ function transformAndValidate(semesterId, arr) {
     newArr.forEach((course) => {
       const result = courseValidator(course);
       if (result) {
-        throw { error: "Provided data failed to pass validation!" };
+        throw {
+          title: "Validation Error",
+          message: "Provided data failed to pass validation!",
+        };
       }
     });
 
     return newArr;
   } else {
     throw {
-      error:
+      title: "Missing data",
+      message:
         "Missing data! Please make sure that you have selected correct file!",
     };
   }

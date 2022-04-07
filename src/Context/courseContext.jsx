@@ -1,20 +1,20 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import useAxios from "../hooks/useAxios";
-import axios from "../apis/cs-tutoring";
 import { GlobalViewContext } from "./dataContext";
+import useAuth from "../hooks/useAuth";
 
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const CourseDataProvider = ({ children }) => {
-  const { loadedSemester, admin } = useContext(GlobalViewContext);
-  const [data, error, loading, axiosFetch] = useAxios();
+  const { auth, ROLES } = useAuth();
+  const { loadedSemester } = useContext(GlobalViewContext);
+  const { data, error, loading, axiosFetch } = useAxios();
   const [courses, setCourses] = useState([]);
   const [current, setCurrent] = useState("");
 
   const fetchCourses = () => {
     axiosFetch({
-      axiosInstance: axios,
       method: "GET",
       url: "/courses",
       requestConfig: {
@@ -40,7 +40,8 @@ const CourseDataProvider = ({ children }) => {
     <ViewContext.Provider
       value={{
         courses,
-        admin,
+        auth,
+        ROLES,
         loadedSemester,
         error,
         loading,

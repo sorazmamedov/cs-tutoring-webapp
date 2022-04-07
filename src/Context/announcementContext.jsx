@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+import { compareDesc } from "date-fns";
 import useAxios from "../hooks/useAxios";
-import axios from "../apis/cs-tutoring";
 import { GlobalViewContext } from "./dataContext";
 import useAuth from "../hooks/useAuth";
 
@@ -10,13 +10,12 @@ const ActionsContext = createContext({});
 const AnnouncementDataProvider = ({ children }) => {
   const { auth, ROLES } = useAuth();
   const { loadedSemester } = useContext(GlobalViewContext);
-  const [data, error, loading, axiosFetch] = useAxios();
+  const { data, error, loading, axiosFetch } = useAxios();
   const [announcements, setAnnouncements] = useState([]);
   const [current, setCurrent] = useState("");
 
   const fetchAnnouncements = () => {
     axiosFetch({
-      axiosInstance: axios,
       method: "GET",
       url: "/announcements",
       requestConfig: { params: { semesterId: loadedSemester.id } },
@@ -34,7 +33,10 @@ const AnnouncementDataProvider = ({ children }) => {
   }, [loadedSemester]);
 
   useEffect(() => {
-    setAnnouncements([...data]);
+    const temp = data
+      .map((item) => ({ ...item, createdOn: new Date(item.createdOn) }))
+      .sort((a, b) => compareDesc(a.createdOn, b.createdOn));
+    setAnnouncements(temp);
   }, [data]);
 
   return (

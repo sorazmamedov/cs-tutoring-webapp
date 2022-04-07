@@ -15,7 +15,8 @@ import useModal from "../../hooks/useModalStates";
 import TemplateModal from "../common/templateModal";
 
 const Tutors = () => {
-  const { admin, tutors, loading, error } = useContext(ViewContext);
+  const { auth, ROLES, signingIn, tutors, loading, error } =
+    useContext(ViewContext);
   const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
     useModal();
   const header = ["ID", "Name", "Email", "About"];
@@ -23,16 +24,20 @@ const Tutors = () => {
 
   return (
     <MainContainer>
-      {!loading && !error && <TitleBar title="Tutors" />}
-      {loading && <LoadingPlaceholder />}
+      {!loading && !signingIn && !error && <TitleBar title="Tutors" />}
+      {(loading || signingIn) && <LoadingPlaceholder />}
       {!loading && error && <ErrorPlaceholder />}
-      {!loading && !error && tutors && tutors.length === 0 && (
+      {!loading && !signingIn && !error && tutors && tutors.length === 0 && (
         <NoDataPlaceholder />
       )}
-      {!loading && !error && tutors && tutors.length !== 0 && (
+      {!loading && !signingIn && !error && tutors && tutors.length !== 0 && (
         <>
           <Table hover responsive>
-            <TableHeader headers={admin ? adminHeader : header} />
+            <TableHeader
+              headers={
+                auth?.user?.roles.includes(ROLES.Admin) ? adminHeader : header
+              }
+            />
             <tbody className="text-muted">
               <TutorRows {...{ setShow, setTitle, setModalBody }} />
             </tbody>

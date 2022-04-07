@@ -1,25 +1,23 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import useAxios from "../hooks/useAxios";
-import axios from "../apis/cs-tutoring";
 import { GlobalViewContext } from "./dataContext";
 
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const CalendarDataProvider = ({ children }) => {
-  const { loadedSemester, admin } = useContext(GlobalViewContext);
-  const [data, error, loading, axiosFetch] = useAxios();
+  const { loadedSemester } = useContext(GlobalViewContext);
+  const { data, error, loading, axiosFetch } = useAxios();
   const [events, setEvents] = useState([]);
   const [current, setCurrent] = useState("");
   const [refetch, setRefetch] = useState(false);
 
   const fetchCalendar = () => {
     axiosFetch({
-      axiosInstance: axios,
       method: "GET",
       url: "/calendars",
       requestConfig: {
-        params: { semesterId: loadedSemester.id, tutorId: "123456789123" },
+        params: { semesterId: loadedSemester.id, tutorId: "123456789124" },
       },
     });
   };
@@ -28,11 +26,11 @@ const CalendarDataProvider = ({ children }) => {
     if (loadedSemester.id && current !== loadedSemester.id) {
       setCurrent(loadedSemester.id);
       fetchCalendar();
-      console.log("[Fetching calendar events]");
+      console.log("[Fetching my calendar]");
     } else if (refetch) {
       setRefetch(false);
       fetchCalendar();
-      console.log("[*Refetching calendar events*]");
+      console.log("[*Refetching my calendar*]");
     }
     // eslint-disable-next-line
   }, [loadedSemester, refetch]);
@@ -51,7 +49,6 @@ const CalendarDataProvider = ({ children }) => {
         error,
         loading,
         loadedSemester,
-        admin,
       }}
     >
       <ActionsContext.Provider

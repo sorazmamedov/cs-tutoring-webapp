@@ -1,29 +1,23 @@
-import { useState } from "react";
 import useAuth from "./useAuth";
-import axios from "axios";
 import { getErrors } from "../components/common/errorHelper";
+import useAxiosPrivate from "./useAxiosPrivate";
 
 const useLogout = () => {
-  const { errors, setErrors, loading, setLoading, auth, setAuth } =
+  const axiosPrivate = useAxiosPrivate();
+  const { errors, setErrors, loading, setSigningOut, signingOut, auth, setAuth } =
     useAuth();
 
   const handleLogout = async () => {
-    setLoading(true);
+    setSigningOut(true);
 
     if (Object.keys(errors).length > 0) {
       setErrors({});
     }
 
     try {
-      const res = await axios({
+      await axiosPrivate({
         method: "get",
-        baseURL: "http://localhost:4000/api/auth/logout",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          // Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
+        url: "/auth/logout",
       });
 
       setAuth({});
@@ -35,11 +29,11 @@ const useLogout = () => {
         setErrors(getErrors(error));
       }
     } finally {
-      setLoading(false);
+      setSigningOut(false);
     }
   };
 
-  return { errors, loading, handleLogout, auth };
+  return { errors, loading, handleLogout, auth, signingOut };
 };
 
 export default useLogout;

@@ -1,20 +1,20 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import useAxios from "../hooks/useAxios";
-import axios from "../apis/cs-tutoring";
 import { GlobalViewContext } from "./dataContext";
+import useAuth from "../hooks/useAuth";
 
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const TutorDataProvider = ({ children }) => {
-  const { loadedSemester, admin } = useContext(GlobalViewContext);
-  const [data, error, loading, axiosFetch] = useAxios();
+  const { auth, ROLES, signingIn } = useAuth();
+  const { loadedSemester } = useContext(GlobalViewContext);
+  const { data, error, loading, axiosFetch } = useAxios();
   const [tutors, setTutors] = useState([]);
   const [current, setCurrent] = useState("");
 
   const fetchTutors = () => {
     axiosFetch({
-      axiosInstance: axios,
       method: "GET",
       url: "/tutors",
       requestConfig: {
@@ -39,10 +39,12 @@ const TutorDataProvider = ({ children }) => {
   return (
     <ViewContext.Provider
       value={{
-        admin,
         tutors,
         error,
         loading,
+        auth,
+        ROLES,
+        signingIn,
       }}
     >
       <ActionsContext.Provider

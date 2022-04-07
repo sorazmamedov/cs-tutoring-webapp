@@ -1,22 +1,20 @@
 import useAuth from "./useAuth";
-import axios from "axios";
+import axios from "../apis/cs-tutoring";
 import { getErrors } from "../components/common/errorHelper";
 
 const useLogin = () => {
-  const { errors, setErrors, loading, setLoading, setAuth } = useAuth();
+  const { errors, setErrors, signingIn, setSigningIn, setAuth } = useAuth();
 
   const handleResponse = async (response) => {
-    setLoading(true);
+    setSigningIn(true);
     setErrors({});
 
     try {
       const token = response.credential;
       const res = await axios({
         method: "get",
-        baseURL: "http://localhost:4000/api/auth/login",
+        url: "/auth/login",
         headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
@@ -30,11 +28,11 @@ const useLogin = () => {
         setErrors(getErrors(error));
       }
     } finally {
-      setLoading(false);
+      setSigningIn(false);
     }
   };
 
-  return { errors, loading, handleResponse };
+  return { errors, signingIn, handleResponse };
 };
 
 export default useLogin;
