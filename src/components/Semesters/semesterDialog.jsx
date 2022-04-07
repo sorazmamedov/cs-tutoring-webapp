@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -8,79 +8,90 @@ import { ViewContext, ActionsContext } from "../../Context/semesterContext";
 import { semesterValidator } from "../../utils/validator";
 import { isEqual } from "../../utils/isEqual";
 import Id from "../../utils/Id";
-import { postSemester, putSemester } from "../../apis/cs-tutoring/semesters";
 import SpinnerBtn from "../common/spinnerBtn";
 import { getErrors } from "../common/errorHelper";
+import useAxios from "../../hooks/useAxios";
 
 const SemesterDialog = ({ edit, reset }) => {
+  const { data, error, loading, axiosFetch } = useAxios();
   const { semesters, currentSemester } = useContext(ViewContext);
   const { setSemesters } = useContext(ActionsContext);
   const [validated, setValidated] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState("");
+
+  let newItem = {};
+
+  const handleError = (error) => {
+    setErrors(getErrors(error));
+    setValidated(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+    setValidated(true);
+    setErrors("");
     const form = e.currentTarget;
 
-    let newItem = getServerFotmatted(edit, currentSemester, form);
+    newItem = getServerFotmatted(edit, currentSemester, form);
     if (isEqual(currentSemester, newItem)) {
       reset();
       return;
     }
 
     let error = semesterValidator(newItem);
-    if (!error) {
-      setLoading(true);
-      setValidated(true);
-      setErrors({});
+    if (error) {
+      handleError(error);
+      return;
+    }
 
-      const response = edit
-        ? await putSemester(newItem)
-        : await postSemester(newItem);
-      const statusCode = edit ? 200 : 201;
-
-      if (response.status === statusCode) {
-        newItem = {
-          ...newItem,
-          startDate: newItem.startDate.toISOString(),
-          endDate: newItem.endDate.toISOString(),
-        };
-        if (edit) {
-          let index = semesters.findIndex(
-            (item) => item.id === currentSemester.id
-          );
-          setSemesters([
-            ...semesters.slice(0, index),
-            { ...newItem },
-            ...semesters.slice(++index),
-          ]);
-        } else {
-          setSemesters([...semesters, { ...newItem }]);
-        }
-
-        setErrors({});
-        setValidated(true);
-        setLoading(false);
-        reset();
-      } else {
-        setErrors(getErrors(response));
-        setValidated(false);
-        setLoading(false);
-      }
-    } else if (error) {
-      setErrors(getErrors(error));
-      setValidated(false);
+    if (edit) {
+      axiosFetch({
+        method: "put",
+        url: `/semesters/${currentSemester.id}`,
+        requestConfig: { data: newItem },
+      });
+    } else {
+      axiosFetch({
+        method: "post",
+        url: "/semesters",
+        requestConfig: { data: newItem },
+      });
     }
   };
 
+  useEffect(() => {
+    if (Object.keys(data).length) {
+      if (edit) {
+        let index = semesters.findIndex(
+          (item) => item.id === currentSemester.id
+        );
+        setSemesters([
+          ...semesters.slice(0, index),
+          { ...data },
+          ...semesters.slice(++index),
+        ]);
+      } else {
+        setSemesters([...semesters, { ...data }]);
+      }
+      setValidated(true);
+      reset();
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (error) {
+      handleError(error);
+    }
+  }, [error]);
+
   return (
     <>
-      {errors &&
+      {!loading &&
         !errors.semesterName &&
         !errors.startDate &&
         !errors.endDate &&
+        errors &&
         Object.entries(errors).map(([key, value]) => (
           <p
             key={key}
@@ -148,7 +159,11 @@ const SemesterDialog = ({ edit, reset }) => {
         </Row>
         <Row className="mb-5" sm="2">
           <Col sm="6" className="order-2 order-sm-1 mb-3 mb-sm-auto pe-sm-4">
-            <Button className="col-12 roundBorder dangerBtn" onClick={reset}>
+            <Button
+              className="col-12 roundBorder dangerBtn"
+              onClick={reset}
+              disabled={loading}
+            >
               CANCEL
             </Button>
           </Col>
