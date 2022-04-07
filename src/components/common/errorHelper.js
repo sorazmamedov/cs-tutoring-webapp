@@ -62,7 +62,7 @@ export function getErrors(err) {
       errorData.fileTypeMismatch = ".xlsx format excel file is required!";
     } else if (err?.message === "Network Error") {
       errorData.networkError = "Please check your internet connection!";
-    } else if (err?.message && err?.title) {
+    } else if (err?.message) {
       errorData.error = err.message;
     } else if (err?.error) {
       errorData.error = err.error

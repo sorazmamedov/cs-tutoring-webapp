@@ -57,17 +57,10 @@ const NewEventDialog = ({ event, reset }) => {
     });
   };
 
-  useEffect(() => {
-    if (Object.keys(data).length) {
-      setRefetch(true);
-      setTimeout(() => {
-        reset();
-      }, 2000);
-    }
-    // eslint-disable-next-line
-  }, [data]);
-
   const handleChange = () => {
+    if (error) {
+      setError("");
+    }
     calculate(formRef, setError, event, setSlots, setPreview);
   };
 
@@ -111,6 +104,16 @@ const NewEventDialog = ({ event, reset }) => {
     handleChange();
     // eslint-disable-next-line
   }, [event]);
+
+  useEffect(() => {
+    if (Object.keys(data).length) {
+      setRefetch(true);
+      setTimeout(() => {
+        reset();
+      }, 2000);
+    }
+    // eslint-disable-next-line
+  }, [data]);
 
   return (
     <>
@@ -189,7 +192,7 @@ const calculate = (formRef, setError, event, setSlots, setPreview) => {
     if (difference < duration) {
       setPreview([]);
       setError({
-        insufficientRange: `Not possible to create a ${duration} minute slot between
+        message: `Not possible to create a ${duration} minute slot between
         ${format(event.start, "h:mm bbb")}
         -
         ${format(event.end, "h:mm bbb")}`,
