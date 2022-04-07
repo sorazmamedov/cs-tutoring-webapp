@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -26,6 +26,7 @@ const DeleteAnnouncementDialog = ({ id, reset }) => {
         reset();
       }, 1500);
     }
+    // eslint-disable-next-line
   }, [data]);
 
   return (

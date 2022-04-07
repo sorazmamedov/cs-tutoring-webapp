@@ -15,8 +15,6 @@ const AnnouncementDialog = ({ id, reset, isAdmin }) => {
   const { data, error, setError, loading, axiosFetch } = useAxios();
   const { announcements, loadedSemester } = useContext(ViewContext);
   const { setAnnouncements } = useContext(ActionsContext);
-  const [validated, setValidated] = useState(false);
-  const [errors, setErrors] = useState({});
   const [publish, setPublish] = useState(false);
 
   const current = id && { ...announcements.find((item) => item.id === id) };
@@ -24,7 +22,6 @@ const AnnouncementDialog = ({ id, reset, isAdmin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setValidated(true);
     const form = e.currentTarget;
 
     if (!id) {
@@ -54,7 +51,6 @@ const AnnouncementDialog = ({ id, reset, isAdmin }) => {
     const error = announcementValidator(newItem);
     if (error) {
       setError(error);
-      setValidated(false);
       return;
     }
 
@@ -83,19 +79,18 @@ const AnnouncementDialog = ({ id, reset, isAdmin }) => {
         ...filtered,
       ]);
       reset();
-    } else if (error) {
-      setErrors(getErrors(error));
-      setValidated(false);
-      return;
     }
-  }, [data, error]);
+    // eslint-disable-next-line
+  }, [data]);
 
+  useEffect(() => {
+    if (error) console.log(getErrors(error));
+  }, [error]);
   return (
     <>
-      {errors &&
-        !errors.subject &&
-        !errors.content &&
-        Object.entries(errors).map(([key, value]) => (
+      {!loading &&
+        error &&
+        Object.entries(getErrors(error)).map(([key, value]) => (
           <p
             key={key}
             className="col-10 col-lg-8 mx-auto text-center text-danger"
@@ -105,7 +100,6 @@ const AnnouncementDialog = ({ id, reset, isAdmin }) => {
         ))}
       <Form
         noValidate
-        validated={validated}
         onSubmit={handleSubmit}
         className="col-10 col-lg-8 mx-auto mb-5"
       >
@@ -118,13 +112,9 @@ const AnnouncementDialog = ({ id, reset, isAdmin }) => {
               name="subject"
               className="roundBorder"
               defaultValue={current?.subject}
-              isInvalid={errors.subject}
               readOnly={!isAdmin}
               required
             />
-            <Form.Control.Feedback type="invalid">
-              {errors.subject}
-            </Form.Control.Feedback>
           </Col>
         </Row>
         <Row className="mb-5">
@@ -136,13 +126,9 @@ const AnnouncementDialog = ({ id, reset, isAdmin }) => {
               name="content"
               className="roundBorder"
               defaultValue={current?.content}
-              isInvalid={errors.content}
               readOnly={!isAdmin}
               required
             />
-            <Form.Control.Feedback type="invalid">
-              {errors.content}
-            </Form.Control.Feedback>
           </Col>
         </Row>
         {isAdmin && (
