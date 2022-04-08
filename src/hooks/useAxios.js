@@ -28,7 +28,7 @@ const useAxios = () => {
       });
       setResponse(response.data);
       if (Object.keys(error).length) {
-        setError("")
+        setError("");
       }
     } catch (err) {
       if (err.response) {

@@ -46,7 +46,7 @@ const Schedules = () => {
       {loading && <LoadingPlaceholder />}
       {!loading && error && <ErrorPlaceholder />}
       {!loading && !error && schedules && schedules.length === 0 && (
-        <NoDataPlaceholder />
+        <NoDataPlaceholder message="No schedule available at this time!" />
       )}
       {!loading && !error && schedules && schedules.length !== 0 && (
         <>

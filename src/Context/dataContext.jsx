@@ -1,13 +1,15 @@
 import React, { createContext, useState } from "react";
 import useAxios from "../hooks/useAxios";
 import { useEffect } from "react";
+import useAuth from "../hooks/useAuth";
 
 const GlobalViewContext = createContext({});
 const GlobalActionsContext = createContext({});
 
 const DataProvider = ({ children }) => {
+  const { signingOut } = useAuth();
   const { data, error, loading, axiosFetch } = useAxios();
-  const [loadedSemester, setLoadedSemester] = useState({});
+  const [loadedSemester, setLoadedSemester] = useState("");
 
   const fetchActiveSemester = () => {
     axiosFetch({
@@ -28,6 +30,14 @@ const DataProvider = ({ children }) => {
       setLoadedSemester({ ...data });
     }
   }, [data]);
+
+  useEffect(() => {
+    if (signingOut) {
+      setLoadedSemester("");
+      fetchActiveSemester();
+    }
+    // eslint-disable-next-line
+  }, [signingOut]);
 
   return (
     <GlobalViewContext.Provider

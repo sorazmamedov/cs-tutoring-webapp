@@ -19,23 +19,22 @@ import { showErrors } from "../common/errorHelper";
 import useModal from "../../hooks/useModalStates";
 
 const Schedules = () => {
-  const { show, title, ModalBody, reset, setModalBody, setTitle, setShow } =
-    useModal();
+  const { show, title, ModalBody, reset, setModalBody, setTitle, setShow } = useModal();
   const {
     tutors,
     error: tutorsError,
     loading: tutorsLoading,
   } = useContext(TutorContext);
-  const { error, loading, schedules, loadedSemester, auth, ROLES } =
-    useContext(ViewContext);
+  const { error, loading, schedules, loadedSemester, auth, ROLES } = useContext(ViewContext);
   const { setSchedules } = useContext(ActionsContext);
-  const [newItemId, setNewItemId] = useState(null);
+  const [newItemId, setNewItemId] = useState("");
 
   const isAdmin = auth?.user?.roles.includes(ROLES.Admin);
   const header = ["Day", "From", "To", "Tutor", "Zoom Link"];
   if (isAdmin) {
     header.push("Actions");
   }
+
   const handleAddSchedule = () => {
     if (tutors.filter((tutor) => tutor.isActive).length) {
       if (!newItemId) {
@@ -86,7 +85,7 @@ const Schedules = () => {
         !tutorsLoading &&
         !tutorsError &&
         schedules &&
-        schedules.length === 0 && <NoDataPlaceholder />}
+        schedules.length === 0 && <NoDataPlaceholder message="No schedule available at this time!" />}
       {!loading &&
         !error &&
         !tutorsLoading &&

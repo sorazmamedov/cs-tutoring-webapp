@@ -4,8 +4,8 @@ import { isEqual } from "../../utils/isEqual";
 import ReadOnlyRow from "./readOnlyRow";
 import EditableRow from "./editableRow";
 import { ActionsContext, ViewContext } from "../../Context/scheduleContext";
-import { postSchedule, putSchedule } from "../../apis/cs-tutoring/schedules";
 import { showErrors } from "../common/errorHelper";
+import useAxios from "../../hooks/useAxios";
 
 const ScheduleRows = ({
   newItemId,
@@ -13,17 +13,68 @@ const ScheduleRows = ({
   setTitle,
   setModalBody,
   setShow,
-  tutors
+  tutors,
 }) => {
+  const { data, error, axiosFetch } = useAxios();
   const { schedules, auth, ROLES } = useContext(ViewContext);
   const { setSchedules } = useContext(ActionsContext);
-  const [saving, setSaving] = useState(null);
+  const [saving, setSaving] = useState("");
   const [editId, setEditId] = useState(newItemId);
 
   const handleEdit = (e) => {
     e.stopPropagation();
     const scheduleId = e.target.getAttribute("scheduleid");
     setEditId(scheduleId);
+  };
+
+  const handleSave = async (edited) => {
+    setSaving(edited.id);
+    const actual = schedules.find(({ id }) => id === edited.id);
+
+    //Abort if nothing has changed or in case of new schedule, drop it if empty
+    if (isEqual(actual, edited)) {
+      if (actual.id === newItemId) {
+        setSchedules([...schedules.slice(1)]);
+        setNewItemId("");
+      }
+      resetStates();
+      return;
+    }
+
+    const result = scheduleValidator(edited);
+    if (result) {
+      setSaving("");
+      showErrors(result, setTitle, setShow, setModalBody);
+      return;
+    }
+
+    if (newItemId) {
+      axiosFetch({
+        method: "POST",
+        url: "/schedules",
+        requestConfig: { data: edited },
+      });
+    } else {
+      delete edited.id;
+      axiosFetch({
+        method: "PUT",
+        url: `/schedules/${editId}`,
+        requestConfig: { data: edited },
+      });
+    }
+  };
+
+  const handleCancel = () => {
+    if (newItemId) {
+      setSchedules([...schedules.filter(({ id }) => id !== newItemId)]);
+    }
+    resetStates();
+  };
+
+  const resetStates = () => {
+    setNewItemId("");
+    setEditId("");
+    setSaving("");
   };
 
   const handleToggle = async (e) => {
@@ -33,79 +84,50 @@ const ScheduleRows = ({
     }
 
     setSaving(id);
-    const item = schedules.find((item) => item.id === id);
-    const modified = { ...item, isActive: !item.isActive };
-    const result = await putSchedule(modified);
+    const schedule = schedules.find((item) => item.id === id);
 
-    if (result.status === 200) {
-      let index = schedules.findIndex((item) => item.id === id);
-      setSaving(null);
-      setSchedules([
-        ...schedules.slice(0, index),
-        result.data,
-        ...schedules.slice(++index),
-      ]);
-    } else {
-      setSaving(null);
-      showErrors(result, setTitle, setShow, setModalBody);
-    }
+    axiosFetch({
+      method: "PUT",
+      url: `/schedules/${id}`,
+      requestConfig: { data: { isActive: !schedule.isActive } },
+    });
   };
 
-  const handleSave = async (edited) => {
-    setSaving(edited.id);
-    const actual = schedules.find(({ id }) => id === edited.id);
-
-    //Abort if nothing has changed or in case of new schedule, drop it if empty
-    if (actual && isEqual(actual, edited)) {
-      if (actual.id === newItemId) {
-        setSchedules([...schedules.slice(1)]);
-        setNewItemId(null);
+  useEffect(() => {
+    if (Object.keys(data).length) {
+      if (newItemId || editId) {
+        let index = schedules.findIndex((item) => item.id === editId);
+        setSchedules([
+          ...schedules.slice(0, index),
+          data,
+          ...schedules.slice(++index),
+        ]);
+      } else {
+        let index = schedules.findIndex((item) => item.id === saving);
+        setSchedules([
+          ...schedules.slice(0, index),
+          data,
+          ...schedules.slice(++index),
+        ]);
       }
-      setEditId(null);
-      setSaving(null);
-      return;
+      resetStates();
     }
+    // eslint-disable-next-line
+  }, [data]);
 
-    const result = scheduleValidator(edited);
-    if (result) {
-      setSaving(null);
-      showErrors(result, setTitle, setShow, setModalBody);
-      return;
+  useEffect(() => {
+    if (error) {
+      setSaving("");
+      showErrors(error, setTitle, setShow, setModalBody);
     }
-
-    const response =
-      edited.id === newItemId
-        ? await postSchedule(edited)
-        : await putSchedule(edited);
-
-    if (response.status === 200 || response.status === 201) {
-      let index = schedules.findIndex((item) => item.id === edited.id);
-      setSchedules([
-        ...schedules.slice(0, index),
-        edited,
-        ...schedules.slice(++index),
-      ]);
-      setEditId(null);
-      setNewItemId(null);
-    } else {
-      showErrors(response, setTitle, setShow, setModalBody);
-    }
-
-    setSaving(null);
-  };
-
-  const handleCancel = () => {
-    if (newItemId) {
-      setSchedules([...schedules.filter(({ id }) => id !== newItemId)]);
-      setNewItemId(null);
-    }
-    setEditId(null);
-  };
+    // eslint-disable-next-line
+  }, [error]);
 
   useEffect(() => {
     if (newItemId) {
       setEditId(newItemId);
     }
+    // eslint-disable-next-line
   }, [newItemId]);
 
   return [...schedules]
@@ -118,7 +140,6 @@ const ScheduleRows = ({
           admin={auth?.user?.roles.includes(ROLES.Admin)}
           tutors={tutors.filter((tutor) => tutor.isActive)}
           schedule={schedule}
-          schedules={schedules}
           handleSave={handleSave}
           handleCancel={handleCancel}
         />

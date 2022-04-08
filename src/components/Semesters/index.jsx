@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import Placeholder from "react-bootstrap/Placeholder";
 import { ViewContext, ActionsContext } from "../../Context/semesterContext";
 import MainContainer from "../common/mainContainer";
@@ -12,15 +12,20 @@ import SemesterDialog from "./semesterDialog";
 import TemplateModal from "../common/templateModal";
 import { HouseIcon } from "../common/icons";
 import { PlusIcon } from "../common/iconsWithTooltip";
-import { semesterValidator } from "../../utils/validator";
-import { putSemester } from "../../apis/cs-tutoring/semesters";
 import InfoDialog from "../common/infoDialog";
 import useModal from "../../hooks/useModalStates";
+import useAxios from "../../hooks/useAxios";
+import { getErrors } from "../common/errorHelper";
 
 const Semesters = () => {
+  const {
+    data,
+    error: fetchErr,
+    loading: fetchLoading,
+    axiosFetch,
+  } = useAxios();
   const { show, title, ModalBody, reset, setModalBody, setTitle, setShow } =
     useModal();
-  const [changingStatus, setChangingStatus] = useState(false);
   const { semesters, currentSemester, loading, error, loadedSemester } =
     useContext(ViewContext);
   const { setSemesters, setCurrentSemester, setLoadedSemester } =
@@ -42,51 +47,11 @@ const Semesters = () => {
   };
 
   const handleStatusChange = async () => {
-    setChangingStatus(true);
-    const modified = {
-      ...currentSemester,
-      active: !currentSemester.active,
-    };
-
-    let error = semesterValidator({
-      ...modified,
-      startDate: new Date(modified.startDate),
-      endDate: new Date(modified.endDate),
+    axiosFetch({
+      method: "PUT",
+      url: `/semesters/${currentSemester.id}`,
+      requestConfig: { data: { active: !currentSemester.active } },
     });
-
-    if (!error) {
-      const response = await putSemester(modified);
-
-      if (response.status === 200) {
-        let index = semesters.findIndex((item) => item.id === modified.id);
-        setSemesters([
-          ...semesters.slice(0, index),
-          modified,
-          ...semesters.slice(++index),
-        ]);
-        setCurrentSemester({ ...modified });
-        if (loadedSemester.id === modified.id) {
-          setLoadedSemester({ ...modified });
-        }
-        setChangingStatus(false);
-      } else {
-        if (response.name === "AbortError") {
-          console.log("[fetch aborted...]");
-        } else {
-          let message = "";
-          if (response.message === "Network Error") {
-            message = "Please check your internet connection!";
-          } else if (response.data.error) {
-            message = response.data.error;
-          }
-          setChangingStatus(false);
-          setModalBody(<InfoDialog {...{ message, reset }} />);
-          setShow(true);
-        }
-      }
-    } else {
-      setChangingStatus(false);
-    }
   };
 
   const handleAddSemester = () => {
@@ -118,6 +83,35 @@ const Semesters = () => {
     }
     // eslint-disable-next-line
   }, [semesters]);
+
+  useEffect(() => {
+    if (Object.keys(data).length) {
+      let index = semesters.findIndex((item) => item.id === currentSemester.id);
+      const modified = { ...currentSemester, active: !currentSemester.active };
+      setSemesters([
+        ...semesters.slice(0, index),
+        modified,
+        ...semesters.slice(++index),
+      ]);
+      setCurrentSemester(modified);
+      if (loadedSemester.id === modified.id) {
+        setLoadedSemester({ ...modified });
+      }
+    }
+    // eslint-disable-next-line
+  }, [data]);
+
+  useEffect(() => {
+    if (fetchErr) {
+      let message = "";
+      Object.entries(getErrors(fetchErr)).forEach(
+        ([key, value]) => (message += value + "\n")
+      );
+      setModalBody(<InfoDialog {...{ message, reset }} />);
+      setShow(true);
+    }
+    // eslint-disable-next-line
+  }, [fetchErr]);
 
   return (
     <MainContainer className="shadow p-3 mb-4">
@@ -170,7 +164,7 @@ const Semesters = () => {
             <StatusLabelWithBtn
               currentSemester={currentSemester}
               onClick={handleStatusChange}
-              changing={changingStatus}
+              changing={fetchLoading}
             />
           </div>
           <ActionsDropDown

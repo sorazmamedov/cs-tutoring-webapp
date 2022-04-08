@@ -61,7 +61,7 @@ const Announcements = () => {
       {loading && <LoadingPlaceholder />}
       {!loading && error && <ErrorPlaceholder />}
       {!loading && !error && announcements && announcements.length === 0 && (
-        <NoDataPlaceholder />
+        <NoDataPlaceholder message="No announcements for now!" />
       )}
       {!loading && !error && announcements && announcements.length !== 0 && (
         <>

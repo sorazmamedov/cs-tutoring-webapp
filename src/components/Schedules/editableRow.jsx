@@ -99,13 +99,20 @@ const EditableRow = ({
             minWidth: "20ch",
             maxWidth: "30ch",
           }}
-          onChange={(e) => setEdited({ ...edited, location: e.target.value })}
+          onChange={(e) =>
+            setEdited({
+              ...edited,
+              location: e.target.value.startsWith("www")
+                ? `https://${e.target.value}`
+                : e.target.value,
+            })
+          }
           required
         />
       </td>
       {admin && (
         <td className="px-0 d-flex justify-content-evenly">
-          {saving !== edited.id ? (
+          {saving !== schedule.id ? (
             <>
               <CheckIcon
                 onClick={() => handleSave(edited)}

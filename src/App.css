@@ -16,10 +16,11 @@
 }
 
 .shadow {
-  background: #c2c0c0e8 0% 0% no-repeat padding-box;
+  background: #c7c7c7 0% 0% no-repeat padding-box;
   box-shadow: 2px 2px 15px #00000029;
   border-radius: 10px;
   opacity: 1;
+  /* min-height: 350px; */
 }
 
 [data-icon-type] {

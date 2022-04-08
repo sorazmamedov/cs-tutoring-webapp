@@ -19,8 +19,7 @@ const ReadOnlyRow = ({
       <td>{`${tutor.firstName} ${tutor.lastName}`}</td>
       {isLogged && (
         <td>
-          {schedule.location.startsWith("www") ||
-          schedule.location.startsWith("https") ? (
+          {schedule.location.startsWith("https") ? (
             <a
               href={schedule.location}
               target="_blank"

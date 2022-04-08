@@ -47,13 +47,13 @@ const SemesterDialog = ({ edit, reset }) => {
 
     if (edit) {
       axiosFetch({
-        method: "put",
+        method: "PUT",
         url: `/semesters/${currentSemester.id}`,
         requestConfig: { data: newItem },
       });
     } else {
       axiosFetch({
-        method: "post",
+        method: "POST",
         url: "/semesters",
         requestConfig: { data: newItem },
       });
@@ -77,6 +77,7 @@ const SemesterDialog = ({ edit, reset }) => {
       setValidated(true);
       reset();
     }
+    // eslint-disable-next-line
   }, [data]);
 
   useEffect(() => {

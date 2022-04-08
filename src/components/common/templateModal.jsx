@@ -8,7 +8,7 @@ const TemplateModal = ({ title, show, ModalBody, reset, size = "lg" }) => {
       show={show}
       onHide={reset}
       backdrop="static"
-      keyboard={false}
+      // keyboard={false}
       centered
       className="text-muted"
     >
