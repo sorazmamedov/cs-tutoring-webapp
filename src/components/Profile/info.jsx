@@ -38,9 +38,9 @@ const ProfileInfo = ({ auth, setAuth, ROLES }) => {
     setError("");
     const form = e.currentTarget;
 
-    const pronouns = form.pronouns.value;
-    const neiuId = form.neiuId.value;
-    const about = form?.about?.value;
+    const pronouns = form.pronouns.value.trim();
+    const neiuId = form.neiuId.value.trim();
+    const about = form?.about?.value.trim();
 
     let changes = {};
 
@@ -56,7 +56,7 @@ const ProfileInfo = ({ auth, setAuth, ROLES }) => {
       changes.neiuId = neiuId;
     }
 
-    if (!Object.keys(changes)) {
+    if (!Object.keys(changes).length) {
       return;
     }
 

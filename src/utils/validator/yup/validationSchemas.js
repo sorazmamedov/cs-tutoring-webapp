@@ -8,9 +8,11 @@ export default Object.freeze({
     .required()
     .typeError("${path}" + messages.idError),
 
-  roles: array().items(number().oneOf([1960, 1988, 2017])),
+  roles: array(number().oneOf([1960, 1988, 2017])),
 
   activeSemesters: array(string().trim().length(len.idLength)),
+
+  pronouns: string().trim().min(0).max(100),
 
   url: string().url(),
 
