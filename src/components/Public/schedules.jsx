@@ -53,12 +53,12 @@ const Schedules = () => {
           <Table className="text-center" bordered hover responsive>
             <TableHeader headers={header} />
             <tbody className="text-muted">
-              {schedules.sort(compare).map((schedule) => (
-                <tr key={schedule.id}>
+              {schedules.sort(compare).map((schedule, index) => (
+                <tr key={index}>
                   <td>{schedule.day}</td>
                   <td>{schedule.startHour}</td>
                   <td>{schedule.endHour}</td>
-                  <td>{`${schedule.tutor.firstName} ${schedule.tutor.lastName}`}</td>
+                  <td>{schedule.tutor}</td>
                 </tr>
               ))}
             </tbody>

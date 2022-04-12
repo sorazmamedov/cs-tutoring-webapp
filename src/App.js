@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Layout from "./components/layout";
@@ -10,8 +10,10 @@ import Settings from "./components/settings";
 import useAuth from "./hooks/useAuth";
 import useLogin from "./hooks/useLogin";
 import { loadClientLib } from "./libs/google";
+import { GlobalViewContext } from "./Context/dataContext";
 
 function App() {
+  const { darkTheme } = useContext(GlobalViewContext);
   const { ROLES } = useAuth();
   const { handleResponse } = useLogin();
 
@@ -28,7 +30,7 @@ function App() {
     loadClientLib();
   });
   return (
-    <>
+    <div className={darkTheme ? "dark" : "light"}>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />} />
@@ -41,7 +43,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-    </>
+    </div>
   );
 }
 

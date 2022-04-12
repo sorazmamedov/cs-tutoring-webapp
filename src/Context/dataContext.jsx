@@ -10,6 +10,7 @@ const DataProvider = ({ children }) => {
   const { signingOut } = useAuth();
   const { data, error, loading, axiosFetch } = useAxios();
   const [loadedSemester, setLoadedSemester] = useState("");
+  const [darkTheme, setDarkTheme] = useState(false);
 
   const fetchActiveSemester = () => {
     axiosFetch({
@@ -45,11 +46,13 @@ const DataProvider = ({ children }) => {
         loadedSemester,
         error,
         loading,
+        darkTheme,
       }}
     >
       <GlobalActionsContext.Provider
         value={{
           setLoadedSemester,
+          setDarkTheme,
         }}
       >
         {children}

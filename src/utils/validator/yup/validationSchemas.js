@@ -8,8 +8,15 @@ export default Object.freeze({
     .required()
     .typeError("${path}" + messages.idError),
 
+  roles: array().items(number().oneOf([1960, 1988, 2017])),
+
+  activeSemesters: array(string().trim().length(len.idLength)),
+
+  url: string().url(),
+
   neiuId: string()
-    .matches(/^\d{9}$/)
+    .trim()
+    .matches(/^\d{9}$/, "NEIU ID must be a 9 digit number.")
     .required()
     .typeError(messages.isRequired),
 
@@ -82,12 +89,12 @@ export default Object.freeze({
   startDate: date()
     .min(new Date(len.minDate), messages.dateError)
     .required()
-    .typeError("${path} " + messages.isRequired),
+    .typeError(messages.isRequired),
 
   endDate: date()
     .min(ref("startDate"), messages.dateError)
     .required()
-    .typeError("${path}" + messages.isRequired),
+    .typeError(messages.isRequired),
 
   start: date()
     .min(

@@ -1,18 +1,15 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ActionsContext, ViewContext } from "../../Context/tutorsContext";
-import { EditIcon, SwitchIcon } from "../common/iconsWithTooltip";
+import { SwitchIcon } from "../common/iconsWithTooltip";
 import SpinnerBtn from "../common/spinnerBtn";
-import { putTutor } from "../../apis/cs-tutoring/tutors";
 import { showErrors } from "../common/errorHelper";
+import useAxios from "../../hooks/useAxios";
 
 const TutorRows = ({ setShow, setTitle, setModalBody }) => {
+  const { data, error, axiosFetch } = useAxios();
   const { auth, ROLES, tutors } = useContext(ViewContext);
   const { setTutors } = useContext(ActionsContext);
-  const [saving, setSaving] = useState(null);
-
-  const handleEdit = (e) => {
-    console.log("Edit Target: ", e);
-  };
+  const [saving, setSaving] = useState("");
 
   const handleToggle = async (e) => {
     if (saving) {
@@ -20,23 +17,31 @@ const TutorRows = ({ setShow, setTitle, setModalBody }) => {
     }
     const id = e.target.getAttribute("tutorid");
     setSaving(id);
-    const item = tutors.find((item) => item.id === id);
-    const modified = { ...item, isActive: !item.isActive };
-    const result = await putTutor(modified);
+    const tutor = tutors.find((item) => item.id === id);
 
-    if (result.status === 200) {
-      let index = tutors.findIndex((item) => item.id === id);
-      setSaving(null);
-      setTutors([
-        ...tutors.slice(0, index),
-        result.data,
-        ...tutors.slice(++index),
-      ]);
-    } else {
-      setSaving(null);
-      showErrors(result, setTitle, setShow, setModalBody);
-    }
+    axiosFetch({
+      method: "PUT",
+      url: `/users/${id}`,
+      requestConfig: { data: { isActive: !tutor.isActive } },
+    });
   };
+
+  useEffect(() => {
+    if (Object.keys(data).length) {
+      let index = tutors.findIndex((item) => item.id === saving);
+      setTutors([...tutors.slice(0, index), data, ...tutors.slice(++index)]);
+      setSaving(null);
+    }
+    // eslint-disable-next-line
+  }, [data]);
+
+  useEffect(() => {
+    if (error) {
+      setSaving("");
+      showErrors(error, setTitle, setShow, setModalBody);
+    }
+    // eslint-disable-next-line
+  }, [error]);
 
   return tutors.map((tutor) => (
     <tr id={tutor.id} key={tutor.id}>
@@ -51,15 +56,12 @@ const TutorRows = ({ setShow, setTitle, setModalBody }) => {
       {auth?.user?.roles.includes(ROLES.Admin) && (
         <td className="pe-0 no-stretch">
           {saving !== tutor.id ? (
-            <>
-              <EditIcon onClick={handleEdit} tutorid={tutor.id} />
-              <SwitchIcon
-                tutorid={tutor.id}
-                className="me-0 ms-2"
-                onChange={handleToggle}
-                checked={tutor.isActive}
-              />
-            </>
+            <SwitchIcon
+              tutorid={tutor.id}
+              className="me-0 ms-2"
+              onChange={handleToggle}
+              checked={tutor.isActive}
+            />
           ) : (
             <SpinnerBtn btnVariant="" variant="primary" />
           )}

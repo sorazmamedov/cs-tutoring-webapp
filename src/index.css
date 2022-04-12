@@ -3,8 +3,8 @@
 :root {
   --main-pink: #ff0066c9;
   --main-blue: #1a2943;
-  /* --main-bg-color: #f0f0f0; */
-  --main-bg-color: #2b3346;
+  --main-bg-color-light: #f0f0f0;
+  --main-bg-color-dark: #2b3346;
   --shadow-bg-color: #ffffff;
 }
 
@@ -25,7 +25,14 @@ body {
 .App {
   min-height: 100vh;
   position: relative;
-  background-color: var(--main-bg-color);
+}
+
+.dark {
+  background-color: var(--main-bg-color-dark);
+}
+
+.light {
+  background-color: var(--main-bg-color-light);
 }
 
 main {

@@ -16,9 +16,9 @@ const TutorDataProvider = ({ children }) => {
   const fetchTutors = () => {
     axiosFetch({
       method: "GET",
-      url: "/tutors",
+      url: "/users",
       requestConfig: {
-        params: { semesterId: loadedSemester.id },
+        params: { semesterId: loadedSemester.id, role: ROLES.Tutor },
       },
     });
   };
@@ -42,6 +42,7 @@ const TutorDataProvider = ({ children }) => {
         tutors,
         error,
         loading,
+        loadedSemester,
         auth,
         ROLES,
         signingIn,

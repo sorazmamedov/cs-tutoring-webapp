@@ -10,17 +10,33 @@ const useLogin = () => {
     setErrors({});
 
     try {
-      const token = response.credential;
-      const res = await axios({
-        method: "get",
-        url: "/auth/login",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
+      let token;
+      if (!sessionStorage.getItem("token")) {
+        token = response.credential;
+        const res = await axios({
+          method: "get",
+          url: "/auth/login",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
 
-      setAuth((prev) => ({ ...prev, token, user: res.data }));
+        setAuth((prev) => ({ ...prev, token, user: res.data }));
+        sessionStorage.setItem("token", token);
+      } else {
+        console.log("Token exists");
+        const res = await axios({
+          method: "get",
+          url: "/auth/login",
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        });
+
+        setAuth((prev) => ({ ...prev, token: sessionStorage.getItem("token"), user: res.data }));
+      }
     } catch (error) {
       if (error?.response) {
         setErrors(getErrors(error.response));

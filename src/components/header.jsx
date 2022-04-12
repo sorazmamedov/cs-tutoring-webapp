@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -8,8 +8,14 @@ import TemplateModal from "./common/templateModal";
 import Login from "./Login";
 import Logout from "./Logout";
 import useAuth from "../hooks/useAuth";
+import {
+  GlobalActionsContext,
+  GlobalViewContext,
+} from "../Context/dataContext";
 
 const Header = () => {
+  const { darkTheme } = useContext(GlobalViewContext);
+  const { setDarkTheme } = useContext(GlobalActionsContext);
   const { auth, ROLES } = useAuth();
   const {
     show,
@@ -60,6 +66,16 @@ const Header = () => {
                 )}
               </>
             )}
+            <NavLink
+              to="*"
+              className={classes}
+              onClick={(e) => {
+                e.preventDefault();
+                setDarkTheme(!darkTheme);
+              }}
+            >
+              {darkTheme ? "Light" : "Dark"}
+            </NavLink>
             {auth?.user ? (
               <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
             ) : (

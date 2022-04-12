@@ -3,9 +3,11 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
 import useAuth from "../../hooks/useAuth";
+import useLogin from "../../hooks/useLogin";
 
 const Login = ({ reset }) => {
   const { errors, signingIn, isLogged } = useAuth();
+  const { handleResponse } = useLogin();
 
   useEffect(() => {
     window.google.accounts.id.renderButton(
@@ -59,6 +61,12 @@ const Login = ({ reset }) => {
         </Col>
       </Row>
       <Row>
+        <button
+          className="btn btn-warning col-10 col-lg-6 mx-auto text-center"
+          onClick={handleResponse}
+        >
+          Login
+        </button>
         <p className="col-10 col-lg-8 mx-auto text-center">
           Please sign in with NEIU email only!
         </p>

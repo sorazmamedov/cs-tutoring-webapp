@@ -7,7 +7,7 @@ import MainContainer from "../common/mainContainer";
 import useAuth from "../../hooks/useAuth";
 
 const Profile = () => {
-  const { auth } = useAuth();
+  const { auth, setAuth, ROLES } = useAuth();
   return (
     <MainContainer>
       <Row className="mt-4">
@@ -15,7 +15,7 @@ const Profile = () => {
           <ProfileImage src={auth?.user?.picture} />
         </Col>
         <Col sm={8} className="">
-          <ProfileInfo user={auth?.user} />
+          <ProfileInfo auth={auth} setAuth={setAuth} ROLES={ROLES} />
         </Col>
       </Row>
     </MainContainer>

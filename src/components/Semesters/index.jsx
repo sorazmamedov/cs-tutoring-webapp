@@ -114,7 +114,7 @@ const Semesters = () => {
   }, [fetchErr]);
 
   return (
-    <MainContainer className="shadow p-3 mb-4">
+    <MainContainer>
       {loading && (
         <Placeholder as="p" animation="glow" className="m-auto">
           <Placeholder xs={12} />

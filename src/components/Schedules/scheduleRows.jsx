@@ -29,11 +29,11 @@ const ScheduleRows = ({
 
   const handleSave = async (edited) => {
     setSaving(edited.id);
-    const actual = schedules.find(({ id }) => id === edited.id);
+    const schedule = schedules.find(({ id }) => id === edited.id);
 
-    //Abort if nothing has changed or in case of new schedule, drop it if empty
-    if (isEqual(actual, edited)) {
-      if (actual.id === newItemId) {
+    //Abort if nothing has changed or remove from schedules array if empty
+    if (isEqual(schedule, edited)) {
+      if (schedule.id === newItemId) {
         setSchedules([...schedules.slice(1)]);
         setNewItemId("");
       }
@@ -78,11 +78,11 @@ const ScheduleRows = ({
   };
 
   const handleToggle = async (e) => {
-    const id = e.target.getAttribute("scheduleid");
     if (saving) {
       return;
     }
 
+    const id = e.target.getAttribute("scheduleid");
     setSaving(id);
     const schedule = schedules.find((item) => item.id === id);
 

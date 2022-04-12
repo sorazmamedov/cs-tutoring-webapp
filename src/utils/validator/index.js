@@ -1,8 +1,6 @@
 import schemas from "./yup";
 
-const adminValidator = (payload) => schemas.adminValidator(payload);
-const tutorValidator = (payload) => schemas.tutorValidator(payload);
-const studentValidator = (payload) => schemas.studentValidator(payload);
+const userValidator = (payload) => schemas.userValidator(payload);
 const announcementValidator = (payload, context) =>
   schemas.announcementValidator(payload, context);
 const appointmentValidator = (payload) => schemas.appointmentValidator(payload);
@@ -17,9 +15,7 @@ const eventValidator = (payload, context) =>
   schemas.eventValidator(payload, context);
 
 export {
-  adminValidator,
-  tutorValidator,
-  studentValidator,
+  userValidator,
   announcementValidator,
   appointmentValidator,
   reportValidator,
