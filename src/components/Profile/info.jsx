@@ -9,7 +9,7 @@ import { showErrors } from "../common/errorHelper";
 import TemplateModal from "../common/templateModal";
 import useModal from "../../hooks/useModalStates";
 
-const ProfileInfo = ({ auth, setAuth, ROLES }) => {
+const ProfileInfo = ({ auth, setAuth, ROLES, darkTheme }) => {
   const { show, title, ModalBody, reset, setModalBody, setTitle, setShow } =
     useModal();
   const [validated, setValidated] = useState(false);
@@ -95,7 +95,7 @@ const ProfileInfo = ({ auth, setAuth, ROLES }) => {
   return (
     <>
       <Form
-        className="mb-4"
+        className={darkTheme ? "mb-4" : "mb-4 text-muted"}
         noValidate
         validated={validated}
         onSubmit={handleSubmit}
@@ -108,7 +108,7 @@ const ProfileInfo = ({ auth, setAuth, ROLES }) => {
             className="col-12 col-md-11 justify-content-md-between"
           >
             <Form.Group className="col-6 pe-4">
-              <Form.Label className="text-muted mb-0">Name</Form.Label>
+              <Form.Label className="mb-0">Name</Form.Label>
               <Form.Control
                 type="text"
                 className="roundBorder"
@@ -118,7 +118,7 @@ const ProfileInfo = ({ auth, setAuth, ROLES }) => {
               />
             </Form.Group>
             <Form.Group className="col-6 ps-4 ms-sm-0">
-              <Form.Label className="text-muted mb-0">Email</Form.Label>
+              <Form.Label className="mb-0">Email</Form.Label>
               <Form.Control
                 type="email"
                 className="roundBorder"
@@ -134,7 +134,7 @@ const ProfileInfo = ({ auth, setAuth, ROLES }) => {
             className="col-12 col-md-11 justify-content-md-between"
           >
             <Form.Group className="col-6 pe-4">
-              <Form.Label className="text-muted mb-0">Pronouns</Form.Label>
+              <Form.Label className="mb-0">Pronouns</Form.Label>
               <Form.Control
                 type="text"
                 placeholder=""
@@ -148,7 +148,7 @@ const ProfileInfo = ({ auth, setAuth, ROLES }) => {
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="col-6 ps-4 ms-sm-0">
-              <Form.Label className="text-muted mb-0">
+              <Form.Label className="mb-0">
                 NEIU ID (9 digits)
               </Form.Label>
               <Form.Control
@@ -167,7 +167,7 @@ const ProfileInfo = ({ auth, setAuth, ROLES }) => {
           {auth?.user?.roles.includes(ROLES.Tutor) && (
             <Stack className="col-12 col-md-11">
               <Form.Group>
-                <Form.Label className="text-muted mb-0">Bio</Form.Label>
+                <Form.Label className="mb-0">Bio</Form.Label>
                 <Form.Control
                   as="textarea"
                   rows={3}

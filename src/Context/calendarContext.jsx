@@ -6,7 +6,7 @@ const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const CalendarDataProvider = ({ children }) => {
-  const { loadedSemester } = useContext(GlobalViewContext);
+  const { loadedSemester, darkTheme } = useContext(GlobalViewContext);
   const { data, error, loading, axiosFetch } = useAxios();
   const [events, setEvents] = useState([]);
   const [current, setCurrent] = useState("");
@@ -49,6 +49,7 @@ const CalendarDataProvider = ({ children }) => {
         error,
         loading,
         loadedSemester,
+        darkTheme
       }}
     >
       <ActionsContext.Provider

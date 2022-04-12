@@ -56,9 +56,9 @@ export const cancelIcon = (props) => (
 );
 
 export const moonIcon = (props) => (
-  <i class="bi bi-moon-stars-fill" data-icon-type="moon" {...props} />
+  <i className="bi bi-moon-stars-fill" data-icon-type="moon" {...props} />
 );
 
 export const sunIcon = (props) => (
-  <i class="bi bi-brightness-high-fill" data-icon-type="sun" {...props} />
+  <i className="bi bi-brightness-high-fill" data-icon-type="sun" {...props} />
 );

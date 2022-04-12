@@ -9,7 +9,7 @@ const ActionsContext = createContext({});
 
 const AnnouncementDataProvider = ({ children }) => {
   const { auth, ROLES } = useAuth();
-  const { loadedSemester } = useContext(GlobalViewContext);
+  const { loadedSemester, darkTheme } = useContext(GlobalViewContext);
   const { data, error, loading, axiosFetch } = useAxios();
   const [announcements, setAnnouncements] = useState([]);
   const [current, setCurrent] = useState("");
@@ -48,6 +48,7 @@ const AnnouncementDataProvider = ({ children }) => {
         ROLES,
         error,
         loading,
+        darkTheme
       }}
     >
       <ActionsContext.Provider

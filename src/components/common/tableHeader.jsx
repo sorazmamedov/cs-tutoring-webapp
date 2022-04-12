@@ -1,8 +1,8 @@
 import React from "react";
 
-const TableHeader = ({ headers }) => {
+const TableHeader = ({ headers, darkTheme }) => {
   return (
-    <thead className="text-muted fw-bolder border-white">
+    <thead className={!darkTheme && "text-muted fw-bolder border-white"} >
       <tr>
         {headers.map((cell, i) => (
           <td key={i}>{cell}</td>

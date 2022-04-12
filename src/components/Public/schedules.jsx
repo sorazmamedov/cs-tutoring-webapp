@@ -13,7 +13,7 @@ import useAxios from "../../hooks/useAxios";
 import { GlobalViewContext } from "../../Context/dataContext";
 
 const Schedules = () => {
-  const { loadedSemester } = useContext(GlobalViewContext);
+  const { loadedSemester, darkTheme } = useContext(GlobalViewContext);
   const { data, error, loading, axiosFetch } = useAxios();
   const [schedules, setSchedules] = useState([]);
   const header = ["Day", "From", "To", "Tutor"];
@@ -52,7 +52,7 @@ const Schedules = () => {
         <>
           <Table className="text-center" bordered hover responsive>
             <TableHeader headers={header} />
-            <tbody className="text-muted">
+            <tbody className={!darkTheme && "text-muted"}>
               {schedules.sort(compare).map((schedule, index) => (
                 <tr key={index}>
                   <td>{schedule.day}</td>

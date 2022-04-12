@@ -84,6 +84,7 @@ const SemesterDialog = ({ edit, reset }) => {
     if (error) {
       handleError(error);
     }
+    // eslint-disable-next-line
   }, [error]);
 
   return (

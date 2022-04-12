@@ -10,7 +10,7 @@ const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const SemesterDataProvider = ({ children }) => {
-  const { loadedSemester } = useContext(GlobalViewContext);
+  const { loadedSemester, darkTheme } = useContext(GlobalViewContext);
   const { setLoadedSemester } = useContext(GlobalActionsContext);
   const { data, error, loading, axiosFetch } = useAxios();
 
@@ -44,6 +44,7 @@ const SemesterDataProvider = ({ children }) => {
         loadedSemester,
         error,
         loading,
+        darkTheme
       }}
     >
       <ActionsContext.Provider

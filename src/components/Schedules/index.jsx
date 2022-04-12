@@ -19,13 +19,15 @@ import { showErrors } from "../common/errorHelper";
 import useModal from "../../hooks/useModalStates";
 
 const Schedules = () => {
-  const { show, title, ModalBody, reset, setModalBody, setTitle, setShow } = useModal();
+  const { show, title, ModalBody, reset, setModalBody, setTitle, setShow } =
+    useModal();
   const {
     tutors,
     error: tutorsError,
     loading: tutorsLoading,
   } = useContext(TutorContext);
-  const { error, loading, schedules, loadedSemester, auth, ROLES } = useContext(ViewContext);
+  const { error, loading, schedules, loadedSemester, auth, ROLES, darkTheme } =
+    useContext(ViewContext);
   const { setSchedules } = useContext(ActionsContext);
   const [newItemId, setNewItemId] = useState("");
 
@@ -85,7 +87,9 @@ const Schedules = () => {
         !tutorsLoading &&
         !tutorsError &&
         schedules &&
-        schedules.length === 0 && <NoDataPlaceholder message="No schedule available at this time!" />}
+        schedules.length === 0 && (
+          <NoDataPlaceholder message="No schedule available at this time!" />
+        )}
       {!loading &&
         !error &&
         !tutorsLoading &&
@@ -96,8 +100,9 @@ const Schedules = () => {
             <Table className="text-center" bordered hover responsive>
               <TableHeader
                 headers={auth?.user ? header : header.slice(0, -1)}
+                darkTheme={darkTheme}
               />
-              <tbody className="text-muted">
+              <tbody className={!darkTheme && "text-muted"}>
                 <ScheduleRows
                   {...{
                     newItemId,
@@ -105,7 +110,7 @@ const Schedules = () => {
                     setTitle,
                     setModalBody,
                     setShow,
-                    tutors
+                    tutors,
                   }}
                 />
               </tbody>

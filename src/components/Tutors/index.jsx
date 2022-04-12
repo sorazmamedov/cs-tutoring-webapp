@@ -17,8 +17,16 @@ import TemplateModal from "../common/templateModal";
 import AddTutorDialog from "./addTutorDialog";
 
 const Tutors = () => {
-  const { auth, ROLES, signingIn, tutors, loading, error, loadedSemester } =
-    useContext(ViewContext);
+  const {
+    auth,
+    ROLES,
+    signingIn,
+    tutors,
+    loading,
+    error,
+    loadedSemester,
+    darkTheme,
+  } = useContext(ViewContext);
   const { setTutors } = useContext(ActionsContext);
   const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
     useModal();
@@ -57,8 +65,9 @@ const Tutors = () => {
               headers={
                 auth?.user?.roles.includes(ROLES.Admin) ? adminHeader : header
               }
+              darkTheme={darkTheme}
             />
-            <tbody className="text-muted">
+            <tbody className={!darkTheme && "text-muted"}>
               <TutorRows {...{ setShow, setTitle, setModalBody }} />
             </tbody>
           </Table>

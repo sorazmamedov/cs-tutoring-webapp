@@ -8,7 +8,7 @@ const ActionsContext = createContext({});
 
 const TutorDataProvider = ({ children }) => {
   const { auth, ROLES, signingIn } = useAuth();
-  const { loadedSemester } = useContext(GlobalViewContext);
+  const { loadedSemester, darkTheme } = useContext(GlobalViewContext);
   const { data, error, loading, axiosFetch } = useAxios();
   const [tutors, setTutors] = useState([]);
   const [current, setCurrent] = useState("");
@@ -46,6 +46,7 @@ const TutorDataProvider = ({ children }) => {
         auth,
         ROLES,
         signingIn,
+        darkTheme
       }}
     >
       <ActionsContext.Provider

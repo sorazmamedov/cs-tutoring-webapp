@@ -17,7 +17,8 @@ import {
 } from "../common/Placeholders/";
 
 const Courses = () => {
-  const { courses, loading, error, auth, ROLES } = useContext(ViewContext);
+  const { courses, loading, error, auth, ROLES, darkTheme } =
+    useContext(ViewContext);
   const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
     useModal();
 
@@ -48,8 +49,15 @@ const Courses = () => {
       {!loading && !error && courses && courses.length !== 0 && (
         <>
           <Table className="text-center" bordered hover responsive>
-            <TableHeader headers={auth?.user?.roles.includes(ROLES.Admin) ? adminTHeader : tableHeader} />
-            <tbody className="text-muted">
+            <TableHeader
+              headers={
+                auth?.user?.roles.includes(ROLES.Admin)
+                  ? adminTHeader
+                  : tableHeader
+              }
+              darkTheme={darkTheme}
+            />
+            <tbody className={!darkTheme && "text-muted"}>
               <CourseRows {...{ reset, setShow, setTitle, setModalBody }} />
             </tbody>
           </Table>

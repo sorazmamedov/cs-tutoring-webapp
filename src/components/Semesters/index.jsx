@@ -26,8 +26,14 @@ const Semesters = () => {
   } = useAxios();
   const { show, title, ModalBody, reset, setModalBody, setTitle, setShow } =
     useModal();
-  const { semesters, currentSemester, loading, error, loadedSemester } =
-    useContext(ViewContext);
+  const {
+    semesters,
+    currentSemester,
+    loading,
+    error,
+    loadedSemester,
+    darkTheme,
+  } = useContext(ViewContext);
   const { setSemesters, setCurrentSemester, setLoadedSemester } =
     useContext(ActionsContext);
 
@@ -134,20 +140,26 @@ const Semesters = () => {
         </div>
       )}
       {!loading && !error && semesters && semesters.length !== 0 && (
-        <TitleBar className="w-100 d-flex justify-content-between align-items-center text-muted">
+        <TitleBar
+          className={
+            darkTheme
+              ? "w-100 d-flex justify-content-between align-items-center"
+              : "w-100 d-flex justify-content-between align-items-center text-muted"
+          }
+        >
           <div className="w-100">
             <HouseIcon />
             <span className="ms-3 fw-bolder align-text-bottom">Semester</span>
 
             <YearSelector
-              className="ms-3 text-muted align-text-bottom rounded bg-white px-1"
+              className="ms-3 align-text-bottom rounded bg-white px-1"
               onChange={(e) => handleYearChange(e.target.value)}
               value={currentSemester?.academicYear}
               years={[...new Set(semesters.map((item) => item.academicYear))]}
             />
 
             <SemesterSelector
-              className="ms-3 text-muted align-text-bottom rounded bg-white px-1"
+              className="ms-3 align-text-bottom rounded bg-white px-1"
               onChange={(e) => handleSemesterChange(e)}
               value={currentSemester?.id}
               semesters={semesters.filter(
