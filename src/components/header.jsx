@@ -8,6 +8,7 @@ import TemplateModal from "./common/templateModal";
 import Login from "./Login";
 import Logout from "./Logout";
 import useAuth from "../hooks/useAuth";
+import { SunIcon, MoonIcon } from "./common/iconsWithTooltip";
 import {
   GlobalActionsContext,
   GlobalViewContext,
@@ -66,21 +67,21 @@ const Header = () => {
                 )}
               </>
             )}
-            <NavLink
-              to="*"
-              className={classes}
-              onClick={(e) => {
-                e.preventDefault();
-                setDarkTheme(!darkTheme);
-              }}
-            >
-              {darkTheme ? "Light" : "Dark"}
-            </NavLink>
             {auth?.user ? (
               <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
             ) : (
               <Nav.Link onClick={handleLogin}>Login</Nav.Link>
             )}
+            <NavLink
+              to="*"
+              className="nav-link py-0"
+              onClick={(e) => {
+                e.preventDefault();
+                setDarkTheme(!darkTheme);
+              }}
+            >
+              {darkTheme ? <SunIcon /> : <MoonIcon />}
+            </NavLink>
           </Nav>
         </Container>
       </Navbar>

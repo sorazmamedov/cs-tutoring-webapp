@@ -9,8 +9,14 @@ export const editIcon = ({ className, ...props }) => (
   />
 );
 
-export const deleteIcon = ({className, ...props}) => {
-  return <i className={`bi bi-trash3 ${className}`} data-icon-type="delete" {...props} />;
+export const deleteIcon = ({ className, ...props }) => {
+  return (
+    <i
+      className={`bi bi-trash3 ${className}`}
+      data-icon-type="delete"
+      {...props}
+    />
+  );
 };
 
 export const toggleIcon = (props) => {
@@ -47,4 +53,12 @@ export const checkIcon = (props) => (
 
 export const cancelIcon = (props) => (
   <i className="bi bi-x-lg" data-icon-type="cancel" {...props} />
+);
+
+export const moonIcon = (props) => (
+  <i class="bi bi-moon-stars-fill" data-icon-type="moon" {...props} />
+);
+
+export const sunIcon = (props) => (
+  <i class="bi bi-brightness-high-fill" data-icon-type="sun" {...props} />
 );

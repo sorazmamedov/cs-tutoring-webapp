@@ -12,6 +12,8 @@ import {
   menuIcon,
   checkIcon,
   cancelIcon,
+  moonIcon,
+  sunIcon,
 } from "./icons";
 
 const tooltip = (text, fn) => (
@@ -58,4 +60,12 @@ export const CheckIcon = (props) => {
 
 export const CancelIcon = (props) => {
   return tooltip("Cancel", cancelIcon(props));
+};
+
+export const MoonIcon = (props) => {
+  return moonIcon(props);
+};
+
+export const SunIcon = (props) => {
+  return sunIcon(props);
 };
