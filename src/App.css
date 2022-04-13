@@ -60,6 +60,10 @@ div > p + i[data-icon-type]:hover {
   font-size: 1.2rem;
 }
 
+[data-icon-type="refresh"] {
+  font-size: 1.4rem;
+}
+
 [data-icon-type="sun"] {
   color: yellow;
   font-size: 1.5rem;

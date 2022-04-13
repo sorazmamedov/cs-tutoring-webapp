@@ -67,7 +67,7 @@ const Tutors = () => {
               }
               darkTheme={darkTheme}
             />
-            <tbody className={!darkTheme && "text-muted"}>
+            <tbody className={darkTheme ? "" : "text-muted"}>
               <TutorRows {...{ setShow, setTitle, setModalBody }} />
             </tbody>
           </Table>

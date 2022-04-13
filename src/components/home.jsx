@@ -11,8 +11,10 @@ import CourseDataProvider from "../Context/courseContext";
 import TutorDataProvider from "../Context/tutorsContext";
 import ScheduleDataProvider from "../Context/scheduleContext";
 import CalendarDataProvider from "../Context/calendarContext";
+import TimeslotDataProvider from "../Context/timeslotContext";
 import useAuth from "../hooks/useAuth";
 import Public from "./Public";
+import Timeslot from "./Timeslot";
 
 const Home = () => {
   const { auth, ROLES } = useAuth();
@@ -30,6 +32,9 @@ const Home = () => {
           <Schedules />
         </ScheduleDataProvider>
         {auth?.user?.roles.includes(ROLES.Admin) && <Tutors />}
+        <TimeslotDataProvider>
+          <Timeslot />
+        </TimeslotDataProvider>
       </TutorDataProvider>
       <AnnouncementDataProvider>
         <Announcements />

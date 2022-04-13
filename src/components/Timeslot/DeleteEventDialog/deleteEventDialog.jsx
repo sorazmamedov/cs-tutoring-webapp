@@ -8,10 +8,8 @@ import { getErrors } from "../../common/errorHelper";
 import { ActionsContext, ViewContext } from "../../../Context/calendarContext";
 import { SwitchIcon } from "../../common/iconsWithTooltip";
 import useAxios from "../../../hooks/useAxios";
-import useAuth from "../../../hooks/useAuth";
 
 const DeleteEventDialog = ({ event, reset }) => {
-  const { auth } = useAuth();
   const { data, error, loading, axiosFetch } = useAxios();
   const { events } = useContext(ViewContext);
   const { setEvents } = useContext(ActionsContext);
@@ -22,7 +20,7 @@ const DeleteEventDialog = ({ event, reset }) => {
     e.preventDefault();
     axiosFetch({
       method: "DELETE",
-      url: `/users/${auth?.user?.id}/calendars/${event.id}`,
+      url: `/calendars/${event.id}`,
       requestConfig: {
         params: { deleteAll },
       },
@@ -93,13 +91,7 @@ const DeleteEventDialog = ({ event, reset }) => {
           )}
         </Row>
         <Row className="justify-content-around" sm="2">
-          <ActionButtons
-            {...{
-              saving: loading,
-              reset,
-              success: Object.keys(data).length !== 0,
-            }}
-          />
+          <ActionButtons {...{ saving: loading, reset, success: Object.keys(data).length !== 0 }} />
         </Row>
       </Form>
     </>

@@ -10,10 +10,8 @@ import Preview from "./preview";
 import ActionButtons from "./actionButtons";
 import Choose from "./choose";
 import useAxios from "../../../hooks/useAxios";
-import useAuth from "../../../hooks/useAuth";
 
 const NewEventDialog = ({ event, reset }) => {
-  const { auth } = useAuth();
   const { data, error, setError, loading, axiosFetch } = useAxios();
   const { loadedSemester } = useContext(ViewContext);
   const { setRefetch } = useContext(ActionsContext);
@@ -29,6 +27,7 @@ const NewEventDialog = ({ event, reset }) => {
     e.preventDefault();
 
     let newEvent = {
+      tutorId: "123456789124",
       semesterId: loadedSemester.id,
       start: event.start,
       end: event.end,
@@ -37,17 +36,14 @@ const NewEventDialog = ({ event, reset }) => {
       repeatUntil: range?.end,
     };
 
-    const error = eventValidator(
-      { tutorId: auth?.user?.id, ...newEvent },
-      {
-        context: {
-          min: newEvent.start,
-          max: newEvent.end,
-          rangeMin: new Date(loadedSemester.startDate),
-          rangeMax: new Date(loadedSemester.endDate),
-        },
-      }
-    );
+    const error = eventValidator(newEvent, {
+      context: {
+        min: newEvent.start,
+        max: newEvent.end,
+        rangeMin: new Date(loadedSemester.startDate),
+        rangeMax: new Date(loadedSemester.endDate),
+      },
+    });
 
     if (error) {
       setError(error);
@@ -56,7 +52,7 @@ const NewEventDialog = ({ event, reset }) => {
 
     axiosFetch({
       method: "POST",
-      url: `/users/${auth?.user?.id}/calendars`,
+      url: "/calendars",
       requestConfig: { data: newEvent },
     });
   };

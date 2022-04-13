@@ -102,7 +102,7 @@ const Schedules = () => {
                 headers={auth?.user ? header : header.slice(0, -1)}
                 darkTheme={darkTheme}
               />
-              <tbody className={!darkTheme && "text-muted"}>
+              <tbody className={darkTheme ? "" : "text-muted"}>
                 <ScheduleRows
                   {...{
                     newItemId,

@@ -1,25 +1,32 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+import { startOfWeek, endOfWeek } from "date-fns";
 import useAuth from "../hooks/useAuth";
 import useAxios from "../hooks/useAxios";
 import { GlobalViewContext } from "./dataContext";
+import { ViewContext as TutorContext } from "./tutorsContext";
 
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
-const CalendarDataProvider = ({ children }) => {
-  const { auth } = useAuth()
+const TimeslotDataProvider = ({ children }) => {
+  const { auth, ROLES } = useAuth();
+  const {
+    tutors,
+    error: tutorsError,
+    loading: tutorsLoading,
+  } = useContext(TutorContext);
   const { loadedSemester, darkTheme } = useContext(GlobalViewContext);
   const { data, error, loading, axiosFetch } = useAxios();
   const [events, setEvents] = useState([]);
   const [current, setCurrent] = useState("");
   const [refetch, setRefetch] = useState(false);
 
-  const fetchCalendar = () => {
+  const fetchSlots = () => {
     axiosFetch({
       method: "GET",
-      url: `/users/${auth?.user?.id}/calendars`,
+      url: "/timeslots",
       requestConfig: {
-        params: { semesterId: loadedSemester.id },
+        params: { semesterId: loadedSemester.id, start: startOfWeek(new Date()), end: endOfWeek(new Date()) },
       },
     });
   };
@@ -27,12 +34,12 @@ const CalendarDataProvider = ({ children }) => {
   useEffect(() => {
     if (loadedSemester.id && current !== loadedSemester.id) {
       setCurrent(loadedSemester.id);
-      fetchCalendar();
-      console.log("[Fetching my calendar]");
+      fetchSlots();
+      console.log("[Fetching timeslots]");
     } else if (refetch) {
       setRefetch(false);
-      fetchCalendar();
-      console.log("[*Refetching my calendar*]");
+      fetchSlots();
+      console.log("[*Refetching timeslots*]");
     }
     // eslint-disable-next-line
   }, [loadedSemester, refetch]);
@@ -51,7 +58,12 @@ const CalendarDataProvider = ({ children }) => {
         error,
         loading,
         loadedSemester,
-        darkTheme
+        darkTheme,
+        tutors,
+        tutorsError,
+        tutorsLoading,
+        auth,
+        ROLES,
       }}
     >
       <ActionsContext.Provider
@@ -66,5 +78,5 @@ const CalendarDataProvider = ({ children }) => {
   );
 };
 
-export default CalendarDataProvider;
+export default TimeslotDataProvider;
 export { ViewContext, ActionsContext };

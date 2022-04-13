@@ -57,7 +57,7 @@ const Courses = () => {
               }
               darkTheme={darkTheme}
             />
-            <tbody className={!darkTheme && "text-muted"}>
+            <tbody className={darkTheme ? "" : "text-muted"}>
               <CourseRows {...{ reset, setShow, setTitle, setModalBody }} />
             </tbody>
           </Table>

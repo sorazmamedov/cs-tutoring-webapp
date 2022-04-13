@@ -51,8 +51,8 @@ const Schedules = () => {
       {!loading && !error && schedules && schedules.length !== 0 && (
         <>
           <Table className="text-center" bordered hover responsive>
-            <TableHeader headers={header} />
-            <tbody className={!darkTheme && "text-muted"}>
+            <TableHeader headers={header} darkTheme={darkTheme} />
+            <tbody className={darkTheme ? "" : "text-muted"}>
               {schedules.sort(compare).map((schedule, index) => (
                 <tr key={index}>
                   <td>{schedule.day}</td>
