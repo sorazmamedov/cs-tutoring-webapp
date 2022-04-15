@@ -5,13 +5,27 @@ import { getErrors } from "../components/common/errorHelper";
 const useLogin = () => {
   const { errors, setErrors, signingIn, setSigningIn, setAuth } = useAuth();
 
-  const handleResponse = async (response) => {
+  const handleResponse = async (response, email) => {
     setSigningIn(true);
     setErrors({});
 
     try {
       let token;
-      if (!sessionStorage.getItem("token")) {
+      if (email) {
+        console.log("email: " + email);
+        console.log("There is no token...");
+        const res = await axios({
+          method: "get",
+          url: "/auth/login",
+          headers: {
+            Authorization: `Bearer ${email}`,
+          },
+          withCredentials: true,
+        });
+
+        setAuth((prev) => ({ ...prev, token: email, user: res.data }));
+      } else if (!sessionStorage.getItem("token")) {
+        console.log("There is no token...");
         token = response.credential;
         const res = await axios({
           method: "get",
@@ -35,7 +49,11 @@ const useLogin = () => {
           withCredentials: true,
         });
 
-        setAuth((prev) => ({ ...prev, token: sessionStorage.getItem("token"), user: res.data }));
+        setAuth((prev) => ({
+          ...prev,
+          token: sessionStorage.getItem("token"),
+          user: res.data,
+        }));
       }
     } catch (error) {
       if (error?.response) {

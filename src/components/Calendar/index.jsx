@@ -5,11 +5,12 @@ import BigCalendar from "./bigCalendar";
 import TemplateModal from "../common/templateModal";
 import NewEventDialog from "./NewEventDialog";
 import DeleteEventDialog from "./DeleteEventDialog";
-import { ViewContext } from "../../Context/calendarContext";
+import { ViewContext, ActionsContext } from "../../Context/calendarContext";
 import useModal from "../../hooks/useModalStates";
 
 const Calendar = () => {
   const { events } = useContext(ViewContext);
+  const { setStart, setEnd, setRefetch } = useContext(ActionsContext);
   const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
     useModal();
 
@@ -25,6 +26,12 @@ const Calendar = () => {
     setShow(true);
   };
 
+  const handleRangeChange = (event) => {
+    setStart(event[0]);
+    setEnd(event[event.length - 1]);
+    setRefetch(true);
+  };
+
   return (
     <MainContainer>
       <TitleBar title="My Calendar" />
@@ -33,6 +40,7 @@ const Calendar = () => {
           events,
           handleSelectSlot,
           handleSelectEvent,
+          handleRangeChange,
         }}
       />
       <TemplateModal {...{ show, title, ModalBody, reset }} />

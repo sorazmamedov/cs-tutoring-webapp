@@ -44,7 +44,7 @@ const Home = () => {
           <Courses />
         </CourseDataProvider>
       )}
-      {auth?.user && (
+      {auth?.user?.roles.includes(ROLES.Tutor) && auth?.user?.isActive && (
         <CalendarDataProvider>
           <Calendar />
         </CalendarDataProvider>

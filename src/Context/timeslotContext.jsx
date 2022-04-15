@@ -20,13 +20,15 @@ const TimeslotDataProvider = ({ children }) => {
   const [events, setEvents] = useState([]);
   const [current, setCurrent] = useState("");
   const [refetch, setRefetch] = useState(false);
+  const [start, setStart] = useState(startOfWeek(new Date()))
+  const [end, setEnd] = useState(endOfWeek(new Date()))
 
   const fetchSlots = () => {
     axiosFetch({
       method: "GET",
       url: "/timeslots",
       requestConfig: {
-        params: { semesterId: loadedSemester.id, start: startOfWeek(new Date()), end: endOfWeek(new Date()) },
+        params: { semesterId: loadedSemester.id, start, end },
       },
     });
   };
@@ -70,6 +72,8 @@ const TimeslotDataProvider = ({ children }) => {
         value={{
           setEvents,
           setRefetch,
+          setStart,
+          setEnd
         }}
       >
         {children}

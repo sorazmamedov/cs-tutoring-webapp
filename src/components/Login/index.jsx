@@ -60,16 +60,55 @@ const Login = ({ reset }) => {
           <div id="googleBtn" className="d-flex justify-content-center"></div>
         </Col>
       </Row>
-      <Row>
-        <button
-          className="btn btn-warning col-10 col-lg-6 mx-auto text-center"
-          onClick={handleResponse}
-        >
-          Login
+      <Row className="col-6 my-3 mx-auto">
+        <p className="text-center">Sign in with NEIU email only!</p>
+      </Row>
+      <Row className="col-6 my-3 mx-auto">
+        <button className="btn btn-warning mb-2" onClick={handleResponse}>
+          Serdar Admin
         </button>
-        <p className="col-10 col-lg-8 mx-auto text-center">
-          Please sign in with NEIU email only!
-        </p>
+        <button
+          className="btn btn-info mb-2"
+          onClick={() => handleResponse(undefined, "mking@neiu.edu")}
+        >
+          Martin Tutor
+        </button>
+        <button
+          className="btn btn-info mb-2"
+          onClick={() => handleResponse(undefined, "smoe@neiu.edu")}
+        >
+          Scarlett Tutor
+        </button>
+        <button
+          className="btn btn-info mb-2"
+          onClick={() => handleResponse(undefined, "jwebb@neiu.edu")}
+        >
+          James Tutor
+        </button>
+        <button
+          className="btn btn-secondary mb-2"
+          onClick={() => handleResponse(undefined, "jmonroe@neiu.edu")}
+        >
+          John Student|Tutor
+        </button>
+        <button
+          className="btn btn-success mb-2"
+          onClick={() => handleResponse(undefined, "mkatowski@neiu.edu")}
+        >
+          Madelyn Student
+        </button>
+        <button
+          className="btn btn-success mb-2"
+          onClick={() => handleResponse(undefined, "bbeckham@neiu.edu")}
+        >
+          Brook Student
+        </button>
+        <button
+          className="btn btn-success mb-5"
+          onClick={() => handleResponse(undefined, "jmonroe@neiu.edu")}
+        >
+          Jennifer Student
+        </button>
       </Row>
     </>
   );

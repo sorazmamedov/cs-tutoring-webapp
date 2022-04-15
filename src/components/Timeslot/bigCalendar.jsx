@@ -4,7 +4,7 @@ import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
-const BigCalendar = ({ events, handleSelectEvent }) => {
+const BigCalendar = ({ events, handleSelectEvent, handleRangeChange }) => {
   const [view, setView] = useState(Views.WEEK);
 
   const onView = useCallback((newView) => setView(newView), [setView]);
@@ -50,8 +50,8 @@ const BigCalendar = ({ events, handleSelectEvent }) => {
       min={min}
       max={max}
       onView={onView}
-      onSelectEvent={(event) => handleSelectEvent(event)}
-      onRangeChange={(event) => console.log(event)}
+      onSelectEvent={handleSelectEvent}
+      onRangeChange={handleRangeChange}
     />
   );
 };

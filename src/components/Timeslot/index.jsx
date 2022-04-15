@@ -5,8 +5,7 @@ import MainContainer from "../common/mainContainer";
 import TitleBar from "../common/titleBar";
 import BigCalendar from "./bigCalendar";
 import TemplateModal from "../common/templateModal";
-import NewEventDialog from "./NewEventDialog";
-import DeleteEventDialog from "./DeleteEventDialog";
+import AppointmentDialog from "./AppointmentDialog";
 import useModal from "../../hooks/useModalStates";
 import { RefreshIcon } from "../common/iconsWithTooltip";
 import { ViewContext, ActionsContext } from "../../Context/timeslotContext";
@@ -17,7 +16,8 @@ import {
 } from "../common/Placeholders/";
 
 const Timeslot = () => {
-  const { setRefetch } = useContext(ActionsContext);
+  const { setRefetch, setEvents, setStart, setEnd } =
+    useContext(ActionsContext);
   const [slots, setSlots] = useState([]);
   const [tab, setTab] = useState("");
   const {
@@ -38,18 +38,28 @@ const Timeslot = () => {
   const isAdmin = auth?.user.roles.includes(ROLES.Admin);
 
   const handleSelectEvent = (event) => {
-    alert(event);
-    // setTitle("Delete Event");
-    // setModalBody(<DeleteEventDialog {...{ event, reset }} />);
-    // setShow(true);
+    // alert(event);
+    const tutor = tutors.find((item) => item.id === event.tutorId);
+    const slot = { ...event, tutor: `${tutor.firstName} ${tutor.lastName}` };
+    setTitle("Appointment");
+    setModalBody(
+      <AppointmentDialog {...{ slot, reset, setEvents, loadedSemester }} />
+    );
+    setShow(true);
   };
 
+  const handleRangeChange = (event) => {
+    setStart(event[0]);
+    setEnd(event[event.length - 1]);
+    setRefetch(true);
+  };
+
+  //Filter timeslots according to selected tutor (tab)
   useEffect(() => {
-    if (events.length && tab) {
-      setSlots([...events.filter((event) => event.tutorId === tab)]);
-    }
+    setSlots([...events.filter((event) => event.tutorId === tab)]);
   }, [events, tab]);
 
+  // Default selected tutor tab
   useEffect(() => {
     if (tutors.length) {
       setTab(tutors[0].id);
@@ -65,42 +75,33 @@ const Timeslot = () => {
         />
       )}
 
-      {loading && tutorsLoading && <LoadingPlaceholder />}
+      {(loading || tutorsLoading) && <LoadingPlaceholder />}
       {!loading && !tutorsLoading && (error || tutorsError) && (
         <ErrorPlaceholder />
       )}
-      {!loading &&
-        !error &&
-        !tutorsLoading &&
-        !tutorsError &&
-        events &&
-        events.length === 0 && (
-          <NoDataPlaceholder message="No timeslot available at this time!" />
-        )}
-      {!loading &&
-        !error &&
-        !tutorsLoading &&
-        !tutorsError &&
-        events &&
-        events.length !== 0 &&
-        tab && (
-          <>
-            <Tabs
-              defaultActiveKey={tab}
-              className="mb-3"
-              onSelect={(eventKey) => setTab(eventKey)}
-            >
-              {tutors.map((tutor) => (
-                <Tab
-                  key={tutor.id}
-                  eventKey={tutor.id}
-                  title={tutor.firstName}
-                />
-              ))}
-            </Tabs>
-            <BigCalendar events={slots} handleSelectEvent={handleSelectEvent} />
-          </>
-        )}
+
+      {!loading && !error && !tutorsLoading && !tutorsError && (
+        <>
+          <Tabs
+            activeKey={tab}
+            className="mb-3"
+            onSelect={(eventKey) => setTab(eventKey)}
+          >
+            {tutors.map((tutor) => (
+              <Tab key={tutor.id} eventKey={tutor.id} title={tutor.firstName} />
+            ))}
+          </Tabs>
+          {events.length > 0 && tutors.length > 0 ? (
+            <BigCalendar
+              events={slots}
+              handleSelectEvent={handleSelectEvent}
+              handleRangeChange={handleRangeChange}
+            />
+          ):
+            <NoDataPlaceholder message="No slots available at this time!" />
+          }
+        </>
+      )}
       <TemplateModal {...{ show, title, ModalBody, reset }} />
     </MainContainer>
   );

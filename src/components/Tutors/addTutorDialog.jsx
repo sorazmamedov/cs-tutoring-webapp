@@ -133,8 +133,8 @@ const AddTutorDialog = ({ setTutors, loadedSemester, ROLES, reset }) => {
                   {data?.firstName + " " + data?.lastName}
                 </Card.Title>
                 <Card.Text>
-                  <p className="mb-0">{data?.neiuId}</p>
-                  <p className="">{data?.email}</p>
+                  <span className="d-block mb-0">{data?.neiuId}</span>
+                  <span className="d-block">{data?.email}</span>
                 </Card.Text>
                 {!adding ? (
                   <Button

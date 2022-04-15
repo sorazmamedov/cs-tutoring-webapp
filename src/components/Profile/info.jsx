@@ -164,7 +164,7 @@ const ProfileInfo = ({ auth, setAuth, ROLES, darkTheme }) => {
               </Form.Control.Feedback>
             </Form.Group>
           </Stack>
-          {auth?.user?.roles.includes(ROLES.Tutor) && (
+          {auth?.user?.roles.includes(ROLES.Tutor) && auth?.user?.isActive && (
             <Stack className="col-12 col-md-11">
               <Form.Group>
                 <Form.Label className="mb-0">Bio</Form.Label>
