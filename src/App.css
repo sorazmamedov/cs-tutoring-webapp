@@ -49,6 +49,20 @@
 
 /* end of time slots table navs */
 
+.rotate {
+  animation: rotation 2s infinite linear;
+  color: green;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 div > p + i[data-icon-type]:hover {
   font-weight: bold;
   color: black;

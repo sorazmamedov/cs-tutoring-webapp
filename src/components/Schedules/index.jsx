@@ -87,7 +87,8 @@ const Schedules = () => {
         !tutorsLoading &&
         !tutorsError &&
         schedules &&
-        schedules.length === 0 && (
+        tutors &&
+        (schedules.length === 0 || tutors.length === 0) && (
           <NoDataPlaceholder message="No schedule available at this time!" />
         )}
       {!loading &&
@@ -95,7 +96,9 @@ const Schedules = () => {
         !tutorsLoading &&
         !tutorsError &&
         schedules &&
-        schedules.length !== 0 && (
+        schedules.length !== 0 &&
+        tutors &&
+        tutors.length !== 0 && (
           <>
             <Table className="text-center" bordered hover responsive>
               <TableHeader

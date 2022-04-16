@@ -14,31 +14,30 @@ import {
   ErrorPlaceholder,
   LoadingPlaceholder,
 } from "../common/Placeholders/";
+import { showErrors } from "../common/errorHelper";
 
 const Timeslot = () => {
   const { setRefetch, setEvents, setStart, setEnd } =
     useContext(ActionsContext);
-  const [slots, setSlots] = useState([]);
   const [tab, setTab] = useState("");
   const {
     events,
     error,
     loading,
     loadedSemester,
-    darkTheme,
     tutors,
     tutorsError,
     tutorsLoading,
     auth,
-    ROLES,
   } = useContext(ViewContext);
   const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
     useModal();
 
-  const isAdmin = auth?.user.roles.includes(ROLES.Admin);
-
   const handleSelectEvent = (event) => {
-    // alert(event);
+    if (event.tutorId === auth?.user?.id) {
+      showErrors({message: "Booking your own slots is not allowed!"}, setTitle, setShow, setModalBody)
+      return;
+    }
     const tutor = tutors.find((item) => item.id === event.tutorId);
     const slot = { ...event, tutor: `${tutor.firstName} ${tutor.lastName}` };
     setTitle("Appointment");
@@ -54,12 +53,6 @@ const Timeslot = () => {
     setRefetch(true);
   };
 
-  //Filter timeslots according to selected tutor (tab)
-  useEffect(() => {
-    setSlots([...events.filter((event) => event.tutorId === tab)]);
-  }, [events, tab]);
-
-  // Default selected tutor tab
   useEffect(() => {
     if (tutors.length) {
       setTab(tutors[0].id);
@@ -68,21 +61,37 @@ const Timeslot = () => {
 
   return (
     <MainContainer>
-      {!loading && !error && !tutorsLoading && !tutorsError && (
+      {!error && !tutorsError && tutors.length !== 0 && (
         <TitleBar
           title="Timeslots"
-          icon={<RefreshIcon onClick={() => setRefetch(true)} />}
+          icon={
+            loading || tutorsLoading ? (
+              <RefreshIcon onClick={() => setRefetch(true)} rotate={true} />
+            ) : (
+              <RefreshIcon onClick={() => setRefetch(true)} />
+            )
+          }
         />
       )}
 
-      {(loading || tutorsLoading) && <LoadingPlaceholder />}
+      {/* {(loading || tutorsLoading) && <LoadingPlaceholder />} */}
       {!loading && !tutorsLoading && (error || tutorsError) && (
         <ErrorPlaceholder />
       )}
 
-      {!loading && !error && !tutorsLoading && !tutorsError && (
+      {!loading &&
+        !error &&
+        !tutorsLoading &&
+        !tutorsError &&
+        events &&
+        tutors &&
+        tutors.length === 0 && (
+          <NoDataPlaceholder message="No slots available at this time!" />
+        )}
+      {!error && !tutorsError && events && tutors && tutors.length !== 0 && (
         <>
           <Tabs
+            // defaultActiveKey={tutors.length !== 0 ? tutors[0].id : ""}
             activeKey={tab}
             className="mb-3"
             onSelect={(eventKey) => setTab(eventKey)}
@@ -91,15 +100,11 @@ const Timeslot = () => {
               <Tab key={tutor.id} eventKey={tutor.id} title={tutor.firstName} />
             ))}
           </Tabs>
-          {events.length > 0 && tutors.length > 0 ? (
-            <BigCalendar
-              events={slots}
-              handleSelectEvent={handleSelectEvent}
-              handleRangeChange={handleRangeChange}
-            />
-          ):
-            <NoDataPlaceholder message="No slots available at this time!" />
-          }
+          <BigCalendar
+            events={[...events.filter((event) => event.tutorId === tab)]}
+            handleSelectEvent={handleSelectEvent}
+            handleRangeChange={handleRangeChange}
+          />
         </>
       )}
       <TemplateModal {...{ show, title, ModalBody, reset }} />
