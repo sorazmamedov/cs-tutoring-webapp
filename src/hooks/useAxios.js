@@ -47,7 +47,7 @@ const useAxios = () => {
     };
   }, [controller]);
 
-  return { data: response, error, setError, loading, axiosFetch };
+  return { data: response, error, setError, loading, setLoading, axiosFetch };
 };
 
 export default useAxios;

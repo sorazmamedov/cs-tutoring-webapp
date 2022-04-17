@@ -12,8 +12,6 @@ const useLogin = () => {
     try {
       let token;
       if (email) {
-        console.log("email: " + email);
-        console.log("There is no token...");
         const res = await axios({
           method: "get",
           url: "/auth/login",
@@ -25,7 +23,6 @@ const useLogin = () => {
 
         setAuth((prev) => ({ ...prev, token: email, user: res.data }));
       } else if (!sessionStorage.getItem("token")) {
-        console.log("There is no token...");
         token = response.credential;
         const res = await axios({
           method: "get",
@@ -39,7 +36,6 @@ const useLogin = () => {
         setAuth((prev) => ({ ...prev, token, user: res.data }));
         sessionStorage.setItem("token", token);
       } else {
-        console.log("Token exists");
         const res = await axios({
           method: "get",
           url: "/auth/login",

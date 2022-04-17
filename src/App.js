@@ -15,6 +15,7 @@ import { GlobalViewContext } from "./Context/dataContext";
 function App() {
   const { darkTheme } = useContext(GlobalViewContext);
   const { ROLES } = useAuth();
+
   const { handleResponse } = useLogin();
 
   useEffect(() => {
@@ -29,6 +30,7 @@ function App() {
     };
     loadClientLib();
   });
+
   return (
     <div className={darkTheme ? "dark" : "light"}>
       <Routes>

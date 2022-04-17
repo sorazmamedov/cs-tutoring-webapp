@@ -1,6 +1,5 @@
-import { object, string } from "yup";
+import { object } from "yup";
 import vs from "./validationSchemas";
-import { len } from "../validationMessages";
 
 export default object().shape({
   id: vs.nanoid,
@@ -12,8 +11,6 @@ export default object().shape({
   roles: vs.roles,
   picture: vs.url,
   activeSemesters: vs.activeSemesters,
-  neiuId: string()
-    .trim()
-    .matches(/^\d{9}$/, "NEIU ID must be a 9 digit number."),
-  about: string().trim().min(len.minLongTextLength).max(len.maxLongTextLength),
+  neiuId: vs.neiuId,
+  about: vs.about,
 });

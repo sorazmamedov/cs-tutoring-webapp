@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import useAxios from "../hooks/useAxios";
 import { GlobalViewContext } from "./dataContext";
+import { ViewContext as TutorsContext } from "./tutorsContext";
 import useAuth from "../hooks/useAuth";
 
 const ViewContext = createContext({});
@@ -8,6 +9,11 @@ const ActionsContext = createContext({});
 
 const ScheduleDataProvider = ({ children }) => {
   const { auth, ROLES, signingIn } = useAuth();
+  const {
+    tutors,
+    error: tutorsError,
+    loading: tutorsLoading,
+  } = useContext(TutorsContext);
   const { loadedSemester, darkTheme } = useContext(GlobalViewContext);
   const { data, error, loading, axiosFetch } = useAxios();
   const [schedules, setSchedules] = useState([]);
@@ -46,7 +52,10 @@ const ScheduleDataProvider = ({ children }) => {
         signingIn,
         error,
         loading,
-        darkTheme
+        darkTheme,
+        tutors,
+        tutorsError,
+        tutorsLoading
       }}
     >
       <ActionsContext.Provider

@@ -1,14 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { isEqual } from "../../utils/isEqual";
 import { courseValidator } from "../../utils/validator";
 import { ActionsContext, ViewContext } from "../../Context/courseContext";
 import EditableRow from "./editableRow";
 import ReadOnlyRow from "./readOnlyRow";
 import { showErrors } from "../common/errorHelper";
-import { putCourse } from "../../apis/cs-tutoring/courses";
 import DeleteCourseDialog from "./deleteCourseDialog";
+import useAxios from "../../hooks/useAxios";
 
 const CourseRows = ({ reset, setShow, setTitle, setModalBody }) => {
+  const { data, error, axiosFetch } = useAxios();
   const { courses, auth, ROLES } = useContext(ViewContext);
   const { setCourses } = useContext(ActionsContext);
   const [editId, setEditId] = useState(null);
@@ -41,7 +42,7 @@ const CourseRows = ({ reset, setShow, setTitle, setModalBody }) => {
       return;
     }
 
-    //Validation
+    //Validate
     const result = courseValidator(edited);
     if (result) {
       setSaving(null);
@@ -49,22 +50,31 @@ const CourseRows = ({ reset, setShow, setTitle, setModalBody }) => {
       return;
     }
 
-    //Persistence
-    const response = await putCourse(edited);
-    if (response.status === 200) {
-      let index = courses.findIndex((item) => item.id === edited.id);
-      setCourses([
-        ...courses.slice(0, index),
-        edited,
-        ...courses.slice(++index),
-      ]);
-    } else {
-      showErrors(response, setTitle, setShow, setModalBody);
-    }
-
-    setEditId(null);
-    setSaving(null);
+    //Persist
+    axiosFetch({
+      method: "PUT",
+      url: `/courses/${edited.id}`,
+      requestConfig: { data: edited },
+    });
   };
+
+  useEffect(() => {
+    if (Object.keys(data).length) {
+      let index = courses.findIndex((item) => item.id === saving);
+      setCourses([...courses.slice(0, index), data, ...courses.slice(++index)]);
+      setEditId(null);
+      setSaving(null);
+    }
+    // eslint-disable-next-line
+  }, [data]);
+
+  useEffect(() => {
+    if (error) {
+      setSaving(null);
+      showErrors(error, setTitle, setShow, setModalBody);
+    }
+    // eslint-disable-next-line
+  }, [error]);
 
   return courses.map((course) =>
     editId === course.id ? (

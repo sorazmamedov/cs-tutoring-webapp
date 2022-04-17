@@ -6,7 +6,7 @@ import TableHeader from "../common/tableHeader";
 import CourseRows from "./courseRows";
 import CustomPagination from "../common/customPagination";
 import TemplateModal from "../common/templateModal";
-import CourseDialog from "./courseDialog";
+import AddCourseDialog from "./AddCourseDialog/";
 import TitleBar from "../common/titleBar";
 import { ViewContext } from "../../Context/courseContext";
 import useModal from "../../hooks/useModalStates";
@@ -17,17 +17,16 @@ import {
 } from "../common/Placeholders/";
 
 const Courses = () => {
-  const { courses, loading, error, auth, ROLES, darkTheme } =
+  const { courses, loading, error, darkTheme, loadedSemester } =
     useContext(ViewContext);
   const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
     useModal();
 
-  const tableHeader = ["Section", "Course", "Instructor", "Email"];
-  const adminTHeader = [...tableHeader, "Actions"];
+  const headers = ["Section", "Course", "Instructor", "Email", "Actions"];
 
   const handleAddCourse = () => {
     setTitle("Add New Courses");
-    setModalBody(<CourseDialog {...{ reset }} />);
+    setModalBody(<AddCourseDialog {...{ semesterId: loadedSemester.id }} />);
     setShow(true);
   };
 
@@ -49,14 +48,7 @@ const Courses = () => {
       {!loading && !error && courses && courses.length !== 0 && (
         <>
           <Table className="text-center" bordered hover responsive>
-            <TableHeader
-              headers={
-                auth?.user?.roles.includes(ROLES.Admin)
-                  ? adminTHeader
-                  : tableHeader
-              }
-              darkTheme={darkTheme}
-            />
+            <TableHeader {...{ headers, darkTheme }} />
             <tbody className={darkTheme ? "" : "text-muted"}>
               <CourseRows {...{ reset, setShow, setTitle, setModalBody }} />
             </tbody>

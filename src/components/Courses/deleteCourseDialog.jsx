@@ -1,35 +1,46 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { ViewContext, ActionsContext } from "../../Context/courseContext";
-import { deleteCourse } from "../../apis/cs-tutoring/courses";
 import { getErrors } from "../common/errorHelper";
 import SpinnerBtn from "../common/spinnerBtn";
+import useAxios from "../../hooks/useAxios";
 
 const DeleteCourseDialog = ({ id, reset }) => {
+  const { data, error, loading, axiosFetch } = useAxios();
   const { courses } = useContext(ViewContext);
   const { setCourses } = useContext(ActionsContext);
-  const [deleting, setDeleting] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState("");
   const [success, setSuccess] = useState(false);
 
   const removeCourse = async () => {
-    setDeleting(true);
-    setErrors({});
-    const response = await deleteCourse(id);
+    setErrors("");
 
-    if (response.status === 200) {
+    axiosFetch({
+      method: "DELETE",
+      url: `/courses/${id}`,
+      requestConfig: {},
+    });
+  };
+
+  useEffect(() => {
+    if (Object.keys(data).length) {
       setCourses([...courses.filter((item) => item.id !== id)]);
       setSuccess(true);
       setTimeout(() => {
         reset();
       }, 1500);
-    } else {
-      setErrors(getErrors(response));
     }
-    setDeleting(false);
-  };
+    // eslint-disable-next-line
+  }, [data]);
+
+  useEffect(() => {
+    if (error) {
+      setErrors(getErrors(error));
+    }
+    // eslint-disable-next-line
+  }, [error]);
 
   return (
     <>
@@ -59,7 +70,7 @@ const DeleteCourseDialog = ({ id, reset }) => {
       {!success && (
         <Row className="col-10 col-lg-8 mx-auto m-0 mb-5">
           <Col xs="6" className="mb-3 mb-sm-auto pe-sm-4">
-            {!deleting ? (
+            {!loading ? (
               <Button
                 className="col-12 roundBorder dangerBtn"
                 onClick={removeCourse}
@@ -79,7 +90,7 @@ const DeleteCourseDialog = ({ id, reset }) => {
             <Button
               className="col-12 roundBorder primaryBtn"
               onClick={reset}
-              disabled={deleting}
+              disabled={loading}
             >
               CANCEL
             </Button>

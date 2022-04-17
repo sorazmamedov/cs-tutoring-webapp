@@ -32,7 +32,6 @@ const CustomPagination = () => {
     if (page === "›" || page === "›\nNext") {
       if (active < numbers[numbers.length - 2]) {
         setActive((prev) => prev + 1);
-        console.log("active: " + active);
         active + 1 >= numbers[numbers.length - 2]
           ? setDisabled(-1)
           : setDisabled(-5);

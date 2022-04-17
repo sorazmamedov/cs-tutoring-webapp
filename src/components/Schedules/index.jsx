@@ -5,29 +5,33 @@ import TableHeader from "../common/tableHeader";
 import ScheduleRows from "./scheduleRows";
 import CustomPagination from "../common/customPagination";
 import { PlusIcon } from "../common/iconsWithTooltip";
+import { showErrors } from "../common/errorHelper";
 import TitleBar from "../common/titleBar";
 import Id from "../../utils/Id";
+import { ActionsContext, ViewContext } from "../../Context/scheduleContext";
 import {
   NoDataPlaceholder,
   ErrorPlaceholder,
   LoadingPlaceholder,
 } from "../common/Placeholders/";
 import TemplateModal from "../common/templateModal";
-import { ViewContext as TutorContext } from "../../Context/tutorsContext";
-import { ActionsContext, ViewContext } from "../../Context/scheduleContext";
-import { showErrors } from "../common/errorHelper";
 import useModal from "../../hooks/useModalStates";
 
 const Schedules = () => {
   const { show, title, ModalBody, reset, setModalBody, setTitle, setShow } =
     useModal();
   const {
+    error,
+    loading,
+    schedules,
+    loadedSemester,
+    auth,
+    ROLES,
+    darkTheme,
     tutors,
-    error: tutorsError,
-    loading: tutorsLoading,
-  } = useContext(TutorContext);
-  const { error, loading, schedules, loadedSemester, auth, ROLES, darkTheme } =
-    useContext(ViewContext);
+    tutorsError,
+    tutorsLoading,
+  } = useContext(ViewContext);
   const { setSchedules } = useContext(ActionsContext);
   const [newItemId, setNewItemId] = useState("");
 

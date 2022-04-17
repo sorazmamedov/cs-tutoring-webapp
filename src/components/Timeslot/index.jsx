@@ -5,15 +5,11 @@ import MainContainer from "../common/mainContainer";
 import TitleBar from "../common/titleBar";
 import BigCalendar from "./bigCalendar";
 import TemplateModal from "../common/templateModal";
-import AppointmentDialog from "./AppointmentDialog";
+import BookSlotDialog from "./BookSlotDialog";
 import useModal from "../../hooks/useModalStates";
 import { RefreshIcon } from "../common/iconsWithTooltip";
 import { ViewContext, ActionsContext } from "../../Context/timeslotContext";
-import {
-  NoDataPlaceholder,
-  ErrorPlaceholder,
-  LoadingPlaceholder,
-} from "../common/Placeholders/";
+import { NoDataPlaceholder, ErrorPlaceholder } from "../common/Placeholders/";
 import { showErrors } from "../common/errorHelper";
 
 const Timeslot = () => {
@@ -35,14 +31,19 @@ const Timeslot = () => {
 
   const handleSelectEvent = (event) => {
     if (event.tutorId === auth?.user?.id) {
-      showErrors({message: "Booking your own slots is not allowed!"}, setTitle, setShow, setModalBody)
+      showErrors(
+        { message: "Booking your own slots is not allowed!" },
+        setTitle,
+        setShow,
+        setModalBody
+      );
       return;
     }
     const tutor = tutors.find((item) => item.id === event.tutorId);
     const slot = { ...event, tutor: `${tutor.firstName} ${tutor.lastName}` };
     setTitle("Appointment");
     setModalBody(
-      <AppointmentDialog {...{ slot, reset, setEvents, loadedSemester }} />
+      <BookSlotDialog {...{ slot, reset, setEvents, loadedSemester }} />
     );
     setShow(true);
   };

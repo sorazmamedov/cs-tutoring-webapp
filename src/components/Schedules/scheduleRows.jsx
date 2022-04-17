@@ -20,6 +20,7 @@ const ScheduleRows = ({
   const { setSchedules } = useContext(ActionsContext);
   const [saving, setSaving] = useState("");
   const [editId, setEditId] = useState(newItemId);
+  const tutorIds = tutors.map((tutor) => tutor.id);
 
   const handleEdit = (e) => {
     e.stopPropagation();
@@ -130,7 +131,9 @@ const ScheduleRows = ({
     // eslint-disable-next-line
   }, [newItemId]);
 
-  return [...schedules]
+  return [
+    ...schedules.filter((item) => tutorIds.includes(item.tutorId) && item),
+  ]
     .sort(compare)
     .map((schedule) =>
       editId === schedule.id ? (

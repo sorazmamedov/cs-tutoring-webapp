@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
@@ -7,7 +7,6 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { format } from "date-fns";
-import { ViewContext, ActionsContext } from "../../../Context/timeslotContext";
 import { getErrors } from "../../common/errorHelper";
 import ActionButtons from "./actionButtons";
 import SpinnerBtn from "../../common/spinnerBtn";
@@ -21,7 +20,6 @@ const NewEventDialog = ({ slot, reset, setEvents, loadedSemester }) => {
   const [success, setSuccess] = useState(false);
   const [courses, setCourses] = useState([]);
 
-  console.log(slot);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (error) {

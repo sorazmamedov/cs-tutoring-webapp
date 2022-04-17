@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState } from "react";
+import React, { useMemo } from "react";
 import { Calendar, Views, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
@@ -10,10 +10,6 @@ const BigCalendar = ({
   handleSelectEvent,
   handleRangeChange,
 }) => {
-  const [view, setView] = useState(Views.WEEK);
-
-  const onView = useCallback((newView) => setView(newView), [setView]);
-
   const locales = {
     "en-US": enUS,
   };
@@ -42,7 +38,7 @@ const BigCalendar = ({
 
   return (
     <Calendar
-      selectable={view !== "month"}
+      selectable
       style={{ height: "700px" }}
       step={15}
       timeslots={4}
@@ -54,7 +50,6 @@ const BigCalendar = ({
       views={["week"]}
       min={min}
       max={max}
-      onView={onView}
       onSelectEvent={handleSelectEvent}
       onSelectSlot={handleSelectSlot}
       onRangeChange={handleRangeChange}

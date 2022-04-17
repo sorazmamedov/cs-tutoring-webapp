@@ -18,9 +18,9 @@ export default Object.freeze({
 
   neiuId: string()
     .trim()
-    .matches(/^\d{9}$/, "NEIU ID must be a 9 digit number.")
-    .required()
-    .typeError(messages.isRequired),
+    .matches(/^\d{9}$/, "NEIU ID must be a 9 digit number."),
+
+  about: string().trim().min(len.minLongTextLength).max(len.maxLongTextLength),
 
   firstName: string()
     .trim()

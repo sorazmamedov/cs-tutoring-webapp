@@ -19,7 +19,6 @@ const TemplateRow = ({ admin, schedule, tutors, handleSave, handleCancel }) => {
       <td className="px-0">
         <select
           className="roundBorder"
-          onChange={(e) => console.log(e.target.value)}
         >
           {days.map((day) => (
             <option key={day} value={day}>
@@ -60,7 +59,6 @@ const TemplateRow = ({ admin, schedule, tutors, handleSave, handleCancel }) => {
       <td>
         <select
           className="roundBorder"
-          onChange={(e) => console.log(e.target.value)}
         >
           {tutors.map((tutor) => (
             <option key={tutor} value={tutor}>

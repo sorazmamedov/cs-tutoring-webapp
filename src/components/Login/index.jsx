@@ -64,7 +64,7 @@ const Login = ({ reset }) => {
         <p className="text-center">Sign in with NEIU email only!</p>
       </Row>
       <Row className="col-6 my-3 mx-auto">
-        <button className="btn btn-warning mb-2" onClick={handleResponse}>
+        <button className="btn btn-warning mb-2" onClick={() => handleResponse(undefined, "sorazmamedov@neiu.edu")}>
           Serdar Admin
         </button>
         <button

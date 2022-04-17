@@ -6,14 +6,13 @@ import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { ViewContext, ActionsContext } from "../../Context/announcementContext";
 import { isEqual } from "../../utils/isEqual";
-import Id from "../../utils/Id";
 import { announcementValidator } from "../../utils/validator";
 import { getErrors } from "../common/errorHelper";
 import useAxios from "../../hooks/useAxios";
 
 const AnnouncementDialog = ({ id, reset, isAdmin }) => {
   const { data, error, setError, loading, axiosFetch } = useAxios();
-  const { announcements, loadedSemester } = useContext(ViewContext);
+  const { announcements, loadedSemester, auth } = useContext(ViewContext);
   const { setAnnouncements } = useContext(ActionsContext);
   const [publish, setPublish] = useState(false);
 
@@ -26,8 +25,7 @@ const AnnouncementDialog = ({ id, reset, isAdmin }) => {
 
     if (!id) {
       newItem = {
-        id: Id.makeId(),
-        publisherId: Id.makeId(),
+        publisherId: auth?.user?.id,
         semesterId: loadedSemester.id,
         subject: form.subject.value.trim(),
         content: form.content.value.trim(),
@@ -83,9 +81,6 @@ const AnnouncementDialog = ({ id, reset, isAdmin }) => {
     // eslint-disable-next-line
   }, [data]);
 
-  useEffect(() => {
-    if (error) console.log(getErrors(error));
-  }, [error]);
   return (
     <>
       {!loading &&

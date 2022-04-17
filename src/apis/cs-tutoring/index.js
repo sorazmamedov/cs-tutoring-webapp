@@ -19,23 +19,3 @@ export const axiosPrivate = axios.create({
   },
   withCredentials: true,
 });
-
-export const makeRequest = async (configObj) => {
-  const { requestConfig = {}, ...endpoint } = configObj;
-  const ctrl = new AbortController();
-  try {
-    const res = await axiosInstance({
-      ...endpoint,
-      ...requestConfig,
-      signal: ctrl.signal,
-    });
-    return res;
-  } catch (error) {
-    if (error.response) {
-      return error.response;
-    }
-    return error;
-  } finally {
-    ctrl.abort();
-  }
-};
