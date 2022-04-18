@@ -43,7 +43,7 @@ const Header = () => {
   const handleLogout = () => {
     setTitle("Are you sure you want to log out?");
     setSize("");
-    setModalBody(<Logout reset={reset} />);
+    setModalBody(<Logout {...{ reset, setTitle }} />);
     setShow(true);
   };
 
@@ -54,6 +54,9 @@ const Header = () => {
           <Nav className="w-100 d-flex justify-content-between">
             <NavLink to="/" className={classes}>
               Semester
+            </NavLink>
+            <NavLink to="/student" className={classes}>
+              Student
             </NavLink>
             {auth?.user && (
               <>

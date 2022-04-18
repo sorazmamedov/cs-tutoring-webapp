@@ -5,12 +5,13 @@ import Col from "react-bootstrap/Col";
 import SpinnerBtn from "../common/spinnerBtn";
 import useLogout from "../../hooks/useLogout";
 
-const Logout = ({ reset }) => {
+const Logout = ({ reset, setTitle }) => {
   const [success, setSuccess] = useState(false);
   const { errors, handleLogout, signingOut, auth } = useLogout();
 
   useEffect(() => {
     if (!auth?.user) {
+      setTitle("");
       setSuccess(true);
       setTimeout(() => {
         reset();
@@ -30,7 +31,7 @@ const Logout = ({ reset }) => {
           </p>
         ))}
       {success && (
-        <p className="text-success text-center mt-2 mb-5">
+        <p className="text-success text-center pb-5 mb-5 fs-5">
           Successfully logged out!
         </p>
       )}
