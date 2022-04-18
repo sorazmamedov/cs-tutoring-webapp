@@ -2,7 +2,8 @@
 
 :root {
   --main-pink: #ff0066c9;
-  --main-blue: #1a2943;
+  --main-blue: #2699fb;
+  --nav-blue: #1a2943;
   --main-bg-color-light: #f0f0f0;
   --main-bg-color-dark: #2b3346;
   --shadow-bg-color: #ffffff;
@@ -43,7 +44,7 @@ main {
 
 header,
 footer {
-  background-color: var(--main-blue);
+  background-color: var(--nav-blue);
 }
 
 header {

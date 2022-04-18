@@ -3,7 +3,7 @@ import { GlobalViewContext } from "../../Context/dataContext";
 
 const TitleBar = ({ className, title, icon, children, ...props }) => {
   const { loadedSemester } = useContext(GlobalViewContext);
-  const defaults = "w-100 d-flex justify-content-between text-muted mb-4";
+  const defaults = "w-100 d-flex justify-content-between align-items-center text-muted mb-4";
   return (
     <div className={className || defaults} {...props}>
       {title && (

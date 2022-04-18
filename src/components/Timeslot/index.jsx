@@ -65,7 +65,7 @@ const Timeslot = () => {
         title="Timeslots"
         icon={
           loading || tutorsLoading ? (
-            <RefreshIcon onClick={() => setRefetch(true)} rotate={true} />
+            <RefreshIcon className="rotate" />
           ) : (
             <RefreshIcon onClick={() => setRefetch(true)} />
           )

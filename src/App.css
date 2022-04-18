@@ -58,9 +58,15 @@
 
 /* end of time slots table navs */
 
+/* refresh icon circular arrow */
+[data-icon-type="refresh"] {
+  font-size: 1.4rem;
+}
+
 .rotate {
   animation: rotation 1s infinite linear;
-  color: green;
+  color: var(--main-pink);
+  /* color: green; */
 }
 
 @keyframes rotation {
@@ -72,6 +78,8 @@
   }
 }
 
+/* end of refresh icon circular arrow */
+
 div > p + i[data-icon-type]:hover {
   font-weight: bold;
   color: black;
@@ -81,10 +89,6 @@ div > p + i[data-icon-type]:hover {
 [data-icon-type="check"],
 [data-icon-type="cancel"] {
   font-size: 1.2rem;
-}
-
-[data-icon-type="refresh"] {
-  font-size: 1.4rem;
 }
 
 [data-icon-type="sun"] {
