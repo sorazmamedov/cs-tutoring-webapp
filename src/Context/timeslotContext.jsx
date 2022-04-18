@@ -3,13 +3,17 @@ import { startOfWeek, endOfWeek } from "date-fns";
 import useAuth from "../hooks/useAuth";
 import useAxios from "../hooks/useAxios";
 import { GlobalViewContext } from "./dataContext";
-import { ViewContext as TutorContext } from "./tutorsContext";
+import {
+  ViewContext as TutorContext,
+  ActionsContext as TutorsActionsContext,
+} from "./tutorsContext";
 
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
 const TimeslotDataProvider = ({ children }) => {
   const { auth, ROLES } = useAuth();
+  const { setRefetchTutors } = useContext(TutorsActionsContext);
   const {
     tutors,
     error: tutorsError,
@@ -20,8 +24,10 @@ const TimeslotDataProvider = ({ children }) => {
   const [events, setEvents] = useState([]);
   const [current, setCurrent] = useState("");
   const [refetch, setRefetch] = useState(false);
-  const [start, setStart] = useState(startOfWeek(new Date()))
-  const [end, setEnd] = useState(endOfWeek(new Date()))
+  const [start, setStart] = useState(
+    startOfWeek(new Date(), { weekStartsOn: 1 })
+  );
+  const [end, setEnd] = useState(endOfWeek(new Date(), { weekStartsOn: 1 }));
 
   const fetchSlots = () => {
     axiosFetch({
@@ -39,6 +45,7 @@ const TimeslotDataProvider = ({ children }) => {
       fetchSlots();
       console.log("[Fetching timeslots]");
     } else if (refetch) {
+      setRefetchTutors(true);
       setRefetch(false);
       fetchSlots();
       console.log("[*Refetching timeslots*]");
@@ -73,7 +80,7 @@ const TimeslotDataProvider = ({ children }) => {
           setEvents,
           setRefetch,
           setStart,
-          setEnd
+          setEnd,
         }}
       >
         {children}

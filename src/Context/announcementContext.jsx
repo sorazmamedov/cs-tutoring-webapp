@@ -13,6 +13,7 @@ const AnnouncementDataProvider = ({ children }) => {
   const { data, error, loading, axiosFetch } = useAxios();
   const [announcements, setAnnouncements] = useState([]);
   const [current, setCurrent] = useState("");
+  const [refetch, setRefetch] = useState(false);
 
   const fetchAnnouncements = () => {
     axiosFetch({
@@ -27,10 +28,14 @@ const AnnouncementDataProvider = ({ children }) => {
       setCurrent(loadedSemester.id);
       fetchAnnouncements();
       console.log("[Fetching announcements]");
+    } else if (refetch) {
+      setRefetch(false);
+      fetchAnnouncements();
+      console.log("[*Refetching announcements*]");
     }
 
     // eslint-disable-next-line
-  }, [loadedSemester]);
+  }, [loadedSemester, refetch]);
 
   useEffect(() => {
     const temp = data
@@ -48,12 +53,13 @@ const AnnouncementDataProvider = ({ children }) => {
         ROLES,
         error,
         loading,
-        darkTheme
+        darkTheme,
       }}
     >
       <ActionsContext.Provider
         value={{
           setAnnouncements,
+          setRefetch,
         }}
       >
         {children}

@@ -59,8 +59,8 @@ export const moonIcon = (props) => (
   <i className="bi bi-moon-stars-fill" data-icon-type="moon" {...props} />
 );
 
-export const sunIcon = (props) => (
-  <i className="bi bi-brightness-high-fill" data-icon-type="sun" {...props} />
+export const sunIcon = ({className, ...props}) => (
+  <i className={`bi bi-brightness-high-fill ${className}`} data-icon-type="sun" {...props} />
 );
 
 export const refreshIcon = ({ rotate, ...props }) => (

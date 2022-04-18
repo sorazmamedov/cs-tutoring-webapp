@@ -110,26 +110,24 @@ const EditableRow = ({
           required
         />
       </td>
-      {admin && (
-        <td className="px-0 d-flex justify-content-evenly">
-          {saving !== schedule.id ? (
-            <>
-              <CheckIcon
-                onClick={() => handleSave(edited)}
-                aria-label="Save"
-                style={{ color: "green" }}
-              />
-              <CancelIcon
-                onClick={handleCancel}
-                aria-label="Cancel"
-                style={{ color: "red" }}
-              />
-            </>
-          ) : (
-            <SpinnerBtn btnVariant="" variant="primary" />
-          )}
-        </td>
-      )}
+      <td className="px-0 d-flex justify-content-evenly">
+        {saving !== schedule.id ? (
+          <>
+            <CheckIcon
+              onClick={() => handleSave(edited)}
+              aria-label="Save"
+              style={{ color: "green" }}
+            />
+            <CancelIcon
+              onClick={handleCancel}
+              aria-label="Cancel"
+              style={{ color: "red" }}
+            />
+          </>
+        ) : (
+          <SpinnerBtn btnVariant="" variant="primary" />
+        )}
+      </td>
     </tr>
   );
 };

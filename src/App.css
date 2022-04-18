@@ -36,6 +36,11 @@
   cursor: pointer;
 }
 
+.table-responsive,
+.table-placeholder {
+  min-height: 250px;
+}
+
 /* time slots table navs */
 .nav-tabs .nav-link {
   color: #707070;
@@ -47,10 +52,14 @@
   font-weight: bolder;
 }
 
+.booked {
+  background-color: var(--main-pink) !important;
+}
+
 /* end of time slots table navs */
 
 .rotate {
-  animation: rotation 2s infinite linear;
+  animation: rotation 1s infinite linear;
   color: green;
 }
 
@@ -84,7 +93,7 @@ div > p + i[data-icon-type]:hover {
 }
 
 [data-icon-type="moon"] {
-  color: #F4F6F0;
+  color: #f4f6f0;
   font-size: 1.4rem;
 }
 

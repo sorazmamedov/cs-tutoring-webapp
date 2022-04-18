@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import { Calendar, Views, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
@@ -31,9 +31,17 @@ const BigCalendar = ({ events, handleSelectEvent, handleRangeChange }) => {
     weekStartsOn: 1,
   });
 
+  const eventPropGetter = useCallback(
+    (event) => ({
+      ...(event.booked && {
+        className: "booked",
+      }),
+    }),
+    []
+  );
+
   return (
     <Calendar
-      selectable
       style={{ height: "800px" }}
       // step={15}
       // timeslots={4}
@@ -41,6 +49,7 @@ const BigCalendar = ({ events, handleSelectEvent, handleRangeChange }) => {
       defaultDate={defaultDate}
       formats={formats}
       events={events}
+      eventPropGetter={eventPropGetter}
       defaultView={Views.WEEK}
       views={["week"]}
       min={min}

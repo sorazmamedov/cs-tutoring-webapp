@@ -1,7 +1,10 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import useAxios from "../hooks/useAxios";
 import { GlobalViewContext } from "./dataContext";
-import { ViewContext as TutorsContext } from "./tutorsContext";
+import {
+  ViewContext as TutorsContext,
+  ActionsContext as TutorsActionsContext,
+} from "./tutorsContext";
 import useAuth from "../hooks/useAuth";
 
 const ViewContext = createContext({});
@@ -9,6 +12,7 @@ const ActionsContext = createContext({});
 
 const ScheduleDataProvider = ({ children }) => {
   const { auth, ROLES, signingIn } = useAuth();
+  const { setRefetchTutors } = useContext(TutorsActionsContext);
   const {
     tutors,
     error: tutorsError,
@@ -18,6 +22,7 @@ const ScheduleDataProvider = ({ children }) => {
   const { data, error, loading, axiosFetch } = useAxios();
   const [schedules, setSchedules] = useState([]);
   const [current, setCurrent] = useState("");
+  const [refetch, setRefetch] = useState(false);
 
   const fetchSchedules = () => {
     axiosFetch({
@@ -34,9 +39,14 @@ const ScheduleDataProvider = ({ children }) => {
       setCurrent(loadedSemester.id);
       fetchSchedules();
       console.log("[Fetching schedules]");
+    } else if (refetch) {
+      setRefetchTutors(true);
+      setRefetch(false);
+      fetchSchedules();
+      console.log("[*Refetching schedules*]");
     }
     // eslint-disable-next-line
-  }, [loadedSemester]);
+  }, [loadedSemester, refetch]);
 
   useEffect(() => {
     setSchedules([...data]);
@@ -55,12 +65,13 @@ const ScheduleDataProvider = ({ children }) => {
         darkTheme,
         tutors,
         tutorsError,
-        tutorsLoading
+        tutorsLoading,
       }}
     >
       <ActionsContext.Provider
         value={{
           setSchedules,
+          setRefetch,
         }}
       >
         {children}

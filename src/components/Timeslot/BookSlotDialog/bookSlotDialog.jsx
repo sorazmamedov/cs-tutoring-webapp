@@ -64,7 +64,7 @@ const NewEventDialog = ({ slot, reset, setEvents, loadedSemester }) => {
       setCourses(data);
       setSearching(false);
     } else if (saving) {
-      setEvents((prev) => [...prev.filter((event) => event.id !== slot.id)]);
+      // setEvents((prev) => [...prev.filter((event) => event.id !== slot.id)]);
       setSaving(false);
       setSuccess(true);
       setTimeout(() => {

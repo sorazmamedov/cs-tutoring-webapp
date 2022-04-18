@@ -5,7 +5,6 @@ import SpinnerBtn from "../common/spinnerBtn";
 const ReadOnlyRow = ({
   schedule,
   admin,
-  isLogged,
   tutor,
   saving,
   handleEdit,
@@ -17,22 +16,15 @@ const ReadOnlyRow = ({
       <td>{schedule.startHour}</td>
       <td>{schedule.endHour}</td>
       <td>{`${tutor.firstName} ${tutor.lastName}`}</td>
-      {isLogged && (
-        <td>
-          {schedule.location.startsWith("https") ? (
-            <a
-              href={schedule.location}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {tutor.firstName}'{!tutor.firstName.endsWith("s") && "s"} Zoom
-              Link
-            </a>
-          ) : (
-            <span>{schedule.location}</span>
-          )}
-        </td>
-      )}
+      <td>
+        {schedule.location.startsWith("https") ? (
+          <a href={schedule.location} target="_blank" rel="noopener noreferrer">
+            {tutor.firstName}'{!tutor.firstName.endsWith("s") && "s"} Zoom Link
+          </a>
+        ) : (
+          <span>{schedule.location}</span>
+        )}
+      </td>
       {admin && (
         <td className="ps-1 pe-0 no-stretch">
           {saving !== schedule.id ? (

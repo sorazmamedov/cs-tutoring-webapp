@@ -25,11 +25,11 @@ const Footer = () => {
   ));
   return (
     <footer>
-      <Navbar variant="dark">
-        <Container className="p-0">
+      <Container className="p-0">
+        <Navbar variant="dark">
           <Nav className="me-auto">{links}</Nav>
-        </Container>
-      </Navbar>
+        </Navbar>
+      </Container>
     </footer>
   );
 };

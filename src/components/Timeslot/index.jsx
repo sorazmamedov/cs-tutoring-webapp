@@ -9,7 +9,6 @@ import BookSlotDialog from "./BookSlotDialog";
 import useModal from "../../hooks/useModalStates";
 import { RefreshIcon } from "../common/iconsWithTooltip";
 import { ViewContext, ActionsContext } from "../../Context/timeslotContext";
-import { NoDataPlaceholder, ErrorPlaceholder } from "../common/Placeholders/";
 import { showErrors } from "../common/errorHelper";
 
 const Timeslot = () => {
@@ -62,52 +61,36 @@ const Timeslot = () => {
 
   return (
     <MainContainer>
-      {!error && !tutorsError && tutors.length !== 0 && (
-        <TitleBar
-          title="Timeslots"
-          icon={
-            loading || tutorsLoading ? (
-              <RefreshIcon onClick={() => setRefetch(true)} rotate={true} />
-            ) : (
-              <RefreshIcon onClick={() => setRefetch(true)} />
-            )
-          }
-        />
+      <TitleBar
+        title="Timeslots"
+        icon={
+          loading || tutorsLoading ? (
+            <RefreshIcon onClick={() => setRefetch(true)} rotate={true} />
+          ) : (
+            <RefreshIcon onClick={() => setRefetch(true)} />
+          )
+        }
+      />
+      {!tutorsError && events && tutors && tutors.length !== 0 ? (
+        <Tabs
+          activeKey={tab}
+          className="mb-3"
+          onSelect={(eventKey) => setTab(eventKey)}
+        >
+          {tutors.map((tutor) => (
+            <Tab key={tutor.id} eventKey={tutor.id} title={tutor.firstName} />
+          ))}
+        </Tabs>
+      ) : (
+        <Tabs activeKey={0} className="mb-3">
+          <Tab eventKey={0} title="No slots available at this time!" />
+        </Tabs>
       )}
-
-      {/* {(loading || tutorsLoading) && <LoadingPlaceholder />} */}
-      {!loading && !tutorsLoading && (error || tutorsError) && (
-        <ErrorPlaceholder />
-      )}
-
-      {!loading &&
-        !error &&
-        !tutorsLoading &&
-        !tutorsError &&
-        events &&
-        tutors &&
-        tutors.length === 0 && (
-          <NoDataPlaceholder message="No slots available at this time!" />
-        )}
-      {!error && !tutorsError && events && tutors && tutors.length !== 0 && (
-        <>
-          <Tabs
-            // defaultActiveKey={tutors.length !== 0 ? tutors[0].id : ""}
-            activeKey={tab}
-            className="mb-3"
-            onSelect={(eventKey) => setTab(eventKey)}
-          >
-            {tutors.map((tutor) => (
-              <Tab key={tutor.id} eventKey={tutor.id} title={tutor.firstName} />
-            ))}
-          </Tabs>
-          <BigCalendar
-            events={[...events.filter((event) => event.tutorId === tab)]}
-            handleSelectEvent={handleSelectEvent}
-            handleRangeChange={handleRangeChange}
-          />
-        </>
-      )}
+      <BigCalendar
+        events={[...events.filter((event) => event.tutorId === tab)]}
+        handleSelectEvent={handleSelectEvent}
+        handleRangeChange={handleRangeChange}
+      />
       <TemplateModal {...{ show, title, ModalBody, reset }} />
     </MainContainer>
   );

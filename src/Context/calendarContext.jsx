@@ -14,8 +14,10 @@ const CalendarDataProvider = ({ children }) => {
   const [events, setEvents] = useState([]);
   const [current, setCurrent] = useState("");
   const [refetch, setRefetch] = useState(false);
-  const [start, setStart] = useState(startOfWeek(new Date()));
-  const [end, setEnd] = useState(endOfWeek(new Date()));
+  const [start, setStart] = useState(
+    startOfWeek(new Date(), { weekStartsOn: 1 })
+  );
+  const [end, setEnd] = useState(endOfWeek(new Date(), { weekStartsOn: 1 }));
 
   const fetchCalendar = () => {
     axiosFetch({

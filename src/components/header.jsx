@@ -49,8 +49,8 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar variant="dark">
-        <Container className="p-0">
+      <Container className="p-0">
+        <Navbar variant="dark">
           <Nav className="w-100 d-flex justify-content-between">
             <NavLink to="/" className={classes}>
               Semester
@@ -83,8 +83,8 @@ const Header = () => {
               {darkTheme ? <SunIcon /> : <MoonIcon />}
             </NavLink>
           </Nav>
-        </Container>
-      </Navbar>
+        </Navbar>
+      </Container>
       <TemplateModal {...{ show, title, ModalBody, reset, size }} />
     </header>
   );

@@ -4,7 +4,7 @@ import MainContainer from "../common/mainContainer";
 import TableHeader from "../common/tableHeader";
 import ScheduleRows from "./scheduleRows";
 import CustomPagination from "../common/customPagination";
-import { PlusIcon } from "../common/iconsWithTooltip";
+import { PlusIcon, RefreshIcon } from "../common/iconsWithTooltip";
 import { showErrors } from "../common/errorHelper";
 import TitleBar from "../common/titleBar";
 import Id from "../../utils/Id";
@@ -32,7 +32,7 @@ const Schedules = () => {
     tutorsError,
     tutorsLoading,
   } = useContext(ViewContext);
-  const { setSchedules } = useContext(ActionsContext);
+  const { setSchedules, setRefetch } = useContext(ActionsContext);
   const [newItemId, setNewItemId] = useState("");
 
   const isAdmin = auth?.user?.roles.includes(ROLES.Admin);
@@ -75,14 +75,20 @@ const Schedules = () => {
 
   return (
     <MainContainer>
-      {!loading && !error && !tutorsLoading && !tutorsError && (
-        <TitleBar
-          title="Schedules"
-          icon={isAdmin && <PlusIcon onClick={handleAddSchedule} />}
-        />
-      )}
+      <TitleBar
+        title="Schedules"
+        icon={
+          isAdmin ? (
+            <PlusIcon onClick={handleAddSchedule} />
+          ) : loading || tutorsLoading ? (
+            <RefreshIcon onClick={() => setRefetch(true)} rotate={true} />
+          ) : (
+            <RefreshIcon onClick={() => setRefetch(true)} />
+          )
+        }
+      />
 
-      {loading && tutorsLoading && <LoadingPlaceholder />}
+      {(loading || tutorsLoading) && <LoadingPlaceholder />}
       {!loading && !tutorsLoading && (error || tutorsError) && (
         <ErrorPlaceholder />
       )}
@@ -100,8 +106,8 @@ const Schedules = () => {
         !tutorsLoading &&
         !tutorsError &&
         schedules &&
-        schedules.length !== 0 &&
         tutors &&
+        schedules.length !== 0 &&
         tutors.length !== 0 && (
           <>
             <Table className="text-center" bordered hover responsive>
@@ -118,6 +124,9 @@ const Schedules = () => {
                     setModalBody,
                     setShow,
                     tutors,
+                    isAdmin,
+                    schedules,
+                    setSchedules,
                   }}
                 />
               </tbody>

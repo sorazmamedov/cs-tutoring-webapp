@@ -12,6 +12,7 @@ const TutorDataProvider = ({ children }) => {
   const { data, error, loading, axiosFetch } = useAxios();
   const [tutors, setTutors] = useState([]);
   const [current, setCurrent] = useState("");
+  const [refetch, setRefetch] = useState(false);
 
   const fetchTutors = () => {
     axiosFetch({
@@ -28,9 +29,13 @@ const TutorDataProvider = ({ children }) => {
       setCurrent(loadedSemester.id);
       fetchTutors();
       console.log("[Fetching tutors]");
+    } else if (refetch) {
+      setRefetch(false);
+      fetchTutors();
+      console.log("[*Refetching tutors*]");
     }
     // eslint-disable-next-line
-  }, [loadedSemester]);
+  }, [loadedSemester, refetch]);
 
   useEffect(() => {
     setTutors([...data]);
@@ -46,12 +51,13 @@ const TutorDataProvider = ({ children }) => {
         auth,
         ROLES,
         signingIn,
-        darkTheme
+        darkTheme,
       }}
     >
       <ActionsContext.Provider
         value={{
           setTutors,
+          setRefetchTutors: setRefetch,
         }}
       >
         {children}

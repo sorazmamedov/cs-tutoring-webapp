@@ -2,10 +2,10 @@ import React from "react";
 
 const NoDataPlaceholder = ({ message }) => {
   return (
-    <div className="d-flex" style={{ height: "250px" }}>
-      <p className="mx-auto mt-4 pt-5 fs-5 text-muted">
+    <div className="d-flex table-placeholder justify-content-center align-items-center border rounded-3">
+      <span className="fs-5 text-muted">
         {message ? message : "No data available!"}
-      </p>
+      </span>
     </div>
   );
 };

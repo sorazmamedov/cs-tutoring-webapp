@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { scheduleValidator } from "../../utils/validator";
 import { isEqual } from "../../utils/isEqual";
 import ReadOnlyRow from "./readOnlyRow";
 import EditableRow from "./editableRow";
-import { ActionsContext, ViewContext } from "../../Context/scheduleContext";
 import { showErrors } from "../common/errorHelper";
 import useAxios from "../../hooks/useAxios";
 
@@ -14,10 +13,11 @@ const ScheduleRows = ({
   setModalBody,
   setShow,
   tutors,
+  isAdmin,
+  schedules,
+  setSchedules,
 }) => {
   const { data, error, axiosFetch } = useAxios();
-  const { schedules, auth, ROLES } = useContext(ViewContext);
-  const { setSchedules } = useContext(ActionsContext);
   const [saving, setSaving] = useState("");
   const [editId, setEditId] = useState(newItemId);
   const tutorIds = tutors.map((tutor) => tutor.id);
@@ -131,16 +131,17 @@ const ScheduleRows = ({
     // eslint-disable-next-line
   }, [newItemId]);
 
-  return [
-    ...schedules.filter((item) => tutorIds.includes(item.tutorId) && item),
-  ]
+  let filtered = isAdmin
+    ? schedules
+    : [...schedules.filter((item) => tutorIds.includes(item.tutorId) && item)];
+    
+  return filtered
     .sort(compare)
     .map((schedule) =>
       editId === schedule.id ? (
         <EditableRow
           key={schedule.id}
           saving={saving}
-          admin={auth?.user?.roles.includes(ROLES.Admin)}
           tutors={tutors.filter((tutor) => tutor.isActive)}
           schedule={schedule}
           handleSave={handleSave}
@@ -151,8 +152,7 @@ const ScheduleRows = ({
           key={schedule.id}
           saving={saving}
           schedule={schedule}
-          admin={auth?.user?.roles.includes(ROLES.Admin)}
-          isLogged={auth?.user}
+          admin={isAdmin}
           tutor={tutors.find((tutor) => tutor.id === schedule.tutorId)}
           handleEdit={handleEdit}
           handleToggle={handleToggle}

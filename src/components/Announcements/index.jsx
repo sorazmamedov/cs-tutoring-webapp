@@ -1,13 +1,17 @@
 import React, { useContext } from "react";
 import { format } from "date-fns";
 import Table from "react-bootstrap/Table";
-import { DeleteIcon, MegaphoneIcon } from "../common/iconsWithTooltip";
+import {
+  DeleteIcon,
+  MegaphoneIcon,
+  RefreshIcon,
+} from "../common/iconsWithTooltip";
 import MainContainer from "../common/mainContainer";
 import TemplateModal from "../common/templateModal";
 import CustomPagination from "../common/customPagination";
 import AnnouncementDialog from "./announcementDialog";
 import DeleteAnnouncementDialog from "./deleteAnnouncementDialog";
-import { ViewContext } from "../../Context/announcementContext";
+import { ViewContext, ActionsContext } from "../../Context/announcementContext";
 import TitleBar from "../common/titleBar";
 import {
   NoDataPlaceholder,
@@ -21,6 +25,7 @@ const Announcements = () => {
     useModal();
   const { announcements, auth, ROLES, error, loading } =
     useContext(ViewContext);
+  const { setRefetch } = useContext(ActionsContext);
 
   const isAdmin = auth?.user?.roles.includes(ROLES.Admin);
 
@@ -47,12 +52,18 @@ const Announcements = () => {
 
   return (
     <MainContainer>
-      {!loading && !error && (
-        <TitleBar
-          title="Announcements"
-          icon={isAdmin && <MegaphoneIcon onClick={handleCreateAnnouncement} />}
-        />
-      )}
+      <TitleBar
+        title="Announcements"
+        icon={
+          isAdmin ? (
+            <MegaphoneIcon onClick={handleCreateAnnouncement} />
+          ) : loading ? (
+            <RefreshIcon onClick={() => setRefetch(true)} rotate={true} />
+          ) : (
+            <RefreshIcon onClick={() => setRefetch(true)} />
+          )
+        }
+      />
 
       {loading && <LoadingPlaceholder />}
       {!loading && error && <ErrorPlaceholder />}
