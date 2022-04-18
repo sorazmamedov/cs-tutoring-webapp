@@ -71,7 +71,7 @@ const Timeslot = () => {
           )
         }
       />
-      {!tutorsError && events && tutors && tutors.length !== 0 ? (
+      {!error && !tutorsError && events && tutors && tutors.length !== 0 ? (
         <Tabs
           activeKey={tab}
           className="mb-3"

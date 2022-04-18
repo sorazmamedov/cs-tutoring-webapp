@@ -40,7 +40,9 @@ const ScheduleDataProvider = ({ children }) => {
       fetchSchedules();
       console.log("[Fetching schedules]");
     } else if (refetch) {
-      setRefetchTutors(true);
+      if (!tutors.length) {
+        setRefetchTutors(true);
+      }
       setRefetch(false);
       fetchSchedules();
       console.log("[*Refetching schedules*]");

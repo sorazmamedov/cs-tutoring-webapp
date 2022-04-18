@@ -45,7 +45,9 @@ const TimeslotDataProvider = ({ children }) => {
       fetchSlots();
       console.log("[Fetching timeslots]");
     } else if (refetch) {
-      setRefetchTutors(true);
+      if (!tutors.length) {
+        setRefetchTutors(true);
+      }
       setRefetch(false);
       fetchSlots();
       console.log("[*Refetching timeslots*]");
