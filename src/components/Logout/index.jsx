@@ -17,6 +17,7 @@ const Logout = ({ reset, setTitle }) => {
         reset();
       }, 1500);
     }
+    // eslint-disable-next-line
   }, [auth, reset]);
 
   return (

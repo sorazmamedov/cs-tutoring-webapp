@@ -72,15 +72,41 @@ const Timeslot = () => {
         }
       />
       {!error && !tutorsError && events && tutors && tutors.length !== 0 ? (
-        <Tabs
-          activeKey={tab}
-          className="mb-3"
-          onSelect={(eventKey) => setTab(eventKey)}
-        >
-          {tutors.map((tutor) => (
-            <Tab key={tutor.id} eventKey={tutor.id} title={tutor.firstName} />
-          ))}
-        </Tabs>
+        <>
+          <Tabs
+            activeKey={tab}
+            className="mb-3"
+            onSelect={(eventKey) => setTab(eventKey)}
+          >
+            {tutors.map((tutor) => (
+              <Tab key={tutor.id} eventKey={tutor.id} title={tutor.firstName} />
+            ))}
+          </Tabs>
+          <div className="m-0">
+            <div className="d-flex p-0 align-items-center justify-content-end">
+            <span className="fs-6 text-muted">Booked</span>
+              <span
+                className="d-inline-block ms-2 rounded"
+                style={{
+                  height: "15px",
+                  width: "15px",
+                  backgroundColor: "#ff0066c9",
+                }}
+              ></span>
+            </div>
+            <div className="d-flex p-0 align-items-center justify-content-end">
+              <span className="fs-6 text-muted">Available</span>
+              <span
+                className="d-inline-block ms-2 rounded"
+                style={{
+                  height: "15px",
+                  width: "15px",
+                  backgroundColor: "#3174ad",
+                }}
+              ></span>
+            </div>
+          </div>
+        </>
       ) : (
         <Tabs activeKey={0} className="mb-3">
           <Tab eventKey={0} title="No slots available at this time!" />

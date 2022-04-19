@@ -13,8 +13,8 @@ const TitleBar = ({ className, title, icon, children, ...props }) => {
           {title}
         </p>
       )}
-      {icon}
       {children}
+      {icon}
     </div>
   );
 };
