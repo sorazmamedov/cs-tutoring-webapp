@@ -44,12 +44,12 @@ const Logout = ({ reset, setTitle }) => {
                 className="col-12 roundBorder dangerBtn"
                 onClick={handleLogout}
               >
-                Logout
+                Sign Out
               </Button>
             ) : (
               <SpinnerBtn
-                className="col-12 roundBorder"
-                text="Logging out"
+                className="col-12 roundBorder dangerBtn"
+                text="signing out"
                 role="logout"
                 accessibilityText="Sign out"
               />

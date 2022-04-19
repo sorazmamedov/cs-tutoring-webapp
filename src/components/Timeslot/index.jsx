@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { isPast } from "date-fns";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import MainContainer from "../common/mainContainer";
@@ -29,6 +30,10 @@ const Timeslot = () => {
     useModal();
 
   const handleSelectEvent = (event) => {
+    if (isPast(event.start)) {
+      return;
+    }
+
     if (event.tutorId === auth?.user?.id) {
       showErrors(
         { message: "Booking your own slots is not allowed!" },
@@ -84,7 +89,7 @@ const Timeslot = () => {
           </Tabs>
           <div className="m-0">
             <div className="d-flex p-0 align-items-center justify-content-end">
-            <span className="fs-6 text-muted">Booked</span>
+              <span className="fs-6 text-muted">Booked</span>
               <span
                 className="d-inline-block ms-2 rounded"
                 style={{

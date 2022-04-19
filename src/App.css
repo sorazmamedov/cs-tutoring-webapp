@@ -56,6 +56,9 @@
   background-color: var(--main-pink) !important;
 }
 
+.expired {
+  background-color: #6c757d !important;
+}
 /* end of time slots table navs */
 
 /* refresh icon circular arrow */

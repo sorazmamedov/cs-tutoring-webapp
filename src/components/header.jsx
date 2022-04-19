@@ -41,7 +41,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    setTitle("Are you sure you want to log out?");
+    setTitle("Are you sure you want to sign out?");
     setSize("");
     setModalBody(<Logout {...{ reset, setTitle }} />);
     setShow(true);
@@ -54,9 +54,6 @@ const Header = () => {
           <Nav className="w-100 d-flex justify-content-between">
             <NavLink to="/" className={classes}>
               Semester
-            </NavLink>
-            <NavLink to="/student" className={classes}>
-              Student
             </NavLink>
             {auth?.user && (
               <>
@@ -71,9 +68,9 @@ const Header = () => {
               </>
             )}
             {auth?.user ? (
-              <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+              <Nav.Link onClick={handleLogout}>Sign Out</Nav.Link>
             ) : (
-              <Nav.Link onClick={handleLogin}>Login</Nav.Link>
+              <Nav.Link onClick={handleLogin}>Sign In</Nav.Link>
             )}
             <NavLink
               to="*"

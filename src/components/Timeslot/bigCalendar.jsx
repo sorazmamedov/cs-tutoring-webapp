@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from "react";
 import { Calendar, Views, dateFnsLocalizer } from "react-big-calendar";
-import { format, parse, startOfWeek, getDay } from "date-fns";
+import { format, parse, startOfWeek, getDay, isPast } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
@@ -36,6 +36,9 @@ const BigCalendar = ({ events, handleSelectEvent, handleRangeChange }) => {
       ...(event.booked && {
         className: "booked",
       }),
+      ...(!event.booked && isPast(event.start) && {
+        className: "expired",
+      })
     }),
     []
   );
