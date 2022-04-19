@@ -30,7 +30,7 @@ const Timeslot = () => {
     useModal();
 
   const handleSelectEvent = (event) => {
-    if (isPast(event.start)) {
+    if (isPast(event.end)) {
       return;
     }
 
@@ -47,7 +47,7 @@ const Timeslot = () => {
     const slot = { ...event, tutor: `${tutor.firstName} ${tutor.lastName}` };
     setTitle("Appointment");
     setModalBody(
-      <BookSlotDialog {...{ slot, reset, setEvents, loadedSemester }} />
+      <BookSlotDialog {...{ slot, reset, setTitle, setEvents, loadedSemester }} />
     );
     setShow(true);
   };
@@ -121,6 +121,7 @@ const Timeslot = () => {
         events={[...events.filter((event) => event.tutorId === tab)]}
         handleSelectEvent={handleSelectEvent}
         handleRangeChange={handleRangeChange}
+        userId={auth.id}
       />
       <TemplateModal {...{ show, title, ModalBody, reset }} />
     </MainContainer>

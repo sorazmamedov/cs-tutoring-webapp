@@ -89,7 +89,11 @@ div > p + i[data-icon-type]:hover {
 
 [data-icon-type="plus"],
 [data-icon-type="check"],
-[data-icon-type="cancel"] {
+[data-icon-type="cancel"],
+[data-icon-type="eye"],
+[data-icon-type="eyeSlash"],
+[data-icon-type="bar"],
+[data-icon-type="barFill"] {
   font-size: 1.2rem;
 }
 
@@ -107,7 +111,8 @@ div > p + i[data-icon-type]:hover {
   font-size: 1.5rem;
 }
 
-i[data-icon-type="delete"] {
+i[data-icon-type="delete"],
+[data-icon-type="barFill"] {
   color: var(--main-pink);
 }
 

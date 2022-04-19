@@ -4,7 +4,12 @@ import { format, parse, startOfWeek, getDay, isPast } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
-const BigCalendar = ({ events, handleSelectEvent, handleRangeChange }) => {
+const BigCalendar = ({
+  events,
+  handleSelectEvent,
+  handleRangeChange,
+  userId,
+}) => {
   const locales = {
     "en-US": enUS,
   };
@@ -33,12 +38,11 @@ const BigCalendar = ({ events, handleSelectEvent, handleRangeChange }) => {
 
   const eventPropGetter = useCallback(
     (event) => ({
-      ...(event.booked && {
-        className: "booked",
-      }),
-      ...(!event.booked && isPast(event.start) && {
-        className: "expired",
-      })
+      ...(event.booked && { className: "booked" }),
+      ...(!event.booked &&
+        isPast(event.end) && {
+          className: "expired",
+        }),
     }),
     []
   );

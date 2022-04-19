@@ -81,7 +81,7 @@ const Schedules = () => {
           isAdmin ? (
             <PlusIcon onClick={handleAddSchedule} />
           ) : loading || tutorsLoading ? (
-            <RefreshIcon onClick={() => setRefetch(true)} rotate={true} />
+            <RefreshIcon onClick={() => setRefetch(true)} className="rotate" />
           ) : (
             <RefreshIcon onClick={() => setRefetch(true)} />
           )

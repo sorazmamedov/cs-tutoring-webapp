@@ -12,7 +12,13 @@ import ActionButtons from "./actionButtons";
 import SpinnerBtn from "../../common/spinnerBtn";
 import useAxios from "../../../hooks/useAxios";
 
-const NewEventDialog = ({ slot, reset, setEvents, loadedSemester }) => {
+const NewEventDialog = ({
+  slot,
+  reset,
+  setTitle,
+  setEvents,
+  loadedSemester,
+}) => {
   const { data, error, setError, loading, axiosFetch } = useAxios();
   const [searching, setSearching] = useState(false);
   const [selected, setSelected] = useState({});
@@ -35,7 +41,7 @@ const NewEventDialog = ({ slot, reset, setEvents, loadedSemester }) => {
 
       if (!regex.test(searchTxt)) {
         setSearching(false);
-        setError({ message: "Allowed chars: a-z, 0-9, @, -" });
+        setError({ message: "No white space! Allowed chars: a-z, 0-9, @, -" });
         return;
       }
 
@@ -64,9 +70,18 @@ const NewEventDialog = ({ slot, reset, setEvents, loadedSemester }) => {
       setCourses(data);
       setSearching(false);
     } else if (saving) {
-      // setEvents((prev) => [...prev.filter((event) => event.id !== slot.id)]);
+      setTitle("Booked");
       setSaving(false);
       setSuccess(true);
+      const booked = {
+        ...data,
+        start: new Date(data.start),
+        end: new Date(data.end),
+      };
+      setEvents((prev) => [
+        ...prev.filter((event) => event.id !== slot.id),
+        booked,
+      ]);
       setTimeout(() => {
         reset();
       }, 3000);
@@ -103,7 +118,7 @@ const NewEventDialog = ({ slot, reset, setEvents, loadedSemester }) => {
               : { opacity: 0 }
           }
         >
-          Booked! Please refresh "Appointments" table!
+          Please refresh "Appointments" table!
         </p>
       )}
       <Form className="col-10 col-lg-8 mx-auto mb-5" onSubmit={handleSubmit}>
@@ -111,22 +126,18 @@ const NewEventDialog = ({ slot, reset, setEvents, loadedSemester }) => {
           <>
             <Row className="">
               <Col xs="8" className="mx-auto p-0">
-                <Form.Label>
+                <Form.Label className="text-wrap">
                   Which course are you coming for tutoring?
                 </Form.Label>
                 <InputGroup className="mb-5">
                   <FormControl
-                    placeholder="email | instruct name | course | section"
+                    placeholder="ex: cs-341, john, algorithms, algo"
                     aria-label="Search by email OR firstname OR lastname OR course OR section number"
                     className="roundBorder mb-0"
                     name="search"
                   />
-
                   {!searching ? (
-                    <Button
-                      className="primaryBtn roundBorder"
-                      type="submit"
-                    >
+                    <Button className="primaryBtn roundBorder" type="submit">
                       Search
                     </Button>
                   ) : (
@@ -139,7 +150,7 @@ const NewEventDialog = ({ slot, reset, setEvents, loadedSemester }) => {
               </Col>
             </Row>
             <Row>
-              <Table bordered className="">
+              <Table bordered>
                 <tbody>
                   {courses.map((course) => (
                     <tr key={course.id}>
@@ -170,26 +181,28 @@ const NewEventDialog = ({ slot, reset, setEvents, loadedSemester }) => {
           </>
         ) : (
           <>
-            <Row>
-              <Col xs="8" className="mx-auto">
-                <p>
-                  <b>Date:</b> {format(slot.start, "PPPP")}
-                </p>
-                <p>
-                  <b>Between:</b> {format(slot.start, "h:mm bbb")} -{" "}
-                  {format(slot.end, "h:mm bbb")}
-                </p>
-                <p>
-                  <b>Tutor:</b> {slot.tutor}
-                </p>
-                <p>
-                  <b>Course:</b> {selected.courseName}
-                </p>
-                <p>
-                  <b>Faculty:</b> {selected.instructorName}
-                </p>
-              </Col>
-            </Row>
+            {!success && (
+              <Row>
+                <Col xs="8" className="mx-auto">
+                  <p>
+                    <b>Date:</b> {format(slot.start, "PPPP")}
+                  </p>
+                  <p>
+                    <b>Between:</b> {format(slot.start, "h:mm bbb")} -{" "}
+                    {format(slot.end, "h:mm bbb")}
+                  </p>
+                  <p>
+                    <b>Tutor:</b> {slot.tutor}
+                  </p>
+                  <p>
+                    <b>Course:</b> {selected.courseName}
+                  </p>
+                  <p>
+                    <b>Faculty:</b> {selected.instructorName}
+                  </p>
+                </Col>
+              </Row>
+            )}
             <Row className="mt-5 justify-content-center">
               <ActionButtons {...{ saving, reset, success }} />
             </Row>

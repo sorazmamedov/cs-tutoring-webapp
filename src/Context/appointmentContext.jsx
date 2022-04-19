@@ -1,30 +1,25 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { startOfWeek, endOfWeek } from "date-fns";
-import useAuth from "../hooks/useAuth";
 import useAxios from "../hooks/useAxios";
 import { GlobalViewContext } from "./dataContext";
+import useAuth from "../hooks/useAuth";
 
 const ViewContext = createContext({});
 const ActionsContext = createContext({});
 
-const CalendarDataProvider = ({ children }) => {
-  const { auth } = useAuth();
+const AppointmentDataProvider = ({ children }) => {
+  const { auth, ROLES, signingIn } = useAuth();
   const { loadedSemester, darkTheme } = useContext(GlobalViewContext);
   const { data, error, loading, axiosFetch } = useAxios();
-  const [events, setEvents] = useState([]);
+  const [appointments, setAppointments] = useState([]);
   const [current, setCurrent] = useState("");
   const [refetch, setRefetch] = useState(false);
-  const [start, setStart] = useState(
-    startOfWeek(new Date(), { weekStartsOn: 1 })
-  );
-  const [end, setEnd] = useState(endOfWeek(new Date(), { weekStartsOn: 1 }));
 
-  const fetchCalendar = () => {
+  const fetchAppointments = () => {
     axiosFetch({
       method: "GET",
-      url: `/users/${auth?.user?.id}/calendars`,
+      url: `/users/${auth?.user?.id}/appointments`,
       requestConfig: {
-        params: { semesterId: loadedSemester.id, start, end },
+        params: { semesterId: loadedSemester.id },
       },
     });
   };
@@ -32,12 +27,12 @@ const CalendarDataProvider = ({ children }) => {
   useEffect(() => {
     if (loadedSemester.id && current !== loadedSemester.id) {
       setCurrent(loadedSemester.id);
-      fetchCalendar();
-      console.log("[Fetching my calendar]");
+      fetchAppointments();
+      console.log("[Fetching appointments]");
     } else if (refetch) {
       setRefetch(false);
-      fetchCalendar();
-      console.log("[*Refetching my calendar*]");
+      fetchAppointments();
+      console.log("[*Refetching appointments*]");
     }
     // eslint-disable-next-line
   }, [loadedSemester, refetch]);
@@ -51,29 +46,27 @@ const CalendarDataProvider = ({ children }) => {
           end: new Date(item.end),
         };
       });
-
-      setEvents(arr);
+      setAppointments(arr);
     }
   }, [data]);
 
   return (
     <ViewContext.Provider
       value={{
-        events,
+        appointments,
+        loadedSemester,
+        auth,
+        ROLES,
+        signingIn,
         error,
         loading,
-        loadedSemester,
         darkTheme,
-        start,
-        end,
       }}
     >
       <ActionsContext.Provider
         value={{
-          setEvents,
+          setAppointments,
           setRefetch,
-          setStart,
-          setEnd,
         }}
       >
         {children}
@@ -82,5 +75,5 @@ const CalendarDataProvider = ({ children }) => {
   );
 };
 
-export default CalendarDataProvider;
+export default AppointmentDataProvider;
 export { ViewContext, ActionsContext };

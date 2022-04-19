@@ -105,7 +105,7 @@ const Login = ({ reset }) => {
         </button>
         <button
           className="btn btn-success mb-5"
-          onClick={() => handleResponse(undefined, "jmonroe@neiu.edu")}
+          onClick={() => handleResponse(undefined, "jenmonroe@neiu.edu")}
         >
           Jennifer Student
         </button>

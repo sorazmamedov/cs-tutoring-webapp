@@ -6,7 +6,7 @@ import Spinner from "react-bootstrap/Spinner";
 const ActionButtons = ({ saving, reset, success }) => {
   if (success) {
     return (
-      <Col lg="4" className="mb-3 mb-sm-auto ps-sm-4">
+      <Col xs="6" lg="4" className="mb-3 mb-sm-auto ps-sm-4">
         <Button className="col-12 roundBorder primaryBtn" onClick={reset}>
           CLOSE
         </Button>

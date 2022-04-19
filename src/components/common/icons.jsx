@@ -51,8 +51,8 @@ export const checkIcon = (props) => (
   <i className="bi bi-check-circle" data-icon-type="check" {...props} />
 );
 
-export const cancelIcon = (props) => (
-  <i className="bi bi-x-lg" data-icon-type="cancel" {...props} />
+export const cancelIcon = ({ className, ...props }) => (
+  <i className={`bi bi-x-lg ${className}`} data-icon-type="cancel" {...props} />
 );
 
 export const moonIcon = (props) => (
@@ -71,6 +71,38 @@ export const refreshIcon = ({ className, ...props }) => (
   <i
     className={`bi bi-arrow-repeat ${className}`}
     data-icon-type="refresh"
+    {...props}
+  />
+);
+
+export const eyeIcon = ({ className, ...props }) => (
+  <i
+    className={`bi bi-eye-fill ${className}`}
+    data-icon-type="eye"
+    {...props}
+  />
+);
+
+export const eyeSlashIcon = ({ className, ...props }) => (
+  <i
+    className={`bi bi-eye-slash-fill ${className}`}
+    data-icon-type="eyeSlash"
+    {...props}
+  />
+);
+
+export const barIcon = ({ className, ...props }) => (
+  <i
+    className={`bi bi-bar-chart ${className}`}
+    data-icon-type="bar"
+    {...props}
+  />
+);
+
+export const barFillIcon = ({ className, ...props }) => (
+  <i
+    className={`bi bi-bar-chart-fill ${className}`}
+    data-icon-type="barFill"
     {...props}
   />
 );

@@ -1,4 +1,5 @@
 import React from "react";
+import Appointments from "./Appointments";
 import Semesters from "./Semesters";
 import Schedules from "./Schedules";
 import Announcements from "./Announcements";
@@ -6,6 +7,7 @@ import Courses from "./Courses";
 import Tutors from "./Tutors";
 import Calendar from "./Calendar";
 import SemesterDataProvider from "../Context/semesterContext";
+import AppointmentDataProvider from "../Context/appointmentContext";
 import AnnouncementDataProvider from "../Context/announcementContext";
 import CourseDataProvider from "../Context/courseContext";
 import TutorDataProvider from "../Context/tutorsContext";
@@ -14,7 +16,7 @@ import CalendarDataProvider from "../Context/calendarContext";
 import TimeslotDataProvider from "../Context/timeslotContext";
 import useAuth from "../hooks/useAuth";
 import Public from "./Public";
-import Timeslot from "./Timeslot";
+import Timeslots from "./Timeslots";
 
 const Home = () => {
   const { auth, ROLES } = useAuth();
@@ -27,13 +29,16 @@ const Home = () => {
           <Semesters />
         </SemesterDataProvider>
       )}
+      <AppointmentDataProvider>
+        <Appointments />
+      </AppointmentDataProvider>
       <TutorDataProvider>
         <ScheduleDataProvider>
           <Schedules />
         </ScheduleDataProvider>
         {auth?.user?.roles.includes(ROLES.Admin) && <Tutors />}
         <TimeslotDataProvider>
-          <Timeslot />
+          <Timeslots />
         </TimeslotDataProvider>
       </TutorDataProvider>
       <AnnouncementDataProvider>
