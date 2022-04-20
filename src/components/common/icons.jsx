@@ -75,34 +75,18 @@ export const refreshIcon = ({ className, ...props }) => (
   />
 );
 
-export const eyeIcon = ({ className, ...props }) => (
+export const eyeIcon = ({ eyeslash, ...props }) => (
   <i
-    className={`bi bi-eye-fill ${className}`}
+    className={eyeslash === "true" ? "bi bi-eye-slash-fill" : "bi bi-eye-fill"}
     data-icon-type="eye"
     {...props}
   />
 );
 
-export const eyeSlashIcon = ({ className, ...props }) => (
+export const barIcon = ({ className, barfill, ...props }) => (
   <i
-    className={`bi bi-eye-slash-fill ${className}`}
-    data-icon-type="eyeSlash"
-    {...props}
-  />
-);
-
-export const barIcon = ({ className, ...props }) => (
-  <i
-    className={`bi bi-bar-chart ${className}`}
+    className={barfill === true ? `bi bi-bar-chart-fill ${className}` : `bi bi-bar-chart ${className}`}
     data-icon-type="bar"
-    {...props}
-  />
-);
-
-export const barFillIcon = ({ className, ...props }) => (
-  <i
-    className={`bi bi-bar-chart-fill ${className}`}
-    data-icon-type="barFill"
     {...props}
   />
 );

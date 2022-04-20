@@ -16,9 +16,7 @@ import {
   sunIcon,
   refreshIcon,
   eyeIcon,
-  eyeSlashIcon,
   barIcon,
-  barFillIcon
 } from "./icons";
 
 const tooltip = (text, fn) => (
@@ -79,18 +77,10 @@ export const RefreshIcon = (props) => {
   return tooltip("Refresh", refreshIcon(props));
 };
 
-export const EyeIcon = (props) => {
-  return tooltip("No Show", eyeIcon(props));
+export const EyeIcon = ({tooltipTxt, ...props}) => {
+  return tooltip(tooltipTxt ? tooltipTxt : "No Show", eyeIcon(props));
 };
 
-export const EyeSlashIcon = (props) => {
-  return tooltip("Showed Up", eyeSlashIcon(props));
-};
-
-export const BarIcon = (props) => {
-  return tooltip("Write Report", barIcon(props));
-};
-
-export const BarFillIcon = (props) => {
-  return tooltip("Edit", barFillIcon(props));
+export const BarIcon = ({tooltipTxt, ...props}) => {
+  return tooltip(tooltipTxt ? tooltipTxt : "Write Report", barIcon(props));
 };

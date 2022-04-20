@@ -44,7 +44,7 @@ const Logout = ({ reset, setTitle }) => {
                 className="col-12 roundBorder dangerBtn"
                 onClick={handleLogout}
               >
-                Sign Out
+                SIGN OUT
               </Button>
             ) : (
               <SpinnerBtn

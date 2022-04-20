@@ -112,7 +112,7 @@ div > p + i[data-icon-type]:hover {
 }
 
 i[data-icon-type="delete"],
-[data-icon-type="barFill"] {
+.bi-bar-chart-fill {
   color: var(--main-pink);
 }
 

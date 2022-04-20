@@ -11,12 +11,14 @@ const AppointmentRows = ({
   setShow,
   appointments,
   setAppointments,
+  userId,
 }) => {
-  const { data, error, axiosFetch } = useAxios();
+  const { data, loading, error, axiosFetch } = useAxios();
   const [saving, setSaving] = useState("");
+  const [action, setAction] = useState("");
 
-  const handleEdit = (e) => {
-    e.stopPropagation();
+  const handleEdit = (id) => {
+    console.log(id);
   };
 
   const handleSave = async (edited) => {
@@ -24,7 +26,6 @@ const AppointmentRows = ({
 
     //Abort if nothing has changed or remove from appointments array if empty
     if (isEqual(appointment, true)) {
-      resetStates();
       return;
     }
 
@@ -50,33 +51,45 @@ const AppointmentRows = ({
     }
   };
 
-  const handleCancel = () => {
-    resetStates();
+  const handleCancel = (id) => {
+    console.log(id);
   };
 
-  const resetStates = () => {
-    setSaving("");
-  };
-
-  const handleToggle = async (e) => {
+  const handleNoShow = async (appointment) => {
+    console.log(appointment.id);
     if (saving) {
       return;
     }
 
-    axiosFetch({
-      method: "PUT",
-      url: `/appointments/`,
-      requestConfig: {},
-    });
+    setAction("noShow");
+    setSaving(appointment.id);
+    // axiosFetch({
+    //   method: "PUT",
+    //   url: `/users/${userId}/appointments/${appointment.id}`,
+    //   requestConfig: { data: { noShow: !appointment.noShow } },
+    // });
   };
 
   useEffect(() => {
+    if (Object.keys(data).length) {
+      if (action === "noShow") {
+        console.log("No show success");
+      } else if (action === "edit") {
+        console.log("Edit success");
+      } else {
+        console.log("Cancel success");
+        //remove appointment from array
+      }
+      setAction("");
+      setSaving("");
+    }
     // eslint-disable-next-line
   }, [data]);
 
   useEffect(() => {
     if (error) {
       setSaving("");
+      setAction("");
       showErrors(error, setTitle, setShow, setModalBody);
     }
     // eslint-disable-next-line
@@ -88,7 +101,8 @@ const AppointmentRows = ({
       saving={saving}
       appointment={appointment}
       handleEdit={handleEdit}
-      handleToggle={handleToggle}
+      handleNoShow={handleNoShow}
+      handleCancel={handleCancel}
     />
   ));
 };

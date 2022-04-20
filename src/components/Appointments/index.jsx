@@ -32,14 +32,12 @@ const Appointment = () => {
 
   const header = ["With", "Date", "Time", "Course", "Actions"];
 
-  const handleAddAppointment = () => {};
-
   return (
     <MainContainer>
       <TitleBar
         title="Appointments"
         icon={
-          loading ? (
+          loading && appointments.length !== 0 ? (
             <RefreshIcon onClick={() => setRefetch(true)} className="rotate" />
           ) : (
             <RefreshIcon onClick={() => setRefetch(true)} />
@@ -47,12 +45,12 @@ const Appointment = () => {
         }
       />
 
-      {loading && <LoadingPlaceholder />}
+      {loading && appointments.length === 0 && <LoadingPlaceholder />}
       {!loading && error && <ErrorPlaceholder />}
       {!loading && !error && appointments && appointments.length === 0 && (
         <NoDataPlaceholder message="No appointment available at this time!" />
       )}
-      {!loading && !error && appointments && appointments.length !== 0 && (
+      {!error && appointments && appointments.length !== 0 && (
         <>
           <Table className="" bordered hover responsive>
             <TableHeader headers={header} darkTheme={darkTheme} />
@@ -64,6 +62,7 @@ const Appointment = () => {
                   setShow,
                   appointments,
                   setAppointments,
+                  userId: auth?.user?.id
                 }}
               />
             </tbody>

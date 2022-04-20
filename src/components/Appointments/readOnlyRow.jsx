@@ -1,15 +1,14 @@
 import React from "react";
 import { format } from "date-fns";
-import { BarFillIcon, BarIcon, CancelIcon, EyeIcon, EyeSlashIcon } from "../common/iconsWithTooltip";
+import { BarIcon, CancelIcon, EyeIcon } from "../common/iconsWithTooltip";
 import SpinnerBtn from "../common/spinnerBtn";
 
 const ReadOnlyRow = ({
   appointment,
-  admin,
-  tutor,
   saving,
   handleEdit,
-  handleToggle,
+  handleNoShow,
+  handleCancel,
 }) => {
   return (
     <tr>
@@ -25,17 +24,33 @@ const ReadOnlyRow = ({
       )}`}</td>
       <td>{appointment.course}</td>
       <td className="ps-1 pe-0 no-stretch text-center">
-        {appointment?.student ? (
-          <>
-            {/* <EyeIcon aria-label="Mark as no show" /> */}
-            <EyeSlashIcon aria-label="Mark as showed up" />
-            {/* <BarIcon aria-label="Write report" className="me-0 ms-2" /> */}
-            <BarFillIcon className="me-0 ms-2" />
-          </>
+        {saving !== appointment.id ? (
+          appointment?.student ? (
+            <>
+              <EyeIcon
+                aria-label="Toggle no show"
+                eyeslash={appointment.noShow ? "true" : "false"}
+                tooltipTxt={appointment.noShow ? "No Show" : "Show"}
+                onClick={() => handleNoShow(appointment)}
+              />
+              <BarIcon
+                aria-label="Write report"
+                className="me-0 ms-2"
+                barfill={appointment.report ? "true" : "false"}
+                tooltipTxt={appointment.report ? "Edit Report" : "Write Report"}
+                onClick={() => handleEdit(appointment.id)}
+              />
+            </>
+          ) : (
+            <CancelIcon
+              className="p-0"
+              aria-label="Cancel"
+              style={{ color: "red" }}
+              onClick={() => handleCancel(appointment.id)}
+            />
+          )
         ) : (
-          <>
-            <CancelIcon className="p-0" aria-label="Cancel" style={{ color: "red" }} />
-          </>
+          <SpinnerBtn btnVariant="" variant="primary" />
         )}
       </td>
     </tr>

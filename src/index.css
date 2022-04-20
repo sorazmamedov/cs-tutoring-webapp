@@ -1,6 +1,7 @@
 @import url("bootstrap-icons/font/bootstrap-icons.css");
 
 :root {
+  color-scheme: light dark;
   --main-pink: #ff0066c9;
   --main-blue: #2699fb;
   --nav-blue: #1a2943;
@@ -16,9 +17,9 @@
 }
 
 body {
-  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif; */
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

@@ -58,7 +58,7 @@ const Announcements = () => {
           isAdmin ? (
             <MegaphoneIcon onClick={handleCreateAnnouncement} />
           ) : loading ? (
-            <RefreshIcon onClick={() => setRefetch(true)} rotate={true} />
+            <RefreshIcon onClick={() => setRefetch(true)} className="rotate" />
           ) : (
             <RefreshIcon onClick={() => setRefetch(true)} />
           )
