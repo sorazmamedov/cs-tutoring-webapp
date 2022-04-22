@@ -65,12 +65,12 @@ const Announcements = () => {
         }
       />
 
-      {loading && <LoadingPlaceholder />}
+      {loading && announcements.length === 0 && <LoadingPlaceholder />}
       {!loading && error && <ErrorPlaceholder />}
       {!loading && !error && announcements.length === 0 && (
         <NoDataPlaceholder message="No announcements for now!" />
       )}
-      {!loading && !error && announcements && announcements.length !== 0 && (
+      {!error && announcements && announcements.length !== 0 && (
         <>
           <Table bordered hover responsive>
             <tbody>

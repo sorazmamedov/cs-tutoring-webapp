@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import Table from "react-bootstrap/Table";
 import MainContainer from "../common/mainContainer";
 import TableHeader from "../common/tableHeader";
 import AppointmentRows from "./appointmentRows";
 import CustomPagination from "../common/customPagination";
 import { RefreshIcon } from "../common/iconsWithTooltip";
-import { showErrors } from "../common/errorHelper";
 import TitleBar from "../common/titleBar";
 import { ActionsContext, ViewContext } from "../../Context/appointmentContext";
 import {
@@ -23,9 +22,7 @@ const Appointment = () => {
     error,
     loading,
     appointments,
-    loadedSemester,
     auth,
-    ROLES,
     darkTheme,
   } = useContext(ViewContext);
   const { setAppointments, setRefetch } = useContext(ActionsContext);
@@ -48,7 +45,7 @@ const Appointment = () => {
       {loading && appointments.length === 0 && <LoadingPlaceholder />}
       {!loading && error && <ErrorPlaceholder />}
       {!loading && !error && appointments && appointments.length === 0 && (
-        <NoDataPlaceholder message="No appointment available at this time!" />
+        <NoDataPlaceholder message="You have no scheduled appointments!" />
       )}
       {!error && appointments && appointments.length !== 0 && (
         <>

@@ -42,7 +42,7 @@ const Schedules = () => {
 
   return (
     <MainContainer>
-      {!loading && !error && <TitleBar title="Schedules" />}
+      {!loading && !error && <TitleBar title="Tutoring Schedule" />}
       {loading && <LoadingPlaceholder />}
       {!loading && error && <ErrorPlaceholder />}
       {!loading && !error && schedules && schedules.length === 0 && (

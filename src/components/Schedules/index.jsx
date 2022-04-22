@@ -76,7 +76,7 @@ const Schedules = () => {
   return (
     <MainContainer>
       <TitleBar
-        title="Schedules"
+        title="Tutoring Schedule"
         icon={
           isAdmin ? (
             <PlusIcon onClick={handleAddSchedule} />

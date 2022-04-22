@@ -63,6 +63,12 @@ export default Object.freeze({
     .max(len.maxLongTextLength)
     .typeError(messages.isRequired),
 
+  report: string()
+    .trim()
+    .min(0)
+    .max(len.maxLongTextLength)
+    .typeError("${path} " + messages.isRequired),
+
   requiredText: string().trim().required().typeError(messages.isRequired),
 
   boolean: boolean()
@@ -75,6 +81,7 @@ export default Object.freeze({
     .matches(/^(Spring|Summer|Fall|Winter)$/, messages.semesterNameError)
     .required()
     .typeError(messages.isRequired),
+
   year: number()
     .integer()
     .positive()

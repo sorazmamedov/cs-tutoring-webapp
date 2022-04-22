@@ -89,7 +89,7 @@ const Login = ({ reset }) => {
           className="btn btn-secondary mb-2"
           onClick={() => handleResponse(undefined, "jmonroe@neiu.edu")}
         >
-          John Student|Tutor
+          John Student
         </button>
         <button
           className="btn btn-success mb-2"

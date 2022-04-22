@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { addMinutes, format, isPast, parseISO } from "date-fns";
-import { appointmentValidator } from "../../utils/validator";
-import { isEqual } from "../../utils/isEqual";
+import ReportDialog from "./reportDialog";
 import ReadOnlyRow from "./readOnlyRow";
 import { showErrors } from "../common/errorHelper";
 import useAxios from "../../hooks/useAxios";
@@ -15,16 +14,19 @@ const AppointmentRows = ({
   setAppointments,
   userId,
 }) => {
-  const { data, loading, error, axiosFetch } = useAxios();
+  const { data, error, axiosFetch } = useAxios();
   const [saving, setSaving] = useState("");
   const [action, setAction] = useState("");
 
-  const handleEdit = (id) => {
-    console.log(id);
+  const handleEdit = (appointment) => {
+    setTitle("Report");
+    setModalBody(
+      <ReportDialog {...{ userId, appointment, reset, setAppointments }} />
+    );
+    setShow(true);
   };
 
   const handleCancel = (appointment) => {
-    console.log(appointment.id);
     setAction("cancel");
     setSaving(appointment.id);
     axiosFetch({
@@ -35,7 +37,6 @@ const AppointmentRows = ({
   };
 
   const handleNoShow = async (appointment) => {
-    console.log(appointment.id);
     if (saving) {
       return;
     }
@@ -83,14 +84,14 @@ const AppointmentRows = ({
   useEffect(() => {
     if (Object.keys(data).length) {
       if (action === "noShow") {
-        let index = appointments.findIndex((item) => item.id === saving);
-        setAppointments([
-          ...appointments.slice(0, index),
-          { ...data, start: parseISO(data.start), end: parseISO(data.end) },
-          ...appointments.slice(++index),
-        ]);
-      } else if (action === "edit") {
-        console.log("Edit success");
+        setAppointments((prev) => {
+          let index = prev.findIndex((item) => item.id === saving);
+          return [
+            ...prev.slice(0, index),
+            { ...data, start: parseISO(data.start), end: parseISO(data.end) },
+            ...prev.slice(++index),
+          ];
+        });
       } else {
         setAppointments([...appointments.filter((item) => item.id !== saving)]);
       }

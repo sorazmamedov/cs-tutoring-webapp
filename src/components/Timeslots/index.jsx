@@ -10,7 +10,7 @@ import BookSlotDialog from "./BookSlotDialog";
 import useModal from "../../hooks/useModalStates";
 import { RefreshIcon } from "../common/iconsWithTooltip";
 import { ViewContext, ActionsContext } from "../../Context/timeslotContext";
-import { showErrors } from "../common/errorHelper";
+import DeleteSlotDialog from "./DeleteSlotDialog";
 
 const Timeslot = () => {
   const { setRefetch, setEvents, setStart, setEnd } =
@@ -35,14 +35,12 @@ const Timeslot = () => {
     }
 
     if (event.tutorId === auth?.user?.id) {
-      showErrors(
-        { message: "Booking your own slots is not allowed!" },
-        setTitle,
-        setShow,
-        setModalBody
-      );
+      setTitle("Delete Slot");
+      setModalBody(<DeleteSlotDialog {...{ event, reset }} />);
+      setShow(true);
       return;
     }
+
     const tutor = tutors.find((item) => item.id === event.tutorId);
     const slot = { ...event, tutor: `${tutor.firstName} ${tutor.lastName}` };
     setTitle("Appointment");

@@ -75,12 +75,14 @@ const ReadOnlyRow = ({
               />
             </>
           ) : (
-            <CancelIcon
-              className="p-0"
-              aria-label="Cancel"
-              style={{ color: "red" }}
-              onClick={dispatchCancel}
-            />
+            !isPast(appointment.end) && (
+              <CancelIcon
+                className="p-0"
+                aria-label="Cancel"
+                style={{ color: "red" }}
+                onClick={dispatchCancel}
+              />
+            )
           )
         ) : (
           <SpinnerBtn btnVariant="" variant="primary" />

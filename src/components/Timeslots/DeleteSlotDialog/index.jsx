@@ -9,7 +9,7 @@ import { ActionsContext, ViewContext } from "../../../Context/calendarContext";
 import { SwitchIcon } from "../../common/iconsWithTooltip";
 import useAxios from "../../../hooks/useAxios";
 
-const DeleteEventDialog = ({ event, reset }) => {
+const DeleteSlotDialog = ({ event, reset }) => {
   const { data, error, loading, axiosFetch } = useAxios();
   const { events } = useContext(ViewContext);
   const { setEvents } = useContext(ActionsContext);
@@ -98,4 +98,4 @@ const DeleteEventDialog = ({ event, reset }) => {
   );
 };
 
-export default DeleteEventDialog;
+export default DeleteSlotDialog;

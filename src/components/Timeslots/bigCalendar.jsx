@@ -39,10 +39,9 @@ const BigCalendar = ({
   const eventPropGetter = useCallback(
     (event) => ({
       ...(event.booked && { className: "booked" }),
-      ...(!event.booked &&
-        isPast(event.end) && {
-          className: "expired",
-        }),
+      ...(isPast(event.end) && {
+        className: "expired",
+      }),
     }),
     []
   );
