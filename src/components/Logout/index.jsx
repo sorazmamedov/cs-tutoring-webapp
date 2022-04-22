@@ -33,7 +33,7 @@ const Logout = ({ reset, setTitle }) => {
         ))}
       {success && (
         <p className="text-success text-center pb-5 mb-5 fs-5">
-          Successfully logged out!
+          Successfully signed out!
         </p>
       )}
       {!success && (

@@ -85,7 +85,7 @@ export const eyeIcon = ({ eyeslash, ...props }) => (
 
 export const barIcon = ({ className, barfill, ...props }) => (
   <i
-    className={barfill === true ? `bi bi-bar-chart-fill ${className}` : `bi bi-bar-chart ${className}`}
+    className={barfill === "true" ? `bi bi-bar-chart-fill ${className}` : `bi bi-bar-chart ${className}`}
     data-icon-type="bar"
     {...props}
   />

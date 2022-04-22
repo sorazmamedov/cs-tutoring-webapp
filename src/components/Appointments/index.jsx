@@ -60,6 +60,7 @@ const Appointment = () => {
                   setTitle,
                   setModalBody,
                   setShow,
+                  reset,
                   appointments,
                   setAppointments,
                   userId: auth?.user?.id

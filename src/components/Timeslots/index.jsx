@@ -30,7 +30,7 @@ const Timeslot = () => {
     useModal();
 
   const handleSelectEvent = (event) => {
-    if (isPast(event.end)) {
+    if (isPast(event.end) || event.booked) {
       return;
     }
 
@@ -47,7 +47,9 @@ const Timeslot = () => {
     const slot = { ...event, tutor: `${tutor.firstName} ${tutor.lastName}` };
     setTitle("Appointment");
     setModalBody(
-      <BookSlotDialog {...{ slot, reset, setTitle, setEvents, loadedSemester }} />
+      <BookSlotDialog
+        {...{ slot, reset, setTitle, setEvents, loadedSemester }}
+      />
     );
     setShow(true);
   };

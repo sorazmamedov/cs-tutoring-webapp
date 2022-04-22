@@ -12,14 +12,14 @@ const Preview = ({ preview, repeat, range }) => {
         <Row>
           <p className="text-dark mb-0">Slots:</p>
           {preview.map((item, index) => (
-            <p key={index} className="text-center text-dark">
+            <p key={index} className="ms-5 text-dark">
               {`${++index}) ${item}`}
             </p>
           ))}
           {repeat && (
             <>
               <p className="text-dark mb-0">Repeat between:</p>
-              <p className="text-center text-dark">
+              <p className="ms-5 text-dark">
                 {`${format(range.start, "M/d/yyyy")} -
                 ${format(range.end, "M/d/yyyy")}`}
               </p>
