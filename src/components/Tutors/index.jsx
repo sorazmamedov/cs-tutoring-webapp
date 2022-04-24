@@ -20,7 +20,6 @@ const Tutors = () => {
   const {
     auth,
     ROLES,
-    signingIn,
     tutors,
     loading,
     error,
@@ -43,7 +42,7 @@ const Tutors = () => {
 
   return (
     <MainContainer>
-      {!loading && !signingIn && !error && (
+      {!loading && !error && (
         <TitleBar
           title="Tutors"
           icon={
@@ -53,12 +52,12 @@ const Tutors = () => {
           }
         />
       )}
-      {(loading || signingIn) && <LoadingPlaceholder />}
+      {loading && <LoadingPlaceholder />}
       {!loading && error && <ErrorPlaceholder />}
-      {!loading && !signingIn && !error && tutors && tutors.length === 0 && (
+      {!loading && !error && tutors && tutors.length === 0 && (
         <NoDataPlaceholder />
       )}
-      {!loading && !signingIn && !error && tutors && tutors.length !== 0 && (
+      {!loading && !error && tutors && tutors.length !== 0 && (
         <>
           <Table hover responsive>
             <TableHeader
