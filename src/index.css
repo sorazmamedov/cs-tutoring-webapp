@@ -56,10 +56,6 @@ main {
   padding-bottom: 10rem;
 }
 
-.activeNav {
-  color: var(--main-pink) !important;
-}
-
 header,
 footer {
   background-color: var(--nav-blue);

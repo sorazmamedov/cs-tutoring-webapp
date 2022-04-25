@@ -20,13 +20,13 @@
   min-height: 250px;
 }
 
-/* time slots table navs */
+/* navs */
 .nav-tabs .nav-link {
   color: #707070;
   font-weight: normal;
 }
 
-.nav-tabs [aria-selected="true"] {
+.nav-link.active {
   color: var(--main-pink) !important;
   font-weight: bolder;
 }
@@ -38,7 +38,7 @@
 .expired {
   background-color: #6c757d !important;
 }
-/* end of time slots table navs */
+/* end of navs */
 
 /* refresh icon circular arrow */
 [data-icon-type="refresh"] {

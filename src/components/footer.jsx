@@ -6,20 +6,13 @@ import { NavLink } from "react-router-dom";
 
 const Footer = () => {
   const navs = {
-    Semester: "/",
-    Profile: "/profile",
-    Settings: "/settings",
-    Login: "/login",
+    Contact: "/Contact",
+    About: "/about",
+    Credits: "/credits",
   };
 
   const links = Object.keys(navs).map((key, index) => (
-    <NavLink
-      key={++index}
-      to={`${navs[key]}`}
-      className={({ isActive }) =>
-        isActive ? "nav-link activeNav" : "nav-link"
-      }
-    >
+    <NavLink key={++index} to={`${navs[key]}`} className="nav-link">
       {key}
     </NavLink>
   ));

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { isPast } from "date-fns";
+import { isPast, endOfDay } from "date-fns";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import MainContainer from "../common/mainContainer";
@@ -25,16 +25,17 @@ const Timeslot = () => {
     tutorsError,
     tutorsLoading,
     auth,
+    ROLES
   } = useContext(ViewContext);
   const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
     useModal();
 
   const handleSelectEvent = (event) => {
-    if (isPast(event.end) || event.booked) {
+    if (isPast(event.end)) {
       return;
     }
 
-    if (event.tutorId === auth?.user?.id) {
+    if (event.tutorId === auth?.user?.id || auth?.user?.roles.includes(ROLES.Admin)) {
       setTitle("Delete Slot");
       setModalBody(<DeleteSlotDialog {...{ event, reset }} />);
       setShow(true);
@@ -54,7 +55,7 @@ const Timeslot = () => {
 
   const handleRangeChange = (event) => {
     setStart(event[0]);
-    setEnd(event[event.length - 1]);
+    setEnd(endOfDay(event[event.length - 1]));
     setRefetch(true);
   };
 

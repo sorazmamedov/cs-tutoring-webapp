@@ -30,9 +30,6 @@ const Header = () => {
     setSize,
   } = useModal();
 
-  const classes = ({ isActive }) =>
-    isActive ? "nav-link activeNav" : "nav-link";
-
   const handleLogin = () => {
     setTitle("Sign In");
     setSize("");
@@ -52,16 +49,16 @@ const Header = () => {
       <Container className="p-0">
         <Navbar variant="dark">
           <Nav className="w-100 d-flex justify-content-between">
-            <NavLink to="/" className={classes}>
+            <NavLink to="/" className="nav-link">
               Semester
             </NavLink>
             {auth?.user && (
               <>
-                <NavLink to="/profile" className={classes}>
+                <NavLink to="/profile" className="nav-link">
                   Profile
                 </NavLink>
                 {auth?.user?.roles.includes(ROLES.Admin) && (
-                  <NavLink to="/settings" className={classes}>
+                  <NavLink to="/settings" className="nav-link">
                     Settings
                   </NavLink>
                 )}
