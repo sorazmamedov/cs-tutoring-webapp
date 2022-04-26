@@ -21,8 +21,7 @@ function App() {
   useEffect(() => {
     window.onGoogleLibraryLoad = () => {
       window.google.accounts.id.initialize({
-        client_id:
-          "194487620046-42s15er9fv10ct1aghe1gu6hi3lm60ed.apps.googleusercontent.com",
+        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
         callback: handleResponse,
         auto_select: "true",
       });

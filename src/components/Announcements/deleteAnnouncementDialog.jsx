@@ -7,7 +7,7 @@ import { ViewContext, ActionsContext } from "../../Context/announcementContext";
 import { getErrors } from "../common/errorHelper";
 import useAxios from "../../hooks/useAxios";
 
-const DeleteAnnouncementDialog = ({ id, reset }) => {
+const DeleteAnnouncementDialog = ({ id, reset, setTitle }) => {
   const { data, error, loading, axiosFetch } = useAxios();
   const { announcements } = useContext(ViewContext);
   const { setAnnouncements } = useContext(ActionsContext);
@@ -22,6 +22,7 @@ const DeleteAnnouncementDialog = ({ id, reset }) => {
   useEffect(() => {
     if (Object.keys(data).length) {
       setAnnouncements([...announcements.filter((item) => item.id !== id)]);
+      setTitle("")
       setTimeout(() => {
         reset();
       }, 1500);
@@ -43,7 +44,7 @@ const DeleteAnnouncementDialog = ({ id, reset }) => {
         ))}
       {Object.keys(data).length !== 0 && (
         <p
-          className="text-success text-center mt-2"
+          className="text-success text-center mb-5 fs-5 pb-3"
           style={
             Object.keys(data).length !== 0
               ? { opacity: "1", transition: "opacity 0.6s linear" }

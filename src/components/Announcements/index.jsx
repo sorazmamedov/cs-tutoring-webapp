@@ -46,7 +46,7 @@ const Announcements = () => {
     e.stopPropagation();
     const id = e.target.id;
     setTitle("Are you sure you want to delete?");
-    setModalBody(<DeleteAnnouncementDialog {...{ id, reset }} />);
+    setModalBody(<DeleteAnnouncementDialog {...{ id, reset, setTitle }} />);
     setShow(true);
   };
 

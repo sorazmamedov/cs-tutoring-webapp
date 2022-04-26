@@ -11,29 +11,46 @@ const CourseDataProvider = ({ children }) => {
   const { loadedSemester, darkTheme } = useContext(GlobalViewContext);
   const { data, error, loading, axiosFetch } = useAxios();
   const [courses, setCourses] = useState([]);
-  const [current, setCurrent] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(2);
+  const [pageCount, setPageCount] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [refetch, setRefetch] = useState(false);
 
   const fetchCourses = () => {
     axiosFetch({
       method: "GET",
       url: "/courses",
       requestConfig: {
-        params: { semesterId: loadedSemester.id },
+        params: { semesterId: loadedSemester.id, page, limit },
       },
     });
   };
 
   useEffect(() => {
-    if (loadedSemester.id && current !== loadedSemester.id) {
-      setCurrent(loadedSemester.id);
+    if (loadedSemester.id) {
       fetchCourses();
       console.log("[Fetching courses]");
     }
     // eslint-disable-next-line
-  }, [loadedSemester]);
+  }, [loadedSemester, page]);
 
   useEffect(() => {
-    setCourses([...data]);
+    if (total) {
+      const pages = Math.ceil(total / limit);
+      if (pages < pageCount) {
+        page + 1 === pageCount || page === 1
+          ? fetchCourses()
+          : setPage((prev) => prev - 1);
+      }
+    }
+    // eslint-disable-next-line
+  }, [total]);
+
+  useEffect(() => {
+    setTotal(data?.pagination?.count);
+    setPageCount(data?.pagination?.pageCount);
+    setCourses(data?.courses);
   }, [data]);
 
   return (
@@ -45,12 +62,20 @@ const CourseDataProvider = ({ children }) => {
         loadedSemester,
         error,
         loading,
-        darkTheme
+        darkTheme,
+        page,
+        limit,
+        pageCount,
+        total,
       }}
     >
       <ActionsContext.Provider
         value={{
           setCourses,
+          setRefetch,
+          setPage,
+          setPageCount,
+          setTotal,
         }}
       >
         {children}

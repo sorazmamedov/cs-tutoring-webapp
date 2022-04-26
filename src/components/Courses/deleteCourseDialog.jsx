@@ -7,10 +7,11 @@ import { getErrors } from "../common/errorHelper";
 import SpinnerBtn from "../common/spinnerBtn";
 import useAxios from "../../hooks/useAxios";
 
-const DeleteCourseDialog = ({ id, reset }) => {
+const DeleteCourseDialog = ({ id, reset, setTitle }) => {
   const { data, error, loading, axiosFetch } = useAxios();
-  const { courses } = useContext(ViewContext);
-  const { setCourses } = useContext(ActionsContext);
+  const { courses, page, total, limit, pageCount } = useContext(ViewContext);
+  const { setCourses, setRefetch, setPage, setPageCount, setTotal } =
+    useContext(ActionsContext);
   const [errors, setErrors] = useState("");
   const [success, setSuccess] = useState(false);
 
@@ -26,7 +27,10 @@ const DeleteCourseDialog = ({ id, reset }) => {
 
   useEffect(() => {
     if (Object.keys(data).length) {
+      setTotal((prev) => prev - 1);
+      // setRefetch(true);
       setCourses([...courses.filter((item) => item.id !== id)]);
+      setTitle("");
       setSuccess(true);
       setTimeout(() => {
         reset();
@@ -57,7 +61,7 @@ const DeleteCourseDialog = ({ id, reset }) => {
         ))}
       {success && (
         <p
-          className="text-success text-center mt-2 mb-5"
+          className="text-success text-center mb-5 fs-5 pb-3"
           style={
             success
               ? { opacity: "1", transition: "opacity 0.6s linear" }
@@ -79,7 +83,7 @@ const DeleteCourseDialog = ({ id, reset }) => {
               </Button>
             ) : (
               <SpinnerBtn
-                className="col-12 roundBorder"
+                className="col-12 roundBorder dangerBtn"
                 text="Deleting"
                 role="delete"
                 accessibilityText="Deleting"

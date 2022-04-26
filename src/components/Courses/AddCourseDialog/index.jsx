@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "react-bootstrap/Nav";
 import AddCourse from "./addCourse";
 import UploadCourses from "./uploadCourses";
 
-const AddCourseDialog = ({ semesterId }) => {
+const AddCourseDialog = ({ semesterId, coursesLen, setPage }) => {
   const [selected, setSelected] = useState(0);
 
   return (
@@ -33,8 +33,11 @@ const AddCourseDialog = ({ semesterId }) => {
           </Nav.Link>
         </Nav.Item>
       </Nav>
-      {!selected && <AddCourse {...{ semesterId }} />}
-      {selected && <UploadCourses {...{ semesterId }} />}
+      {selected ? (
+        <UploadCourses {...{ semesterId }} />
+      ) : (
+        <AddCourse {...{ semesterId }} />
+      )}
     </>
   );
 };

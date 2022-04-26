@@ -44,7 +44,7 @@ const SemesterDataProvider = ({ children }) => {
         loadedSemester,
         error,
         loading,
-        darkTheme
+        darkTheme,
       }}
     >
       <ActionsContext.Provider

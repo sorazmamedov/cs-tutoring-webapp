@@ -27,7 +27,7 @@ const CourseRows = ({ reset, setShow, setTitle, setModalBody }) => {
     e.stopPropagation();
     const id = e.target.getAttribute("courseid");
     setTitle("Are you sure you want to delete?");
-    setModalBody(<DeleteCourseDialog {...{ id, reset }} />);
+    setModalBody(<DeleteCourseDialog {...{ id, reset, setTitle }} />);
     setShow(true);
   };
 

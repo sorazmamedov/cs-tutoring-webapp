@@ -8,7 +8,7 @@ import CustomPagination from "../common/customPagination";
 import TemplateModal from "../common/templateModal";
 import AddCourseDialog from "./AddCourseDialog/";
 import TitleBar from "../common/titleBar";
-import { ViewContext } from "../../Context/courseContext";
+import { ActionsContext, ViewContext } from "../../Context/courseContext";
 import useModal from "../../hooks/useModalStates";
 import {
   NoDataPlaceholder,
@@ -17,8 +17,18 @@ import {
 } from "../common/Placeholders/";
 
 const Courses = () => {
-  const { courses, loading, error, darkTheme, loadedSemester } =
-    useContext(ViewContext);
+  const {
+    courses,
+    loading,
+    error,
+    darkTheme,
+    loadedSemester,
+    page,
+    pageCount,
+    total,
+    limit
+  } = useContext(ViewContext);
+  const { setPage, setRefetch } = useContext(ActionsContext);
   const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
     useModal();
 
@@ -26,7 +36,15 @@ const Courses = () => {
 
   const handleAddCourse = () => {
     setTitle("Add New Courses");
-    setModalBody(<AddCourseDialog {...{ semesterId: loadedSemester.id }} />);
+    setModalBody(
+      <AddCourseDialog
+        {...{
+          semesterId: loadedSemester.id,
+          coursesLen: courses.length,
+          setPage,
+        }}
+      />
+    );
     setShow(true);
   };
 
@@ -53,7 +71,7 @@ const Courses = () => {
               <CourseRows {...{ reset, setShow, setTitle, setModalBody }} />
             </tbody>
           </Table>
-          <CustomPagination />
+          <CustomPagination {...{page, pageCount, setPage, total, limit, setRefetch }} />
         </>
       )}
       <TemplateModal {...{ show, title, ModalBody, reset }} />
