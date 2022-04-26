@@ -3,8 +3,19 @@ import Nav from "react-bootstrap/Nav";
 import AddCourse from "./addCourse";
 import UploadCourses from "./uploadCourses";
 
-const AddCourseDialog = ({ semesterId, coursesLen, setPage }) => {
+const AddCourseDialog = ({ semesterId, pageCount, setRefetch }) => {
   const [selected, setSelected] = useState(0);
+  const [added, setAdded] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (added && pageCount <= 1) {
+        setRefetch(true);
+        setAdded(false);
+      }
+    };
+    // eslint-disable-next-line
+  });
 
   return (
     <>
@@ -34,9 +45,9 @@ const AddCourseDialog = ({ semesterId, coursesLen, setPage }) => {
         </Nav.Item>
       </Nav>
       {selected ? (
-        <UploadCourses {...{ semesterId }} />
+        <UploadCourses {...{ semesterId, setAdded }} />
       ) : (
-        <AddCourse {...{ semesterId }} />
+        <AddCourse {...{ semesterId, setAdded }} />
       )}
     </>
   );

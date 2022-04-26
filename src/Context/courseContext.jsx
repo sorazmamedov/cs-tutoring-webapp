@@ -12,7 +12,7 @@ const CourseDataProvider = ({ children }) => {
   const { data, error, loading, axiosFetch } = useAxios();
   const [courses, setCourses] = useState([]);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(2);
+  const [limit] = useState(8);
   const [pageCount, setPageCount] = useState(0);
   const [total, setTotal] = useState(0);
   const [refetch, setRefetch] = useState(false);
@@ -33,7 +33,7 @@ const CourseDataProvider = ({ children }) => {
       console.log("[Fetching courses]");
     }
     // eslint-disable-next-line
-  }, [loadedSemester, page]);
+  }, [loadedSemester, page, refetch]);
 
   useEffect(() => {
     if (total) {

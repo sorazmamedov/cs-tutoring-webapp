@@ -8,7 +8,7 @@ import { courseValidator } from "../../../utils/validator/";
 import { getErrors } from "../../common/errorHelper";
 import useAxios from "../../../hooks/useAxios";
 
-const UploadCourses = ({ semesterId }) => {
+const UploadCourses = ({ semesterId, setAdded }) => {
   const { data, error, setError, axiosFetch } = useAxios();
   const [upload, setUpload] = useState(false);
   const [validated, setValidated] = useState(false);
@@ -53,7 +53,7 @@ const UploadCourses = ({ semesterId }) => {
   useEffect(() => {
     if (Object.keys(data).length) {
       setUpload(false);
-      // setTimeout(() => reset(), 1500);
+      setAdded(true);
     }
     // eslint-disable-next-line
   }, [data]);

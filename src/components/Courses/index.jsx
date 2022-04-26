@@ -24,9 +24,7 @@ const Courses = () => {
     darkTheme,
     loadedSemester,
     page,
-    pageCount,
-    total,
-    limit
+    pageCount
   } = useContext(ViewContext);
   const { setPage, setRefetch } = useContext(ActionsContext);
   const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
@@ -40,8 +38,8 @@ const Courses = () => {
       <AddCourseDialog
         {...{
           semesterId: loadedSemester.id,
-          coursesLen: courses.length,
-          setPage,
+          pageCount,
+          setRefetch,
         }}
       />
     );
@@ -71,7 +69,7 @@ const Courses = () => {
               <CourseRows {...{ reset, setShow, setTitle, setModalBody }} />
             </tbody>
           </Table>
-          <CustomPagination {...{page, pageCount, setPage, total, limit, setRefetch }} />
+          <CustomPagination {...{page, pageCount, setPage }} />
         </>
       )}
       <TemplateModal {...{ show, title, ModalBody, reset }} />

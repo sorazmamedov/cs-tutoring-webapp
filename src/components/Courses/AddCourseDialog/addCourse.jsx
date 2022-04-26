@@ -8,7 +8,7 @@ import SpinnerBtn from "../../common/spinnerBtn";
 import { courseValidator } from "../../../utils/validator";
 import { getErrors } from "../../common/errorHelper";
 
-const AddCourse = ({ semesterId }) => {
+const AddCourse = ({ semesterId, setAdded }) => {
   const [validated, setValidated] = useState(false);
   const [success, setSuccess] = useState(false);
   const { data, error, loading, setError, axiosFetch } = useAxios();
@@ -55,6 +55,7 @@ const AddCourse = ({ semesterId }) => {
   useEffect(() => {
     if (Object.keys(data).length) {
       setSuccess(true);
+      setAdded(true);
     }
     // eslint-disable-next-line
   }, [data]);

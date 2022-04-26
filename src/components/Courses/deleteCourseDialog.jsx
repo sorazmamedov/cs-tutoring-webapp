@@ -9,8 +9,8 @@ import useAxios from "../../hooks/useAxios";
 
 const DeleteCourseDialog = ({ id, reset, setTitle }) => {
   const { data, error, loading, axiosFetch } = useAxios();
-  const { courses, page, total, limit, pageCount } = useContext(ViewContext);
-  const { setCourses, setRefetch, setPage, setPageCount, setTotal } =
+  const { courses } = useContext(ViewContext);
+  const { setCourses, setTotal } =
     useContext(ActionsContext);
   const [errors, setErrors] = useState("");
   const [success, setSuccess] = useState(false);
@@ -28,7 +28,6 @@ const DeleteCourseDialog = ({ id, reset, setTitle }) => {
   useEffect(() => {
     if (Object.keys(data).length) {
       setTotal((prev) => prev - 1);
-      // setRefetch(true);
       setCourses([...courses.filter((item) => item.id !== id)]);
       setTitle("");
       setSuccess(true);
