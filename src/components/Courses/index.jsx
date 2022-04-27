@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import Table from "react-bootstrap/Table";
-import { PlusIcon } from "../common/iconsWithTooltip";
+import { PlusIcon, RefreshIcon } from "../common/iconsWithTooltip";
 import MainContainer from "../common/mainContainer";
 import TableHeader from "../common/tableHeader";
 import CourseRows from "./courseRows";
@@ -24,7 +24,7 @@ const Courses = () => {
     darkTheme,
     loadedSemester,
     page,
-    pageCount
+    pageCount,
   } = useContext(ViewContext);
   const { setPage, setRefetch } = useContext(ActionsContext);
   const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
@@ -48,20 +48,24 @@ const Courses = () => {
 
   return (
     <MainContainer>
-      {!loading && !error && (
-        <TitleBar
-          title={"Courses"}
-          icon={<PlusIcon onClick={handleAddCourse} />}
-        />
-      )}
+      <TitleBar
+        title={"Courses"}
+        icon={
+          loading && courses && courses.length !== 0 ? (
+            <RefreshIcon onClick={() => setRefetch(true)} className="rotate" />
+          ) : (
+            <PlusIcon onClick={handleAddCourse} />
+          )
+        }
+      />
 
-      {loading && <LoadingPlaceholder />}
+      {loading && courses && courses.length === 0 && <LoadingPlaceholder />}
       {!loading && error && <ErrorPlaceholder />}
       {!loading && !error && courses && courses.length === 0 && (
         <NoDataPlaceholder />
       )}
 
-      {!loading && !error && courses && courses.length !== 0 && (
+      {!error && courses && courses.length !== 0 && (
         <>
           <Table className="text-center" bordered hover responsive>
             <TableHeader {...{ headers, darkTheme }} />
@@ -69,7 +73,7 @@ const Courses = () => {
               <CourseRows {...{ reset, setShow, setTitle, setModalBody }} />
             </tbody>
           </Table>
-          <CustomPagination {...{page, pageCount, setPage }} />
+          <CustomPagination {...{ page, pageCount, setPage }} />
         </>
       )}
       <TemplateModal {...{ show, title, ModalBody, reset }} />

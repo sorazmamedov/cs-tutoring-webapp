@@ -25,6 +25,10 @@ const Calendar = () => {
   };
 
   const handleSelectEvent = (event) => {
+    if (isPast(event.end)) {
+      return;
+    }
+    
     setTitle("Delete Event");
     setModalBody(<DeleteEventDialog {...{ event, reset }} />);
     setShow(true);

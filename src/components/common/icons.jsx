@@ -27,8 +27,8 @@ export const megaphoneIcon = (props) => (
   <i className="bi bi-megaphone-fill" data-icon-type="megaphone" {...props} />
 );
 
-export const plusIcon = (props) => (
-  <i className="bi bi-plus-circle" data-icon-type="plus" {...props} />
+export const plusIcon = ({className, ...props}) => (
+  <i className={`bi bi-plus-circle ${className}`} data-icon-type="plus" {...props} />
 );
 
 export const arrowUpIcon = (props) => (

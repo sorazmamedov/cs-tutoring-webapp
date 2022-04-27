@@ -29,9 +29,11 @@ const Home = () => {
           <Semesters />
         </SemesterDataProvider>
       )}
-      <AppointmentDataProvider>
-        <Appointments />
-      </AppointmentDataProvider>
+      {!auth?.user?.roles.includes(ROLES.Admin) && (
+        <AppointmentDataProvider>
+          <Appointments />
+        </AppointmentDataProvider>
+      )}
       <TutorDataProvider>
         <ScheduleDataProvider>
           <Schedules />

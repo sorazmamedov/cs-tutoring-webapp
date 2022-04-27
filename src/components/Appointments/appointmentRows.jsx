@@ -19,6 +19,19 @@ const AppointmentRows = ({
   const [action, setAction] = useState("");
 
   const handleEdit = (appointment) => {
+    const add15Mins = addMinutes(appointment.start, 15);
+    const hasPassed = isPast(add15Mins);
+    if (!hasPassed && !appointment.noShow) {
+      showErrors(
+        {
+          message: `Writing a report is allowed after the appointment expires or after no show!`,
+        },
+        setTitle,
+        setShow,
+        setModalBody
+      );
+      return;
+    }
     setTitle("Report");
     setModalBody(
       <ReportDialog {...{ userId, appointment, reset, setAppointments }} />
@@ -36,8 +49,8 @@ const AppointmentRows = ({
     });
   };
 
-  const handleNoShow = async (appointment) => {
-    if (saving) {
+  const handleNoShow = (appointment) => {
+    if (saving || appointment.report) {
       return;
     }
 

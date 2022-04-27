@@ -34,7 +34,7 @@ const Appointment = () => {
       <TitleBar
         title="Appointments"
         icon={
-          loading && appointments.length !== 0 ? (
+          loading && appointments && appointments.length !== 0 ? (
             <RefreshIcon onClick={() => setRefetch(true)} className="rotate" />
           ) : (
             <RefreshIcon onClick={() => setRefetch(true)} />

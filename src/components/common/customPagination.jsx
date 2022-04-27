@@ -3,6 +3,10 @@ import Container from "react-bootstrap/Container";
 import Pagination from "react-bootstrap/Pagination";
 
 const CustomPagination = ({ page, pageCount, setPage }) => {
+  if (!pageCount) {
+    return "";
+  }
+
   const handlePagination = (e) => {
     const targetId = e.target.id;
     if (targetId === "first") {
@@ -19,11 +23,13 @@ const CustomPagination = ({ page, pageCount, setPage }) => {
   return (
     <Container className="d-flex justify-content-end p-0 mt-2">
       <Pagination size="sm" className="m-0 p-0">
-        <Pagination.First
-          id="first"
-          disabled={page === 1}
-          onClick={handlePagination}
-        />
+        {pageCount > 2 && (
+          <Pagination.First
+            id="first"
+            disabled={page === 1}
+            onClick={handlePagination}
+          />
+        )}
         <Pagination.Item
           id="prev"
           disabled={page === 1}
@@ -38,11 +44,13 @@ const CustomPagination = ({ page, pageCount, setPage }) => {
         >
           Next
         </Pagination.Item>
-        <Pagination.Last
-          id="last"
-          disabled={page === pageCount}
-          onClick={handlePagination}
-        />
+        {pageCount > 2 && (
+          <Pagination.Last
+            id="last"
+            disabled={page === pageCount}
+            onClick={handlePagination}
+          />
+        )}
       </Pagination>
     </Container>
   );

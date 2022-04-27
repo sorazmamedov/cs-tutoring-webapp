@@ -49,7 +49,7 @@ const DeleteSlotDialog = ({ event, reset }) => {
         <p className="text-success text-center mt-2">"Slot deleted!"</p>
       )}
       <Form noValidate onSubmit={handleSubmit} className="col-10 mx-auto mb-5">
-        <Row className="mb-2 col-lg-6 mx-auto">
+        <Row className={`mb-2 col-lg-6 mx-auto ${event.booked ? "" : "mb-5 text-center"}`}>
           <Col xs="12">
             <Form.Label className="text-dark ps-1">
               {format(event.start, "PP")}
@@ -63,17 +63,19 @@ const DeleteSlotDialog = ({ event, reset }) => {
             </Form.Label>
           </Col>
         </Row>
-        <Row className="mb-5 col-lg-6 mx-auto">
-          <Col xs="12">
-            <Form.Control
-              as="textarea"
-              className="roundBorder"
-              name="reason"
-              placeholder="Reason for cancelation"
-              rows={3}
-            />
-          </Col>
-        </Row>
+        {event.booked && (
+          <Row className="mb-5 col-lg-6 mx-auto">
+            <Col xs="12">
+              <Form.Control
+                as="textarea"
+                className="roundBorder"
+                name="reason"
+                placeholder="Reason for cancelation"
+                rows={3}
+              />
+            </Col>
+          </Row>
+        )}
         <Row className="justify-content-around col-lg-10 mx-auto" sm="2">
           <ActionButtons
             {...{

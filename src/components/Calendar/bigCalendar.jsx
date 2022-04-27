@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import { Calendar, Views, dateFnsLocalizer } from "react-big-calendar";
-import { format, parse, startOfWeek, getDay } from "date-fns";
+import { format, parse, startOfWeek, getDay, isPast } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
@@ -36,6 +36,15 @@ const BigCalendar = ({
     weekStartsOn: 1,
   });
 
+  const eventPropGetter = useCallback(
+    (event) => ({
+      ...(isPast(event.end) && {
+        className: "expired",
+      }),
+    }),
+    []
+  );
+
   return (
     <Calendar
       selectable
@@ -46,6 +55,7 @@ const BigCalendar = ({
       defaultDate={defaultDate}
       formats={formats}
       events={events}
+      eventPropGetter={eventPropGetter}
       defaultView={Views.WEEK}
       views={["week"]}
       min={min}
