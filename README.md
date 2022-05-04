@@ -1,5 +1,5 @@
 # Documentation is coming soon
-For now, check the pdf file (in the root folder of the project) for user manual and for documentation.
+For now, check the pdf file (in the root directory of the project) for user manual and documentation.
 
 
 # Credits:
