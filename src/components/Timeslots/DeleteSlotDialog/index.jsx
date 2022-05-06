@@ -14,7 +14,7 @@ const DeleteSlotDialog = ({ event, reset }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const reason = e.currentTarget.reason.value.trim();
+    const reason = e.currentTarget?.reason?.value?.trim();
 
     axiosFetch({
       method: "DELETE",

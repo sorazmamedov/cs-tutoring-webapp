@@ -57,11 +57,11 @@ const Header = () => {
                 <NavLink to="/profile" className="nav-link">
                   Profile
                 </NavLink>
-                {/* {auth?.user?.roles.includes(ROLES.Admin) && (
+                {auth?.user?.roles.includes(ROLES.Admin) && (
                   <NavLink to="/settings" className="nav-link">
                     Settings
                   </NavLink>
-                )} */}
+                )}
               </>
             )}
             {auth?.user ? (

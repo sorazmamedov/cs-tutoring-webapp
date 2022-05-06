@@ -25,7 +25,7 @@ const Timeslot = () => {
     tutorsError,
     tutorsLoading,
     auth,
-    ROLES
+    ROLES,
   } = useContext(ViewContext);
   const { show, title, ModalBody, reset, setShow, setTitle, setModalBody } =
     useModal();
@@ -35,10 +35,17 @@ const Timeslot = () => {
       return;
     }
 
-    if (event.tutorId === auth?.user?.id || auth?.user?.roles.includes(ROLES.Admin)) {
+    if (
+      event.tutorId === auth?.user?.id ||
+      auth?.user?.roles.includes(ROLES.Admin)
+    ) {
       setTitle("Delete Slot");
       setModalBody(<DeleteSlotDialog {...{ event, reset }} />);
       setShow(true);
+      return;
+    }
+
+    if (event.booked) {
       return;
     }
 
