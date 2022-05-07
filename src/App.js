@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Layout from "./components/layout";
@@ -8,27 +8,11 @@ import NotFound from "./components/notFound";
 import RequireAuth from "./components/requireAuth";
 import Settings from "./components/settings";
 import useAuth from "./hooks/useAuth";
-import useLogin from "./hooks/useLogin";
-import { loadClientLib } from "./libs/google";
 import { GlobalViewContext } from "./Context/dataContext";
 
 function App() {
   const { darkTheme } = useContext(GlobalViewContext);
   const { ROLES } = useAuth();
-
-  const { handleResponse } = useLogin();
-
-  useEffect(() => {
-    window.onGoogleLibraryLoad = () => {
-      window.google.accounts.id.initialize({
-        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        callback: handleResponse,
-        auto_select: "true",
-      });
-      window.google.accounts.id.prompt();
-    };
-    loadClientLib();
-  });
 
   return (
     <div className={darkTheme ? "dark" : "light"}>

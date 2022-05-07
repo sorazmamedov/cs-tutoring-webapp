@@ -77,7 +77,7 @@ const Header = () => {
                 setDarkTheme(!darkTheme);
               }}
             >
-              {darkTheme ? <SunIcon /> : <MoonIcon />}
+              {darkTheme ?  <MoonIcon /> : <SunIcon />}
             </NavLink>
           </Nav>
         </Navbar>

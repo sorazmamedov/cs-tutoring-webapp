@@ -10,21 +10,6 @@ const Login = ({ reset }) => {
   const { handleResponse } = useLogin();
 
   useEffect(() => {
-    window.google.accounts.id.renderButton(
-      document.getElementById("googleBtn"),
-      {
-        type: "standard",
-        size: "large",
-        theme: "filled_blue",
-        text: "sign_in_with",
-        shape: "rectangular",
-        logo_alignment: "left",
-        width: "250",
-      }
-    );
-  });
-
-  useEffect(() => {
     if (isLogged) {
       reset();
     }
@@ -61,51 +46,48 @@ const Login = ({ reset }) => {
         </Col>
       </Row>
       <Row className="col-6 my-3 mx-auto">
-        <p className="text-center">Sign in with NEIU email only!</p>
-      </Row>
-      <Row className="col-6 my-3 mx-auto">
-        <button className="btn btn-warning mb-2" onClick={() => handleResponse(undefined, "sorazmamedov@neiu.edu")}>
-          Serdar Admin
+        <button className="btn btn-warning mb-2" onClick={() => handleResponse("sorazmamedov@neiu.edu")}>
+          Admin
         </button>
         <button
           className="btn btn-info mb-2"
-          onClick={() => handleResponse(undefined, "mking@neiu.edu")}
+          onClick={() => handleResponse("mking@neiu.edu")}
         >
           Martin Tutor
         </button>
         <button
           className="btn btn-info mb-2"
-          onClick={() => handleResponse(undefined, "smoe@neiu.edu")}
+          onClick={() => handleResponse("smoe@neiu.edu")}
         >
           Scarlett Tutor
         </button>
         <button
           className="btn btn-info mb-2"
-          onClick={() => handleResponse(undefined, "jwebb@neiu.edu")}
+          onClick={() => handleResponse("jwebb@neiu.edu")}
         >
           James Tutor
         </button>
         <button
           className="btn btn-secondary mb-2"
-          onClick={() => handleResponse(undefined, "jmonroe@neiu.edu")}
+          onClick={() => handleResponse("jmonroe@neiu.edu")}
         >
           John Student
         </button>
         <button
           className="btn btn-success mb-2"
-          onClick={() => handleResponse(undefined, "mkatowski@neiu.edu")}
+          onClick={() => handleResponse("mkatowski@neiu.edu")}
         >
           Madelyn Student
         </button>
         <button
           className="btn btn-success mb-2"
-          onClick={() => handleResponse(undefined, "bbeckham@neiu.edu")}
+          onClick={() => handleResponse("bbeckham@neiu.edu")}
         >
           Brook Student
         </button>
         <button
           className="btn btn-success mb-5"
-          onClick={() => handleResponse(undefined, "jenmonroe@neiu.edu")}
+          onClick={() => handleResponse("jenmonroe@neiu.edu")}
         >
           Jennifer Student
         </button>
