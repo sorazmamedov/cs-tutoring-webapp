@@ -46,48 +46,51 @@ const Login = ({ reset }) => {
         </Col>
       </Row>
       <Row className="col-6 my-3 mx-auto">
-        <button className="btn btn-warning mb-2" onClick={() => handleResponse("sorazmamedov@neiu.edu")}>
+        <button
+          className="btn btn-warning mb-2"
+          onClick={() => handleResponse("support@mindtek.edu")}
+        >
           Admin
         </button>
         <button
           className="btn btn-info mb-2"
-          onClick={() => handleResponse("mking@neiu.edu")}
+          onClick={() => handleResponse("mking@mindtek.edu")}
         >
           Martin Tutor
         </button>
         <button
           className="btn btn-info mb-2"
-          onClick={() => handleResponse("smoe@neiu.edu")}
+          onClick={() => handleResponse("smoe@mindtek.edu")}
         >
           Scarlett Tutor
         </button>
         <button
           className="btn btn-info mb-2"
-          onClick={() => handleResponse("jwebb@neiu.edu")}
+          onClick={() => handleResponse("jwebb@mindtek.edu")}
         >
           James Tutor
         </button>
         <button
           className="btn btn-secondary mb-2"
-          onClick={() => handleResponse("jmonroe@neiu.edu")}
+          onClick={() => handleResponse("jmonroe@mindtek.edu")}
         >
           John Student
         </button>
         <button
           className="btn btn-success mb-2"
-          onClick={() => handleResponse("mkatowski@neiu.edu")}
+          onClick={() => handleResponse("mkatowski@mindtek.edu")}
         >
           Madelyn Student
         </button>
         <button
           className="btn btn-success mb-2"
-          onClick={() => handleResponse("bbeckham@neiu.edu")}
+          onClick={() => handleResponse("bbeckham@mindtek.edu")}
         >
           Brook Student
         </button>
         <button
           className="btn btn-success mb-5"
-          onClick={() => handleResponse("jenmonroe@neiu.edu")}
+          onClick={() => handleResponse("jenmonroe@mindtek.edu")}
         >
           Jennifer Student
         </button>
